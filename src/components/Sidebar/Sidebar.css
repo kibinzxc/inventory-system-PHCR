@@ -1,0 +1,243 @@
+a {
+    border: none;
+    outline: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    height: 100vh;
+}
+
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #343434;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    transition: width 0.5s;
+}
+
+.sidebar a {
+    padding: 10px 25px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.bglinks {
+    flex-grow: 1;
+    padding: 0 10px;
+    margin-top: 20px;
+}
+
+.sidebar a:hover {
+    background-color: #495057;
+    color: #FFFFFF;
+}
+
+.sidebar i {
+    margin-right: 10px;
+}
+
+.collapsed {
+    width: 60px;
+}
+
+.collapsed a span {
+    display: none;
+}
+
+.collapsed a {
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.logo-toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.logo img {
+    width: 180px;
+    height: auto;
+    animation: fadeIn 1s forwards;
+    margin-top: 20px;
+}
+
+.logo.hidden img {
+    animation: fadeOut 1s forwards;
+}
+
+.logo img {
+    width: 180px;
+    height: auto;
+    transition: opacity 1s;
+}
+
+.logo.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: absolute;
+    top: 38px;
+    left: 200px;
+    transition: left 0.3s ease-in-out;
+    color: white;
+    font-size: 20px;
+}
+
+.toggle-btn:hover {
+    transition: 0.3s all ease-in-out;
+    transform: scale(1.2);
+}
+
+.collapsed .toggle-btn {
+    left: 12px;
+}
+
+.collapsed .toggle-btn:hover {
+    transition: 0.3s all ease-in-out;
+    transform: scale(1.2);
+}
+
+.logout {
+    margin-top: auto;
+    padding: 10px 5px;
+    color: #FFFFFF;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+
+
+.links {
+    margin-left: 10px;
+    margin-top: 2px;
+}
+
+.bglink_footer {
+    padding: 0 10px;
+}
+
+.hr_style {
+    margin-top: 20px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.notification-badge {
+    background-color: #ffb3c6;
+    color: #780000;
+    border-radius: 10px;
+    padding: 3px 15px;
+    font-size: 13px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: 0.3s all ease-in-out;
+}
+
+.collapsed .notification-badge {
+    display: inline-block;
+    top: 30%;
+    right: 5%;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 100%;
+    transition: 0.3s all ease-in-out;
+}
+
+.bglinks a {
+    position: relative;
+}
+
+.tooltip {
+    display: none;
+    /* Initially hidden */
+    position: absolute;
+    left: 60px;
+    /* Positioning based on your layout */
+    top: 20px;
+    /* Adjust the top position as needed */
+    background-color: #333;
+    /* Tooltip background color */
+    color: #fff;
+    /* Tooltip text color */
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    z-index: 1000;
+    /* Ensure it appears above other elements */
+}
+
+.sidebar.collapsed .tooltip {
+    display: block;
+    /* Show tooltip when collapsed */
+}
+
+@media screen and (max-width: 768px) {
+    .collapsed .bglinks img {
+        width: 35px;
+    }
+
+    .collapsed .toggle-btn {
+        left: 5px;
+    }
+
+    .collapsed .toggle-btn img {
+        width: 35px;
+    }
+
+    .sidebar.collapsed .tooltip {
+        display: none;
+    }
+
+    .collapsed .notification-badge {
+        font-size: 15px;
+        right: 0;
+    }
+
+}

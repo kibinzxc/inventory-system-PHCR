@@ -15,10 +15,10 @@
     <div class="bglinks">
         <a href="#" data-tooltip="Dashboard"><img src="../../assets/home.svg" alt=""><span class="links">Dashboard</span></a>
         <hr class="hr_style" />
-        <a href="#" data-tooltip="Inventory"><img src="../../assets/package.svg" alt=""><span class="links">Inventory</span></a>
-        <a href="#" data-tooltip="Products"><img src="../../assets/archive.svg" alt=""><span class="links">Products</span></a>
+        <a href="../../components/inventory.php" data-tooltip="Inventory"><img src="../../assets/package.svg" alt=""><span class="links">Inventory</span></a>
+        <a href="../../components/products.php" data-tooltip="Products"><img src="../../assets/archive.svg" alt=""><span class="links">Products</span></a>
         <hr class="hr_style" />
-        <a href="#" data-tooltip="Accounts"><img src="../../assets/user.svg" alt=""><span class="links">Accounts</span></a>
+        <a href="../Accounts/Accounts.php" data-tooltip="Accounts"><img src="../../assets/user.svg" alt=""><span class="links">Accounts</span></a>
         <a href="#" data-tooltip="Notifications"><img src="../../assets/mail.svg" alt=""><span class="links">Notifications</span> <span class="notification-badge">3</span></a>
     </div>
 

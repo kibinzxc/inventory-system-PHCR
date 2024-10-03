@@ -46,17 +46,18 @@ function toggleSidebar() {
     localStorage.setItem('sidebarState', JSON.stringify(settings));
 }
 // Function to update the title with the notification count or app name
+const originalTitle = document.title;
 function updateTitle(count) {
     if (showNotification) {
-        document.title = `(${count}) Notifications - Pizza Hut`;
+        document.title = `(${count}) Notifications`;
     } else {
-        document.title = 'Pizza Hut';
+        document.title = originalTitle
     }
     showNotification = !showNotification;
 }
 
 // Simulated notification count
-let notificationCount = 5; // Set this to your current notification count
+let notificationCount = 3; // Set this to your current notification count
 let showNotification = true; // Flag to track which title to show
 
 // Update the title every 2 seconds

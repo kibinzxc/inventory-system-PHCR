@@ -1,0 +1,256 @@
+/* Main content styling */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+
+
+body {
+    margin: 0;
+    height: 100vh;
+    background-color: #E7E7E7;
+}
+
+#main-content {
+    transition: margin-left 0.5s;
+    margin-left: 250px;
+    padding: 16px;
+
+}
+
+
+.collapsed #main-content {
+    margin-left: 60px;
+}
+
+.tooltip {
+    position: absolute;
+    /* Adjust positioning */
+    background-color: #333;
+    /* Tooltip background color */
+    color: #fff;
+    /* Tooltip text color */
+    padding: 5px 10px;
+    /* Padding */
+    border-radius: 5px;
+    /* Rounded corners */
+    display: none;
+    /* Hidden by default */
+    z-index: 1000;
+    /* Ensure it appears above other elements */
+}
+
+
+.tooltip-link:hover+.tooltip {
+
+    /* Show tooltip on hover */
+}
+
+.tooltip-link {
+    position: relative;
+    /* Positioning context for the tooltip */
+}
+
+
+@media screen and (max-width: 768px) {
+    #main-content {
+        margin-left: 500px;
+        /* Adjust margin */
+    }
+
+    .tooltip {
+        display: none;
+    }
+}
+
+
+.container {
+    margin: 0 35px;
+    font-family: 'Inter', sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn {
+    width: 165px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #006D6D;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.header a:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+.btn img {
+    margin-right: 5px;
+    /* Adjust the value as needed */
+}
+
+a.btn {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.table_container {
+    margin: 25px 0;
+    height: 100%;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #FFF;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    padding: 5px 40px;
+}
+
+.btns_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Align items vertically */
+    flex-wrap: wrap;
+    /* Allow wrapping of items */
+    margin: 25px 0;
+}
+
+.icon_btn {
+    width: 3%;
+    height: 38px;
+    flex-shrink: 0;
+    border: 1px solid #DBDBDB;
+    background: #FFF;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.search_btn {
+    width: 50%;
+    height: 38px;
+    flex-shrink: 0;
+    border: 1px solid #DBDBDB;
+    background: #FFF url('../../assets/search.svg') no-repeat left 10px center;
+    /* Adjust the path */
+    padding: 0 40px;
+    /* Add padding to make space for the icon */
+    font-size: 15px;
+    /* Change cursor to pointer */
+    border-radius: 5px;
+    /* Optional: adds slightly rounded corners */
+    font-weight: 500;
+    /* Font weight for search button */
+}
+
+.sort-container {
+    display: flex;
+    /* Use flexbox for layout */
+    align-items: center;
+    /* Center items vertically */
+    border: 1px solid #DBDBDB;
+    /* Border for the container */
+    border-radius: 5px;
+    /* Optional: adds slightly rounded corners */
+    padding: 0 0 0 10px;
+    /* Padding around the container */
+    width: 30%;
+    /* Adjust width as needed */
+    background-color: white;
+    /* Background color */
+    font-weight: 600;
+    /* Font weight for sort container */
+}
+
+.sort-label {
+    margin-right: 5px;
+    /* Space between label and icon */
+    font-size: 15px;
+    /* Font size for label */
+    color: #000;
+    /* Color for label */
+}
+
+.select {
+    flex-grow: 1;
+    /* Allow select to grow */
+    height: 38px;
+    /* Height of the select */
+    padding: 0 40px 0 10px;
+    /* Padding for the select */
+    appearance: none;
+    /* Remove the default arrow */
+    border: none;
+    /* Remove border */
+    background-color: transparent;
+    background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gPHBhdGggZD0iTTIgNkw4IDEyTDE0IDYiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4gPC9zdmc+') no-repeat right 10px center;
+    /* Background color */
+    cursor: pointer;
+    /* Change cursor to pointer */
+    font-size: 15px;
+    /* Font size for select */
+}
+
+.sort-icon {
+    margin-left: 5px;
+    /* Space between icon and select */
+    fill: #000;
+    /* Icon color */
+    width: 16px;
+    /* Icon size */
+    height: 16px;
+    /* Icon size */
+}
+
+.filter_icon {
+    margin-right: 5px;
+    /* Space between filter icon and label */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .btns_container {
+        flex-direction: column;
+        /* Stack items vertically on smaller screens */
+        align-items: flex-start;
+        /* Align items to the left */
+    }
+
+    .icon_btn {
+        margin-bottom: 10px;
+        /* Space between buttons when stacked */
+    }
+
+    .search_btn {
+        margin-bottom: 10px;
+        /* Space below the search input when stacked */
+        width: 100%;
+        /* Full width on smaller screens */
+    }
+
+    .sort-container {
+        width: 100%;
+        /* Full width on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .icon_btn {
+        margin-right: 5px;
+        /* Reduce space on very small screens */
+    }
+
+    .search_btn {
+        min-width: auto;
+        /* Allow search input to resize freely */
+    }
+}

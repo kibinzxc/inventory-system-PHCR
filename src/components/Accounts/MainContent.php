@@ -17,17 +17,22 @@
                 <div class="sort-container">
                     <img src="../../assets/filter.svg" alt="" class="filter_icon">
                     <span class="sort-label">SORT BY:</span>
-                    <select class="select">
-                        <option value="" selected>EMPLOYEE ID</option>
-                        <option value="asc">NAME</option>
-                        <option value="desc">POSITION</option>
-                        <option value="desc">USER TYPE</option>
+                    <select class="select" id="sort">
+                        <option value="uid" selected>EMPLOYEE ID</option>
+                        <option value="name">NAME</option>
+                        <option value="position">POSITION</option>
+                        <option value="userType">USER TYPE</option>
                     </select>
                 </div>
-                <a href="#" class="icon_btn"><img src="../../assets/refresh-ccw.svg" alt=""></a>
+                <a href="#" class="icon_btn" id="refresh-btn"><img src="../../assets/refresh-ccw.svg" alt=""></a>
             </div>
-            <div class="table"> <?php include 'AccountTable.php'; ?></div>
 
+
+            <div class="loader" id="loader" style="display:none;"></div>
+            <div class="table" id="account-table"> <?php include 'AccountTable.php'; ?></div>
         </div>
     </div>
 </div>
+
+<!-- Include the external JS file -->
+<script src="Accounts.js"></script>

@@ -1,16 +1,25 @@
 <?php
 include '../../connection/database.php';
 
+// Handle search and sort inputs
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'uid';
 
-// SQL query with search and sorting
+// Define valid columns for sorting to prevent SQL injection
+$valid_sort_columns = ['uid', 'name', 'email', 'position', 'userType'];
+$sort = in_array($sort, $valid_sort_columns) ? $sort : 'uid';
+
+// SQL query using prepared statements to prevent SQL injection
 $sql = "SELECT uid, name, email, position, userType 
         FROM accounts 
-        WHERE name LIKE '%$search%' OR email LIKE '%$search%' OR uid LIKE '%$search%' OR position LIKE '%$search%' OR userType LIKE '%$search%' 
+        WHERE name LIKE ? OR email LIKE ? OR uid LIKE ? OR position LIKE ? OR userType LIKE ? 
         ORDER BY $sort";
 
-$result = $conn->query($sql);
+$stmt = $conn->prepare($sql);
+$search_param = "%$search%";
+$stmt->bind_param('sssss', $search_param, $search_param, $search_param, $search_param, $search_param);
+$stmt->execute();
+$result = $stmt->get_result();
 ?>
 
 <link rel="stylesheet" href="AccountTable.css">
@@ -44,7 +53,7 @@ $result = $conn->query($sql);
                             <a href='#' data-icon-tooltip='Edit'>
                                 <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'>
                             </a>
-                            <a href='#' data-icon-tooltip='Remove'>
+                            <a href='delete.php?uid=" . $row["uid"] . "' data-icon-tooltip='Remove'>
                                 <img src='../../assets/trash-2.svg' alt='Remove' class='remove_icon'>
                             </a>
                         </div>
@@ -59,5 +68,6 @@ $result = $conn->query($sql);
 </table>
 
 <?php
+$stmt->close();
 $conn->close();
 ?>

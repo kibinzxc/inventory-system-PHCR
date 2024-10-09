@@ -5,7 +5,9 @@
     <div class="container">
         <div class="header">
             <h2>Account Management</h2>
-            <a href="addAccount.php" class="btn"><img src="../../assets/plus-circle.svg" alt=""> Add Account</a>
+            <div class="btn-container"> <!-- Add this container -->
+                <a href="addAccount.php" class="btn"><img src="../../assets/plus-circle.svg" alt=""> Add Account</a>
+            </div>
         </div>
 
         <div class="table_container">
@@ -26,7 +28,6 @@
                 </div>
                 <a href="#" class="icon_btn" id="refresh-btn"><img src="../../assets/refresh-ccw.svg" alt=""></a>
             </div>
-
 
             <div class="loader" id="loader" style="display:none;"></div>
             <div class="table" id="account-table"> <?php include 'AccountTable.php'; ?></div>

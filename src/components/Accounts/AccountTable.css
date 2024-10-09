@@ -12,6 +12,9 @@ table {
     border: 1px solid #ddd;
     /* Optional: Add an outside border for better visibility */
     margin-bottom: 40px;
+    min-width: 600px;
+    /* Ensure table is wider than the container for scrolling */
+
 }
 
 table td,
@@ -107,4 +110,11 @@ table th {
     visibility: visible;
     opacity: 1;
     /* Show the tooltip */
+}
+
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+        margin: 0;
+    }
 }

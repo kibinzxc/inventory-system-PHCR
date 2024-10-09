@@ -1,76 +1,57 @@
 /* Main content styling */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
     height: 100vh;
     background-color: #E7E7E7;
+
 }
+
 
 #main-content {
     transition: margin-left 0.5s;
     margin-left: 250px;
     padding: 16px;
-
 }
 
-
 .collapsed #main-content {
-    margin-left: 60px;
+    margin-left: 30px;
 }
 
 .tooltip {
     position: absolute;
-    /* Adjust positioning */
     background-color: #333;
-    /* Tooltip background color */
     color: #fff;
-    /* Tooltip text color */
     padding: 5px 10px;
-    /* Padding */
     border-radius: 5px;
-    /* Rounded corners */
     display: none;
-    /* Hidden by default */
     z-index: 1000;
-    /* Ensure it appears above other elements */
 }
 
-
-.tooltip-link:hover+.tooltip {
-
-    /* Show tooltip on hover */
-}
-
-.tooltip-link {
-    position: relative;
-    /* Positioning context for the tooltip */
-}
-
-
-@media screen and (max-width: 768px) {
-    #main-content {
-        margin-left: 500px;
-        /* Adjust margin */
-    }
-
-    .tooltip {
-        display: none;
-    }
-}
-
-
+/* Main container styles */
 .container {
     margin: 0 35px;
     font-family: 'Inter', sans-serif;
+
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+/* New container for the button */
+.btn-container {
+    margin-left: auto;
+    /* Push the button to the right by default */
 }
 
 .btn {
@@ -85,8 +66,6 @@ body {
     justify-content: center;
 }
 
-
-
 .header a:hover {
     transform: scale(1.1);
     transition: 0.3s;
@@ -94,7 +73,6 @@ body {
 
 .btn img {
     margin-right: 5px;
-    /* Adjust the value as needed */
 }
 
 a.btn {
@@ -105,27 +83,35 @@ a.btn {
 }
 
 .table_container {
+    z-index: 1;
+    /* Ensure it's above other elements */
     margin: 25px 0;
-    height: 100%;
+    height: auto;
+    /* Set to auto or a specific value */
     flex-shrink: 0;
     border-radius: 10px;
     background: #FFF;
     box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
-    padding: 5px 40px;
+    padding: 5px 20px;
+    /* Adjust padding */
+    overflow-x: auto;
+    /* Allow horizontal scrolling */
+    overflow-y: hidden;
+    /* Prevent vertical scrolling if unnecessary */
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on mobile */
 }
 
 .btns_container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* Align items vertically */
     flex-wrap: wrap;
-    /* Allow wrapping of items */
-    margin: 25px 0;
+    margin: 20px 0;
 }
 
 .icon_btn {
-    width: 3%;
+    width: 5%;
     height: 38px;
     flex-shrink: 0;
     border: 1px solid #DBDBDB;
@@ -133,8 +119,8 @@ a.btn {
     justify-content: center;
     align-items: center;
     display: flex;
+    border-radius: 5px;
 }
-
 
 .icon_btn:hover {
     transform: scale(1.1);
@@ -147,126 +133,50 @@ a.btn {
     flex-shrink: 0;
     border: 1px solid #DBDBDB;
     background: #FFF url('../../assets/search.svg') no-repeat left 10px center;
-    /* Adjust the path */
     padding: 0 40px;
-    /* Add padding to make space for the icon */
     font-size: 15px;
-    /* Change cursor to pointer */
     border-radius: 5px;
-    /* Optional: adds slightly rounded corners */
     font-weight: 500;
-    /* Font weight for search button */
 }
 
 .sort-container {
     display: flex;
-    /* Use flexbox for layout */
     align-items: center;
-    /* Center items vertically */
     border: 1px solid #DBDBDB;
-    /* Border for the container */
     border-radius: 5px;
-    /* Optional: adds slightly rounded corners */
     padding: 0 0 0 10px;
-    /* Padding around the container */
     width: 30%;
-    /* Adjust width as needed */
     background-color: white;
-    /* Background color */
     font-weight: 600;
-    /* Font weight for sort container */
 }
 
 .sort-label {
     margin-right: 5px;
-    /* Space between label and icon */
     font-size: 15px;
-    /* Font size for label */
     color: #000;
-    /* Color for label */
 }
 
 .select {
     flex-grow: 1;
-    /* Allow select to grow */
     height: 38px;
-    /* Height of the select */
     padding: 0 40px 0 10px;
-    /* Padding for the select */
     appearance: none;
-    /* Remove the default arrow */
     border: none;
-    /* Remove border */
-    background-color: transparent;
-    background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gPHBhdGggZD0iTTIgNkw4IDEyTDE0IDYiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4gPC9zdmc+') no-repeat right 10px center;
-    /* Background color */
+    background: url('data:image/svg+xml;base64,...') no-repeat right 10px center;
     cursor: pointer;
-    /* Change cursor to pointer */
     font-size: 15px;
-    /* Font size for select */
 }
 
 .sort-icon {
     margin-left: 5px;
-    /* Space between icon and select */
-    fill: #000;
-    /* Icon color */
     width: 16px;
-    /* Icon size */
     height: 16px;
-    /* Icon size */
-}
-
-.filter_icon {
-    margin-right: 5px;
-    /* Space between filter icon and label */
-}
-
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-    .btns_container {
-        flex-direction: column;
-        /* Stack items vertically on smaller screens */
-        align-items: flex-start;
-        /* Align items to the left */
-    }
-
-    .icon_btn {
-        margin-bottom: 10px;
-        /* Space between buttons when stacked */
-    }
-
-    .search_btn {
-        margin-bottom: 10px;
-        /* Space below the search input when stacked */
-        width: 100%;
-        /* Full width on smaller screens */
-    }
-
-    .sort-container {
-        width: 100%;
-        /* Full width on smaller screens */
-    }
-}
-
-@media (max-width: 480px) {
-    .icon_btn {
-        margin-right: 5px;
-        /* Reduce space on very small screens */
-    }
-
-    .search_btn {
-        min-width: auto;
-        /* Allow search input to resize freely */
-    }
 }
 
 /* Loader styling */
 .loader {
     border: 16px solid #f3f3f3;
-    /* Light grey */
     border-top: 16px solid #006D6D;
-    /* Blue */
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -276,9 +186,9 @@ a.btn {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 1000;
-    /* Ensure it's above other elements */
 }
 
+/* Keyframes for spin animation */
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -292,5 +202,67 @@ a.btn {
 /* Optional: to darken the table area while loading */
 .table_container {
     position: relative;
-    /* To allow loader to be centered relative to container */
+}
+
+/* Define the rotation animation */
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.icon_btn img.rotating {
+    animation: rotate 1s linear infinite;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .btns_container {
+        display: none;
+    }
+
+    .icon_btn {
+        display: none;
+    }
+
+    .table {
+        width: 100%;
+        /* Adjust table width to take full container */
+    }
+
+    .table_container {
+        width: 100%;
+        /* Ensure container is 100% of the viewport */
+        overflow-x: auto;
+        padding: 5px 10px;
+        /* Adjust padding for mobile */
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scrolling on mobile */
+        max-width: 100%;
+        /* Prevent exceeding viewport width */
+    }
+
+    /* Change header layout for mobile */
+    .header {
+        flex-direction: column;
+        /* Stack items vertically */
+        align-items: flex-start;
+        /* Align items to the start */
+    }
+
+    h2 {
+        align-self: center;
+    }
+
+    .btn-container {
+        margin-left: 0;
+        /* Reset margin for mobile */
+        margin: 0 0 10px 0;
+        align-self: center;
+        /* Add spacing above the button */
+    }
+
+    .container {
+        margin-right: 0;
+    }
 }

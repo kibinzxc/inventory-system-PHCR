@@ -13,7 +13,18 @@ document.getElementById('sort').addEventListener('change', function() {
 // Event listener for refresh button
 document.getElementById('refresh-btn').addEventListener('click', function(e) {
     e.preventDefault(); // Prevent default anchor behavior
-    loadTable(); // Call the function to reload the table
+
+    // Add the rotating class to the image
+    const refreshIcon = this.querySelector('img');
+    refreshIcon.classList.add('rotating');
+
+    // Call the function to reload the table
+    loadTable();
+
+    // Remove the rotation class after the table is loaded
+    setTimeout(() => {
+        refreshIcon.classList.remove('rotating');
+    }, 1000); // Adjust timing to match the animation duration
 });
 
 // Function to load the table with optional search and sort parameters

@@ -44,16 +44,16 @@ $result = $stmt->get_result();
                 echo "<tr>";
                 echo "<td>" . $count++ . "</td>";
                 echo "<td>" . $row["uid"] . "</td>";
-                echo "<td>" . $row["name"] . "</td>";
-                echo "<td>" . $row["email"] . "</td>";
-                echo "<td>" . $row["position"] . "</td>";
-                echo "<td>" . $row["userType"] . "</td>";
+                echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["position"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["userType"]) . "</td>";
                 echo "<td>
                         <div class='actions_icon'>
-                            <a href='#' data-icon-tooltip='Edit'>
+                            <a href='#' onclick=\"openEditModal('" . $row['uid'] . "', '" . addslashes($row['name']) . "', '" . addslashes($row['email']) . "', '" . addslashes($row['position']) . "', '" . addslashes($row['userType']) . "')\" data-icon-tooltip='Edit'>
                                 <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'>
                             </a>
-                            <a href='delete.php?uid=" . $row["uid"] . "' data-icon-tooltip='Remove'>
+                            <a href='#' onclick=\"openConfirmModal('" . $row["uid"] . "')\" data-icon-tooltip='Remove'>
                                 <img src='../../assets/trash-2.svg' alt='Remove' class='remove_icon'>
                             </a>
                         </div>
@@ -66,6 +66,8 @@ $result = $stmt->get_result();
         ?>
     </tbody>
 </table>
+<?php include 'Confirm_modal.php'; ?>
+<?php include 'Edit_modal.php'; ?>
 
 <?php
 $stmt->close();

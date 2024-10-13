@@ -22,8 +22,9 @@ include '../../authentication/check_login_admin.php';
 
     <?php include 'MainContent.php'; ?>
 
-
+    <?php include 'SuccessErrorModal.php'; ?>
     <script src="../Sidebar/Sidebar.js"></script>
+    <script src="SuccessErrorModal.js"></script>
 
 </body>
 

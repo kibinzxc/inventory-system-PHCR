@@ -1,28 +1,30 @@
 <?php
-
 include '../../connection/database.php';
 
 if (isset($_GET['uid'])) {
     $uid = $_GET['uid'];
 
-    // Prepare the SQL delete query
     $sql = "DELETE FROM accounts WHERE uid = ?";
 
-    // Initialize a statement and execute the query
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("i", $uid); // Bind the 'uid' to the query
+        $stmt->bind_param("i", $uid);
 
-        // Execute the query
         if ($stmt->execute()) {
-            echo "Account deleted successfully.";
+            header("Location: accounts.php?update=success&reason=account_deleted");
+            exit();
         } else {
-            echo "Error deleting account: " . $conn->error;
+            header("Location: accounts.php?update=error&reason=sql_failure");
+            exit();
         }
 
         $stmt->close();
+    } else {
+        header("Location: accounts.php?update=error&reason=sql_failure");
+        exit();
     }
 
     $conn->close();
 } else {
-    echo "No account specified.";
+    header("Location: accounts.php?update=error&reason=no_account_specified");
+    exit();
 }

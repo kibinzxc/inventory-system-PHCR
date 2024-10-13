@@ -33,7 +33,9 @@
             <div class="table" id="account-table"> <?php include 'AccountTable.php'; ?></div>
         </div>
     </div>
+    <?php include 'SuccessErrorModal.php'; ?>
 </div>
 
 <!-- Include the external JS file -->
 <script src="Accounts.js"></script>
+<script src="SuccessErrorModal.js"></script>

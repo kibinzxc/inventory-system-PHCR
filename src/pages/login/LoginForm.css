@@ -159,6 +159,11 @@
     animation: fadeIn 0.3s ease-in-out;
 }
 
+.error_img {
+    filter: invert(27%) sepia(100%) saturate(1000%) hue-rotate(-50deg) brightness(90%) contrast(90%);
+
+}
+
 
 @keyframes fadeIn {
     from {

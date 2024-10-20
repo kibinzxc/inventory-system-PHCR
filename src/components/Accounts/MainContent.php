@@ -24,7 +24,14 @@
                         <option value="name">NAME</option>
                         <option value="userType">USER TYPE</option>
                     </select>
+
+                    <span class="sort-label">ORDER:</span>
+                    <select class="select2" id="sortOrder">
+                        <option value="asc" selected>Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
                 </div>
+
                 <a href="#" class="icon_btn" id="refresh-btn"><img src="../../assets/refresh-ccw.svg" alt=""></a>
             </div>
 
@@ -36,5 +43,4 @@
     <?php include 'SuccessErrorModal.php'; ?>
     <script src="SuccessErrorModal.js"></script>
 </div>
-<!-- Include the external JS file -->
 <script src="Accounts.js"></script>

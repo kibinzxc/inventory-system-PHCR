@@ -104,22 +104,28 @@ a.btn {
 
 .btns_container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
+    /* Align items to the start */
     align-items: center;
     flex-wrap: wrap;
-    margin: 20px 0;
+    /* Allow wrapping */
+    margin: 20px 5px;
+    gap: 10px;
 }
 
 .icon_btn {
-    width: 5%;
+    width: 4%;
+    /* Allow width to be determined by content */
     height: 38px;
     flex-shrink: 0;
+    /* Prevent shrinking */
     border: 1px solid #DBDBDB;
     background: #FFF;
     justify-content: center;
     align-items: center;
     display: flex;
     border-radius: 5px;
+    /* Add space between buttons */
 }
 
 .icon_btn:hover {
@@ -128,7 +134,7 @@ a.btn {
 }
 
 .search_btn {
-    width: 50%;
+    width: 40%;
     height: 38px;
     flex-shrink: 0;
     border: 1px solid #DBDBDB;
@@ -145,9 +151,15 @@ a.btn {
     border: 1px solid #DBDBDB;
     border-radius: 5px;
     padding: 0 0 0 10px;
-    width: 30%;
+    flex-grow: 1;
+    /* Allow it to grow */
+    min-width: 100px;
+    /* Minimum width to prevent too small */
+    height: 38px;
+    /* Match button height */
     background-color: white;
     font-weight: 600;
+    /* Pushes the sort container to the right */
 }
 
 .sort-label {
@@ -156,13 +168,20 @@ a.btn {
     color: #000;
 }
 
-.select {
+.select,
+.select2 {
     flex-grow: 1;
-    height: 38px;
-    padding: 0 40px 0 10px;
+    /* Allow it to grow */
+    height: 100%;
+    /* Match height of sort container */
+    padding: 0 0 0 10px;
+    /* Adjusted padding */
     appearance: none;
+    /* Remove default styles */
     border: none;
-    background: url('data:image/svg+xml;base64,...') no-repeat right 10px center;
+    /* Remove border for uniformity */
+    background: white;
+    /* Background color */
     cursor: pointer;
     font-size: 15px;
 }

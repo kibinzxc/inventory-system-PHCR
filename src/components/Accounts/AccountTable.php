@@ -4,16 +4,20 @@ include '../../connection/database.php';
 // Handle search and sort inputs
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'uid';
+$order = isset($_GET['order']) ? $_GET['order'] : 'asc'; // Get order parameter
 
-// Define valid columns for sorting to prevent SQL injection
+// Define valid columns for sorting and valid order directions to prevent SQL injection
 $valid_sort_columns = ['uid', 'name', 'email', 'userType'];
+$valid_order_directions = ['asc', 'desc'];
+
 $sort = in_array($sort, $valid_sort_columns) ? $sort : 'uid';
+$order = in_array($order, $valid_order_directions) ? $order : 'asc'; // Validate order
 
 // SQL query using prepared statements to prevent SQL injection
 $sql = "SELECT uid, name, email, userType 
         FROM accounts 
         WHERE name LIKE ? OR email LIKE ? OR uid LIKE ? OR userType LIKE ? 
-        ORDER BY $sort";
+        ORDER BY $sort $order"; // Include order in SQL
 
 $stmt = $conn->prepare($sql);
 $search_param = "%$search%";
@@ -59,7 +63,7 @@ $result = $stmt->get_result();
                 echo "</tr>";
             }
         } else {
-            echo "<tr><td colspan='7'>No accounts found</td></tr>";
+            echo "<tr><td colspan='6'>No accounts found</td></tr>"; // Updated colspan to match the table headers
         }
         ?>
     </tbody>

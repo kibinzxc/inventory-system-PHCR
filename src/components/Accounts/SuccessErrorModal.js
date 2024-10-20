@@ -5,48 +5,77 @@ document.addEventListener("DOMContentLoaded", function () {
     const errorMessage = document.getElementById("errorMessage");
 
     const urlParams = new URLSearchParams(window.location.search);
-    const update = urlParams.get('update');
+    const action = urlParams.get('action'); // Get action parameter
     const reason = urlParams.get('reason');
-    const messages = urlParams.get('messages');
+    const message = urlParams.get('messages'); // Using 'messages' for error messages
 
-    console.log("Update parameter:", update); // Debugging line
+    console.log("Action parameter:", action); // Debugging line
     console.log("Reason parameter:", reason); // Debugging line
-    console.log("Messages parameter:", messages); // Debugging line
+    console.log("Message parameter:", message); // Debugging line
 
-    // Show success modal if update is successful
-    if (update === 'success') {
-        if (reason === 'account_updated') {
-            successMessage.textContent = "Account updated successfully.";
-        } else if (reason === 'account_deleted') {
-            successMessage.textContent = "Account deleted successfully.";
-        }
+    // Show success modal if action is add or update
+    if (action === 'add') {
+        successMessage.textContent = message || "User successfully added."; // Default message for add
+        successModal.style.display = "flex"; // Show the success modal
+
+        setTimeout(() => {
+            successModal.style.display = "none";
+        }, 5000); // Hide after 5 seconds
+    } else if (action === 'update') {
+        successMessage.textContent = message || "User successfully updated."; // Default message for update
+        successModal.style.display = "flex"; // Show the success modal
+
+        setTimeout(() => {
+            successModal.style.display = "none";
+        }, 5000); // Hide after 5 seconds
+    } else if (action === 'del') {
+        successMessage.textContent = message || "User successfully deleted."; // Default message for update
         successModal.style.display = "flex"; // Show the success modal
 
         setTimeout(() => {
             successModal.style.display = "none";
         }, 5000); // Hide after 5 seconds
     }
-    // Show error modal if there is an error
-    else if (update === 'error') {
-        let message = "An error occurred. ";
 
-        if (reason === 'password_mismatch') {
-            message += "The passwords do not match.";
-        } else if (reason === 'sql_failure') {
-            message += "There was a database error.";
-        } else if (reason === 'empty_fields') {
-            message += "Please fill in all fields.";
-        } else if (reason === 'password_criteria') {
-            if (messages) {
-                message += messages.replace(/%20/g, ' '); // Decode URL-encoded spaces
-            }
-        } else if (reason === 'no_account_specified') {
-            message += "No account specified for deletion.";
-        } else {
-            message += "Please try again.";
+    // Show error modal if there is an error
+    else if (action === 'error') {
+        let errorMsg = "An error occurred. ";
+
+        // Check for specific reasons and set error message accordingly
+        switch (reason) {
+            case 'password_mismatch':
+                errorMsg += "The passwords do not match.";
+                break;
+            case 'sql_failure':
+                errorMsg += "There was a database error.";
+                break;
+            case 'empty_fields':
+                errorMsg += "Please fill in all fields.";
+                break;
+            case 'name_empty':
+                errorMsg += "Name cannot be blank.";
+                break;
+            case 'email_empty':
+                errorMsg += "Email cannot be blank.";
+                break;
+            case 'userType_empty':
+                errorMsg += "User type cannot be blank.";
+                break;
+            case 'password_criteria':
+                errorMsg += message || "Password does not meet criteria.";
+                break;
+            case 'no_account_specified':
+                errorMsg += "No account specified for deletion.";
+                break;
+            case 'uid_missing':
+                errorMsg += "UID is missing.";
+                break;
+            default:
+                errorMsg += "Please try again.";
+                break;
         }
 
-        errorMessage.textContent = message;
+        errorMessage.textContent = errorMsg;
         errorModal.style.display = "flex"; // Show the error modal
 
         setTimeout(() => {

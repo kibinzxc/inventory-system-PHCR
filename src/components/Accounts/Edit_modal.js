@@ -1,11 +1,9 @@
 // Open the Edit Modal and fill in the user details
-function openEditModal(uid, name, email, position, userType) {
+function openEditModal(uid, name, email, userType) {
     document.getElementById('edit-uid').value = uid;
     document.getElementById('edit-name').value = name;
     document.getElementById('edit-email').value = email;
-    document.getElementById('edit-position').value = position;
-    document.getElementById('edit-userType').value = userType;
-    
+
 
     var modal = document.getElementById('editModal');
     modal.style.display = 'block';
@@ -23,7 +21,7 @@ closeBtn.onclick = closeModal;
 
 
 // Close the modal when clicking the Cancel button
-var cancelBtn = document.getElementById('cancelBtn'); 
+var cancelBtn = document.getElementById('cancelBtn');
 if (cancelBtn) {
     cancelBtn.onclick = closeModal;
 }

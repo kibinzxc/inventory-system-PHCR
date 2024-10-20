@@ -6,7 +6,7 @@
         <div class="header">
             <h2>Account Management</h2>
             <div class="btn-container"> <!-- Add this container -->
-                <a href="addAccount.php" class="btn"><img src="../../assets/plus-circle.svg" alt=""> Add Account</a>
+                <a href="#" class="btn" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add Account</a>
             </div>
         </div>
 
@@ -22,7 +22,6 @@
                     <select class="select" id="sort">
                         <option value="uid" selected>EMPLOYEE ID</option>
                         <option value="name">NAME</option>
-                        <option value="position">POSITION</option>
                         <option value="userType">USER TYPE</option>
                     </select>
                 </div>
@@ -33,9 +32,9 @@
             <div class="table" id="account-table"> <?php include 'AccountTable.php'; ?></div>
         </div>
     </div>
+    <?php include 'add-account.php' ?>
     <?php include 'SuccessErrorModal.php'; ?>
+    <script src="SuccessErrorModal.js"></script>
 </div>
-
 <!-- Include the external JS file -->
 <script src="Accounts.js"></script>
-<script src="SuccessErrorModal.js"></script>

@@ -1,17 +1,19 @@
 // Event listener for search input
-document.getElementById('search').addEventListener('input', function() {
+document.getElementById('search').addEventListener('input', function () {
     let searchValue = this.value.toLowerCase();
+    console.log("Search Input:", searchValue); // Debugging output
     loadTable(searchValue, document.getElementById('sort').value, false); // No loader for search
 });
 
 // Event listener for sort dropdown
-document.getElementById('sort').addEventListener('change', function() {
+document.getElementById('sort').addEventListener('change', function () {
     let sortValue = this.value;
+    console.log("Sort Value:", sortValue); // Debugging output
     loadTable(document.getElementById('search').value, sortValue, false); // No loader for sort
 });
 
 // Event listener for refresh button
-document.getElementById('refresh-btn').addEventListener('click', function(e) {
+document.getElementById('refresh-btn').addEventListener('click', function (e) {
     e.preventDefault(); // Prevent default anchor behavior
 
     // Add the rotating class to the image
@@ -27,30 +29,28 @@ document.getElementById('refresh-btn').addEventListener('click', function(e) {
     }, 1000); // Adjust timing to match the animation duration
 });
 
-// Function to load the table with optional search and sort parameters
 function loadTable(search = '', sort = 'uid', showLoader = true) {
-    // Show loader only if specified
     if (showLoader) {
         document.getElementById('loader').style.display = 'block';
     }
 
+    console.log("Loading Table with Search:", search, "and Sort:", sort); // Debugging output
+
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'AccountTable.php?search=' + search + '&sort=' + sort, true);
-    
-    xhr.onload = function() {
+    xhr.open('GET', 'AccountTable.php?search=' + encodeURIComponent(search) + '&sort=' + encodeURIComponent(sort), true);
+
+    xhr.onload = function () {
         if (xhr.status === 200) {
             // Update the table content
             document.getElementById('account-table').innerHTML = xhr.responseText;
+            console.log("Table content updated."); // Debugging output
         }
-
-        // Hide loader after the table is updated if it was shown
         if (showLoader) {
             document.getElementById('loader').style.display = 'none';
         }
     };
 
-    // Handle errors (optional)
-    xhr.onerror = function() {
+    xhr.onerror = function () {
         console.error("Failed to load the data.");
         if (showLoader) {
             document.getElementById('loader').style.display = 'none';

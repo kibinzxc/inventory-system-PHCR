@@ -13,19 +13,11 @@
                 <input type="hidden" name="uid" id="edit-uid">
                 <div class="form-group">
                     <label for="edit-name">Name</label>
-                    <input type="text" id="edit-name" name="name" required>
+                    <input type="text" id="edit-name" name="name" readonly>
                 </div>
                 <div class="form-group">
                     <label for="edit-email">Email</label>
-                    <input type="email" id="edit-email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-position">Position</label>
-                    <input type="text" id="edit-position" name="position" required>
-                </div>
-                <div class="form-group">
-                    <label for="edit-userType">Role</label>
-                    <input type="text" id="edit-userType" name="userType" required>
+                    <input type="email" id="edit-email" name="email" readonly>
                 </div>
                 <div class="form-group">
                     <label for="edit-password">Password</label>

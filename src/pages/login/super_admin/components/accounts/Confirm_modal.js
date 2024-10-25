@@ -5,10 +5,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Function to open the confirmation modal and set the UID for deletion
     window.openConfirmModal = function (uid) {
+        // Show the modal
+        confirmModal.style.display = "flex";
+
+        // Update the confirm button to redirect to delete with the correct UID
         confirmBtn.onclick = function () {
             window.location.href = 'delete.php?uid=' + uid; // Redirect to delete.php with the uid
         };
-        confirmModal.style.display = "flex"; // Show the modal
     };
 
     // Close modal functionality

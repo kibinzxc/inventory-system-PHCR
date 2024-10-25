@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const action = urlParams.get('action'); // Get action parameter
     const reason = urlParams.get('reason');
-    const message = urlParams.get('messages'); // Using 'messages' for error messages
+    const message = urlParams.get('message'); // Using 'messages' for error messages
 
     console.log("Action parameter:", action); // Debugging line
     console.log("Reason parameter:", reason); // Debugging line
@@ -60,6 +60,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 break;
             case 'userType_empty':
                 errorMsg += "User type cannot be blank.";
+                break;
+            case 'password_empty':
+                errorMsg += message;
                 break;
             case 'password_criteria':
                 errorMsg += message || "Password does not meet criteria.";

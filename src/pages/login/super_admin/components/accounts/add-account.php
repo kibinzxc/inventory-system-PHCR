@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="add-account.css">
-<div id="addModal" class="modal">
+<div id="addModal" class="modal" style="display: <?php echo $showModal ? 'block' : 'none'; ?>;">
     <div class="modal-content">
         <!-- Modal Header -->
         <div class="modal-header">
@@ -13,15 +13,21 @@
                 <input type="hidden" name="uid" id="add-uid">
                 <div class="form-group">
                     <label for="add-name">Name</label>
-                    <input type="text" id="add-name" name="name" placeholder="Enter the name">
+                    <input type="text" id="add-name" name="name" placeholder="Enter the name"
+                        value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>">
                 </div>
                 <div class="form-group">
                     <label for="add-email">Email</label>
-                    <input type="email" id="add-email" name="email" placeholder="Enter the email">
+                    <input type="email" id="add-email" name="email" placeholder="Enter the email"
+                        value="<?php echo isset($_GET['email']) ? htmlspecialchars($_GET['email']) : ''; ?>">
                 </div>
                 <div class="form-group">
                     <label for="add-userType">Role</label>
-                    <input type="text" id="add-userType" name="userType" value="stockman" Readonly>
+                    <select id="add-userType" name="userType">
+                        <option value="" disabled selected hidden>Select user type</option>
+                        <option value="admin" <?php echo (isset($_GET['userType']) && $_GET['userType'] === 'admin') ? 'selected' : ''; ?>>Admin</option>
+                        <option value="stockman" <?php echo (isset($_GET['userType']) && $_GET['userType'] === 'stockman') ? 'selected' : ''; ?>>Stockman</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="add-password">Password</label>

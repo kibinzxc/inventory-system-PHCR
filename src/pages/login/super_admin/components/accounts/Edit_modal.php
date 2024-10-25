@@ -13,11 +13,11 @@
                 <input type="hidden" name="uid" id="edit-uid">
                 <div class="form-group">
                     <label for="edit-name">Name</label>
-                    <input type="text" id="edit-name" name="name" readonly>
+                    <input type="text" id="edit-name" name="name">
                 </div>
                 <div class="form-group">
                     <label for="edit-email">Email</label>
-                    <input type="email" id="edit-email" name="email" readonly>
+                    <input type="email" id="edit-email" name="email">
                 </div>
                 <div class="form-group">
                     <label for="edit-password">Password</label>

@@ -86,7 +86,27 @@
     border-radius: 4px;
     width: 100%;
     box-sizing: border-box;
+    font-size: 1rem;
 }
+
+
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    color: black;
+    /* Default text color for the select */
+    font-size: 1rem;
+}
+
+/* Ensure options have a default color */
+.form-group select option {
+    color: black;
+    /* Default text color for all options */
+}
+
 
 /* Modal Footer (Button Area) */
 .modal-footer {

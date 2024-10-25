@@ -53,6 +53,7 @@ function loadTable(search = '', sort = 'uid', sortOrder = 'asc') {
             console.log("Table content updated."); // Debugging output
 
             // Reattach event listeners for modal buttons
+            attachDeleteListeners()
             attachModalListeners();
         }
         // Hide loader after the table is loaded
@@ -87,4 +88,52 @@ function attachModalListeners() {
         cancelBtn.onclick = closeModal;
 
     }
+}
+
+// Function to attach delete listeners
+function attachDeleteListeners() {
+    const confirmModal = document.getElementById("uniqueConfirmModal");
+    const confirmBtn = document.getElementById("uniqueConfirmBtn");
+    const cancelBtn = document.getElementById("uniqueCancelBtn");
+
+    // Function to open the confirmation modal and set the UID for deletion
+    window.openConfirmModal = function (uid) {
+        // Show the modal
+        confirmModal.style.display = "flex";
+
+        // Update the confirm button to redirect to delete with the correct UID
+        confirmBtn.onclick = function () {
+            window.location.href = 'delete.php?uid=' + uid; // Redirect to delete.php with the uid
+        };
+    };
+
+    // Close modal functionality
+    document.querySelector('.confirmation-close').onclick = function () {
+        confirmModal.style.display = "none"; // Hide modal on close button click
+    };
+
+    cancelBtn.onclick = function () {
+        confirmModal.style.display = "none"; // Hide modal on cancel
+    };
+
+    // Optional: Close modal when clicking outside of the modal content
+    window.onclick = function (event) {
+        if (event.target === confirmModal) {
+            confirmModal.style.display = "none"; // Hide modal if clicked outside
+        }
+    };
+
+    const deleteButtons = document.querySelectorAll('.remove_icon'); // Select all delete buttons
+    deleteButtons.forEach(button => {
+        button.onclick = function (e) {
+            e.preventDefault(); // Prevent the default anchor action
+
+            // Retrieve the UID from the closest table row (assuming the button is in a table row)
+            const row = button.closest('tr'); // Get the closest <tr> to the button
+            const uid = row.querySelector('td:nth-child(2)').textContent; // Assuming UID is in the second column
+
+            console.log("Delete button clicked for UID:", uid); // Log which UID is being deleted
+            openConfirmModal(uid); // Call the function to open the confirm modal
+        };
+    });
 }

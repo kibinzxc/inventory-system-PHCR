@@ -10,19 +10,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if the name and email are empty
     if (empty($name) && empty($email)) {
-        header("Location: accounts.php?action=error&reason=empty_fields&message=Name and email cannot be empty.");
+        header("Location: accounts.php?action=error&reason=empty_fields&message=Name and email cannot be empty.&name=$name&email=$email&userType=$userType");
         exit();
     } elseif (empty($name)) {
-        header("Location: accounts.php?action=error&reason=name_empty&message=Name cannot be empty.");
+        header("Location: accounts.php?action=error&reason=name_empty&message=Name cannot be empty.&email=$email&userType=$userType");
         exit();
     } elseif (empty($email)) {
-        header("Location: accounts.php?action=error&reason=email_empty&message=Email cannot be empty.");
+        header("Location: accounts.php?action=error&reason=email_empty&message=Email cannot be empty.&name=$name&userType=$userType");
         exit();
     } elseif (empty($userType)) {
-        header("Location: accounts.php?action=error&reason=userType_empty&message=User type cannot be empty.");
+        header("Location: accounts.php?action=error&reason=userType_empty&message=User type cannot be empty.&name=$name&email=$email");
         exit();
     } elseif (empty($password) || empty($confirmPassword)) {
-        header("Location: accounts.php?action=error&reason=password_empty&message=Please fill both password fields.");
+        // Check if both password fields are filled
+        header("Location: accounts.php?action=error&reason=password_empty&message=Both password fields must be filled.&name=$name&email=$email&userType=$userType");
         exit();
     }
 
@@ -30,19 +31,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($password === $confirmPassword) {
         // Password criteria validation
         if (strlen($password) < 8) {
-            header("Location: accounts.php?action=error&reason=password_criteria&messages=Password must be at least 8 characters long.");
+            header("Location: accounts.php?action=error&reason=password_criteria&message=Password must be at least 8 characters long.&name=$name&email=$email&userType=$userType");
             exit();
         } elseif (!preg_match('/[A-Z]/', $password)) {
-            header("Location: accounts.php?action=error&reason=password_criteria&messages=Password must contain at least one uppercase letter.");
+            header("Location: accounts.php?action=error&reason=password_criteria&message=Password must contain at least one uppercase letter.&name=$name&email=$email&userType=$userType");
             exit();
         } elseif (!preg_match('/[a-z]/', $password)) {
-            header("Location: accounts.php?action=error&reason=password_criteria&messages=Password must contain at least one lowercase letter.");
+            header("Location: accounts.php?action=error&reason=password_criteria&message=Password must contain at least one lowercase letter.&name=$name&email=$email&userType=$userType");
             exit();
         } elseif (!preg_match('/[0-9]/', $password)) {
-            header("Location: accounts.php?action=error&reason=password_criteria&messages=Password must contain at least one number.");
+            header("Location: accounts.php?action=error&reason=password_criteria&message=Password must contain at least one number.&name=$name&email=$email&userType=$userType");
             exit();
         } elseif (!preg_match('/[\W_]/', $password)) {
-            header("Location: accounts.php?action=error&reason=password_criteria&messages=Password must contain at least one special character.");
+            header("Location: accounts.php?action=error&reason=password_criteria&message=Password must contain at least one special character.&name=$name&email=$email&userType=$userType");
             exit();
         }
 
@@ -60,14 +61,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         } else {
             // Redirect with specific SQL error
-            header("Location: accounts.php?action=error&reason=sql_failure");
+            header("Location: accounts.php?action=error&reason=sql_failure&name=$name&email=$email&userType=$userType");
             exit();
         }
 
         $stmt->close();
     } else {
         // Redirect with a password mismatch error
-        header("Location: accounts.php?action=error&reason=password_mismatch");
+        header("Location: accounts.php?action=error&reason=password_mismatch&message=Passwords do not match.&name=$name&email=$email&userType=$userType");
         exit();
     }
 }

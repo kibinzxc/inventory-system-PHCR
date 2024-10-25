@@ -1,10 +1,5 @@
 // Open the Add Modal and optionally fill in the user details
-function openAddModal(uid = '', name = '', email = '', userType = '') {
-    document.getElementById('add-uid').value = uid;
-    document.getElementById('add-name').value = name;
-    document.getElementById('add-email').value = email;
-    document.getElementById('add-userType').value = "stockman";
-
+function openAddModal() {
     var modal = document.getElementById('addModal');
     modal.style.display = 'block';
 }

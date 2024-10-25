@@ -1,0 +1,56 @@
+/* Main content styling */
+body {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    height: 100vh;
+}
+
+#main-content {
+    transition: margin-left 0.5s;
+    margin-left: 250px;
+    padding: 16px;
+}
+
+.collapsed #main-content {
+    margin-left: 60px;
+}
+
+.tooltip {
+    position: absolute;
+    /* Adjust positioning */
+    background-color: #333;
+    /* Tooltip background color */
+    color: #fff;
+    /* Tooltip text color */
+    padding: 5px 10px;
+    /* Padding */
+    border-radius: 5px;
+    /* Rounded corners */
+    display: none;
+    /* Hidden by default */
+    z-index: 1000;
+    /* Ensure it appears above other elements */
+}
+
+
+.tooltip-link:hover+.tooltip {
+
+    /* Show tooltip on hover */
+}
+
+.tooltip-link {
+    position: relative;
+    /* Positioning context for the tooltip */
+}
+
+
+@media screen and (max-width: 768px) {
+    #main-content {
+        margin-left: 0;
+        /* Adjust margin */
+    }
+
+    .tooltip {
+        display: none;
+    }
+}

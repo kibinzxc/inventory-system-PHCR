@@ -1,0 +1,120 @@
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    /* Ensure no spacing between cells */
+    margin-top: 20px;
+    text-align: center;
+    border-radius: 10px;
+    /* Apply border-radius to the table */
+    overflow: hidden;
+    /* Essential to see the border-radius effect */
+    border: 1px solid #ddd;
+    /* Optional: Add an outside border for better visibility */
+    margin-bottom: 40px;
+    min-width: 600px;
+    /* Ensure table is wider than the container for scrolling */
+
+}
+
+table td,
+table th {
+    border: none;
+    /* Remove vertical lines */
+    padding: 8px;
+    /* Add padding to cells */
+}
+
+table tr {
+    /* No need to add border-bottom here */
+}
+
+table td {
+    height: 40px;
+    background: #FFF;
+    border-bottom: 1px solid #ddd;
+    /* Add horizontal lines */
+}
+
+table tr:last-child td {
+    border-bottom: none;
+    /* Remove border from the last row for better aesthetics */
+}
+
+table th {
+    height: 45px;
+    flex-shrink: 0;
+    background: #343434;
+    color: white;
+}
+
+.settings_icon {
+    filter: invert(27%) sepia(47%) saturate(746%) hue-rotate(153deg) brightness(95%) contrast(90%);
+    fill: #254E5A;
+    /* Directly set the fill color */
+
+}
+
+.actions_icon a {
+    text-decoration: none;
+}
+
+.actions_icon {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.remove_icon {
+    filter: invert(28%) sepia(77%) saturate(355%) hue-rotate(320deg) brightness(90%) contrast(90%);
+}
+
+/* Tooltip container */
+[data-icon-tooltip] {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+[data-icon-tooltip]::after {
+    content: attr(data-icon-tooltip);
+    /* Use the data attribute value as the tooltip text */
+    visibility: hidden;
+    width: auto;
+    /* Adjust as needed */
+    background-color: #333;
+    /* Tooltip background color */
+    color: #fff;
+    /* Tooltip text color */
+    text-align: center;
+    border-radius: 5px;
+    /* Rounded corners */
+    padding: 5px;
+    /* Padding inside the tooltip */
+    position: absolute;
+    z-index: 1000;
+    bottom: 105%;
+    /* Position above the element */
+    left: 50%;
+    /* Center the tooltip */
+    transform: translateX(-50%);
+    /* Adjust for centering */
+    opacity: 0;
+    /* Hidden by default */
+    transition: opacity 0.3s;
+    /* Fade effect */
+}
+
+/* Show the tooltip text when hovering */
+[data-icon-tooltip]:hover::after {
+    visibility: visible;
+    opacity: 1;
+    /* Show the tooltip */
+}
+
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+        margin: 0;
+    }
+}

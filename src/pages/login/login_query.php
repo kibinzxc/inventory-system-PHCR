@@ -32,10 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } elseif ($userType === 'super_admin') {
                 header("Location: super_admin/components/Dashboard/Dashboard.php");
             } elseif ($userType === 'stockman') {
-                // Add redirection path for stockman
                 header("Location: ../../components/Stockman/Dashboard.php");
             } else {
-                // If user is not an admin, super_admin, or stockman
                 header("Location: ../../pages/login.php?error=Unauthorized%20access");
             }
             exit();
@@ -46,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         // User does not exist
-        header("Location: ../../pages/login.php?error=Account%20doesn't%20exist");
+        header("Location: ../../pages/login.php?error=Account%20does%20not%20exist");
         exit();
     }
 

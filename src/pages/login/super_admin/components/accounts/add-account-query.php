@@ -2,8 +2,9 @@
 include '../../connection/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
+    // Capitalize all characters in the name and make the email lowercase
+    $name = strtoupper($_POST['name']);
+    $email = strtolower($_POST['email']);
     $userType = $_POST['userType'];
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirmPassword'];
@@ -22,14 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: accounts.php?action=error&reason=userType_empty&message=User type cannot be empty.&name=$name&email=$email");
         exit();
     } elseif (empty($password) || empty($confirmPassword)) {
-        // Check if both password fields are filled
         header("Location: accounts.php?action=error&reason=password_empty&message=Both password fields must be filled.&name=$name&email=$email&userType=$userType");
         exit();
     }
 
     // Continue with further validation if all fields are filled
     if ($password === $confirmPassword) {
-        // Password criteria validation
         if (strlen($password) < 8) {
             header("Location: accounts.php?action=error&reason=password_criteria&message=Password must be at least 8 characters long.&name=$name&email=$email&userType=$userType");
             exit();
@@ -47,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         }
 
-        // Hash the password (consider using password_hash() for better security)
+        // Hash the password
         $hashedPassword = md5($password);
 
         // SQL statement for adding a new account
@@ -60,14 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: accounts.php?action=add&message=User successfully added.");
             exit();
         } else {
-            // Redirect with specific SQL error
             header("Location: accounts.php?action=error&reason=sql_failure&name=$name&email=$email&userType=$userType");
             exit();
         }
 
         $stmt->close();
     } else {
-        // Redirect with a password mismatch error
         header("Location: accounts.php?action=error&reason=password_mismatch&message=Passwords do not match.&name=$name&email=$email&userType=$userType");
         exit();
     }

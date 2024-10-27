@@ -9,9 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const reason = urlParams.get('reason');
     const message = urlParams.get('message'); // Using 'messages' for error messages
 
-    console.log("Action parameter:", action); // Debugging line
-    console.log("Reason parameter:", reason); // Debugging line
-    console.log("Message parameter:", message); // Debugging line
 
     // Show success modal if action is add or update
     if (action === 'add') {

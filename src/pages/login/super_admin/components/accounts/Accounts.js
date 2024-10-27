@@ -1,21 +1,18 @@
 // Event listener for search input
 document.getElementById('search').addEventListener('input', function () {
     let searchValue = this.value.toLowerCase();
-    console.log("Search Input:", searchValue); // Debugging output
     loadTable(searchValue, document.getElementById('sort').value, document.getElementById('sortOrder').value); // Pass sortOrder as well
 });
 
 // Event listener for sort dropdown
 document.getElementById('sort').addEventListener('change', function () {
     let sortValue = this.value;
-    console.log("Sort Value:", sortValue); // Debugging output
     loadTable(document.getElementById('search').value, sortValue, document.getElementById('sortOrder').value); // Pass sortOrder as well
 });
 
 // Event listener for sort order dropdown
 document.getElementById('sortOrder').addEventListener('change', function () {
     let sortOrderValue = this.value;
-    console.log("Sort Order Value:", sortOrderValue); // Debugging output
     loadTable(document.getElementById('search').value, document.getElementById('sort').value, sortOrderValue); // Pass search value and sort as well
 });
 
@@ -41,7 +38,6 @@ document.getElementById('refresh-btn').addEventListener('click', function (e) {
 
 // Function to load the table
 function loadTable(search = '', sort = 'uid', sortOrder = 'asc') {
-    console.log("Loading Table with Search:", search, "Sort:", sort, "Order:", sortOrder); // Debugging output
 
     let xhr = new XMLHttpRequest();
     xhr.open('GET', 'AccountTable.php?search=' + encodeURIComponent(search) + '&sort=' + encodeURIComponent(sort) + '&order=' + encodeURIComponent(sortOrder), true);
@@ -50,7 +46,6 @@ function loadTable(search = '', sort = 'uid', sortOrder = 'asc') {
         if (xhr.status === 200) {
             // Update the table content
             document.getElementById('account-table').innerHTML = xhr.responseText;
-            console.log("Table content updated."); // Debugging output
 
             // Reattach event listeners for modal buttons
             attachDeleteListeners()
@@ -132,7 +127,6 @@ function attachDeleteListeners() {
             const row = button.closest('tr'); // Get the closest <tr> to the button
             const uid = row.querySelector('td:nth-child(2)').textContent; // Assuming UID is in the second column
 
-            console.log("Delete button clicked for UID:", uid); // Log which UID is being deleted
             openConfirmModal(uid); // Call the function to open the confirm modal
         };
     });

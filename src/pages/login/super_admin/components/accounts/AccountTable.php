@@ -16,8 +16,9 @@ $order = in_array($order, $valid_order_directions) ? $order : 'asc'; // Validate
 // SQL query using prepared statements to prevent SQL injection
 $sql = "SELECT uid, name, email, userType 
         FROM accounts 
-        WHERE name LIKE ? OR email LIKE ? OR uid LIKE ? OR userType LIKE ? 
-        ORDER BY $sort $order"; // Include order in SQL
+        WHERE (name LIKE ? OR email LIKE ? OR uid LIKE ? OR userType LIKE ?)
+        AND userType != 'super_admin' 
+        ORDER BY $sort $order"; // Exclude "super_admin" userType and include order
 
 $stmt = $conn->prepare($sql);
 $search_param = "%$search%";

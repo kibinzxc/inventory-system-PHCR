@@ -3,7 +3,7 @@
     <div class="editpass-modal-content">
         <!-- Modal Header -->
         <div class="editpass-modal-header">
-            <h2>Add Account</h2>
+            <h2>Change Password</h2>
             <span class="editpass-close1">&times;</span>
         </div>
 
@@ -13,13 +13,13 @@
                 <input type="hidden" name="uid" id="editpass-uid">
 
                 <div class="editpass-form-group">
-                    <label for="editpass-password">Password</label>
-                    <input type="password" id="editpass-password" name="password" placeholder="Enter the password">
+                    <label for="editpass-password">New Password</label>
+                    <input type="password" id="editpass-password" name="password" placeholder="Enter your new password">
                 </div>
 
                 <div class="editpass-form-group">
                     <label for="editpass-confirm-password">Confirm Password</label>
-                    <input type="password" id="editpass-confirm-password" name="confirmPassword" placeholder="Retype the password">
+                    <input type="password" id="editpass-confirm-password" name="confirmPassword" placeholder="Retype your new password">
                 </div>
             </form>
         </div>

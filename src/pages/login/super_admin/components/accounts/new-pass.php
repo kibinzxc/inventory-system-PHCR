@@ -46,7 +46,7 @@
         </blockquote>
 
     </div>
-    <?php include 'verification.php' ?>
+    <?php include 'edit_password.php' ?>
     <?php include 'add-account.php' ?>
     <?php include 'SuccessErrorModal.php'; ?>
     <script src="SuccessErrorModal.js"></script>

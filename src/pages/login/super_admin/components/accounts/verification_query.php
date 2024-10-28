@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Compare the hashed input password with the hashed password in the database
         if ($hashedInputPassword === $hashedPassword) {
             // Password is correct; redirect to edit_password.php
-            header("Location: edit_password.php?uid=" . $uid);
+            header("Location: new-pass-container.php?uid=" . $uid);
             exit();
         } else {
             // Incorrect password message with retrieved password

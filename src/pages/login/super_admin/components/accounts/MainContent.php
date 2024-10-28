@@ -5,7 +5,8 @@
     <div class="container">
         <div class="header">
             <h2>Account Management</h2>
-            <div class="btn-container"> <!-- Add this container -->
+            <div class="btn-wrapper">
+                <a href="#" class="btn" onclick="openVerificationModal()"><img src="../../assets/plus-circle.svg" alt=""> Edit Password</a>
                 <a href="#" class="btn" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add Account</a>
             </div>
         </div>
@@ -37,8 +38,15 @@
 
             <div class="loader" id="loader" style="display:none;"></div>
             <div class="table" id="account-table"> <?php include 'AccountTable.php'; ?></div>
+
         </div>
+
+        <blockquote class="mobile-note">
+            <strong>Note:</strong> On mobile devices, access is limited to viewing only. You cannot edit, add, or remove content.
+        </blockquote>
+
     </div>
+    <?php include 'verification.php' ?>
     <?php include 'add-account.php' ?>
     <?php include 'SuccessErrorModal.php'; ?>
     <script src="SuccessErrorModal.js"></script>

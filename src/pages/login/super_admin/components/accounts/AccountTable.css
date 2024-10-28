@@ -25,9 +25,6 @@ table th {
     /* Add padding to cells */
 }
 
-table tr {
-    /* No need to add border-bottom here */
-}
 
 table td {
     height: 40px;
@@ -116,5 +113,14 @@ table th {
     table {
         width: 100%;
         margin: 0;
+    }
+
+    /* Hide the Actions column */
+    table th:last-child,
+    /* Hide the last header cell */
+    table td:last-child {
+        /* Hide the last cell in each row */
+        display: none;
+        /* Hide the element */
     }
 }

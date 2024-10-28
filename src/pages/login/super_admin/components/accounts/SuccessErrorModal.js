@@ -70,6 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
             case 'uid_missing':
                 errorMsg += "UID is missing.";
                 break;
+            case 'incorrect_password':
+                errorMsg += message;
             default:
                 errorMsg += "Please try again.";
                 break;

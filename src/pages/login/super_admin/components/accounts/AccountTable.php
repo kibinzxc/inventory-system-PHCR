@@ -36,7 +36,7 @@ $result = $stmt->get_result();
             <th>Name</th>
             <th>Email</th>
             <th>Role</th>
-            <th>Actions</th>
+            <th>Actions</th><!-- This column will be hidden on mobile -->
         </tr>
     </thead>
     <tbody>

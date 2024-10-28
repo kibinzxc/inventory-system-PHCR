@@ -49,10 +49,12 @@ body {
 }
 
 /* New container for the button */
-.btn-container {
-    margin-left: auto;
-    /* Push the button to the right by default */
+.btn-wrapper {
+    display: flex;
+    gap: 10px;
+    /* Adjust this value as needed */
 }
+
 
 .btn {
     width: 165px;
@@ -65,6 +67,7 @@ body {
     display: flex;
     justify-content: center;
 }
+
 
 .header a:hover {
     transform: scale(1.1);
@@ -234,9 +237,28 @@ a.btn {
     animation: rotate 1s linear infinite;
 }
 
+.mobile-note {
+    display: none;
+    /* Initially hidden */
+    background-color: #f9f9f9;
+    /* Light background */
+    border-left: 5px solid #007BFF;
+    /* Blue left border */
+    padding: 10px;
+    /* Padding for space */
+    margin: 20px 0;
+    /* Margin for spacing */
+    font-style: italic;
+    /* Italics for emphasis */
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .btns_container {
+        display: none;
+    }
+
+    .btn-wrapper {
         display: none;
     }
 
@@ -247,6 +269,7 @@ a.btn {
     .table {
         width: 100%;
         /* Adjust table width to take full container */
+        font-size: 1.2rem;
     }
 
     .table_container {
@@ -283,5 +306,10 @@ a.btn {
 
     .container {
         margin-right: 0;
+    }
+
+    .mobile-note {
+        display: block;
+        /* Show on mobile */
     }
 }

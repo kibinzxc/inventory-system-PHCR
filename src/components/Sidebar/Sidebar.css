@@ -218,6 +218,11 @@ body {
     /* Show tooltip when collapsed */
 }
 
+.sidebar.collapsed {
+    width: 60px;
+    /* Collapsed width */
+}
+
 @media screen and (max-width: 768px) {
     .collapsed .bglinks img {
         width: 35px;

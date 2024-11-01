@@ -7,30 +7,46 @@ document.addEventListener('DOMContentLoaded', function () {
     // Check if sidebarState exists and set isCollapsed accordingly
     if (sidebarState && sidebarState.collapsed) {
         isCollapsed = true; // Set the state based on saved preference
-        updateSidebarState(); // Initialize the sidebar state
-    } else {
-        updateSidebarState(false); // Ensure sidebar is expanded
     }
+
+    // Immediately update the sidebar and toggle button state without animation
+    updateSidebarState(true); // Pass true to avoid animation
 });
 
 // Function to update the sidebar and main content based on the collapsed state
-function updateSidebarState(forceCollapse) {
+function updateSidebarState(avoidAnimation = false) {
     const sidebar = document.getElementById("mySidebar");
     const mainContent = document.getElementById("main-content");
     const logo = document.getElementById("sidebarLogo");
+    const toggleArrow = document.querySelector(".toggle-btn"); // Get the toggle button
 
-    if (forceCollapse !== undefined) {
-        isCollapsed = forceCollapse; // Force set the collapsed state if provided
+    // If avoiding animation, set transition to none
+    if (avoidAnimation) {
+        sidebar.style.transition = 'none';
+        toggleArrow.style.transition = 'none'; // Prevent animation on toggle arrow
+    } else {
+        sidebar.style.transition = 'width 0.5s'; // Allow transition for toggles
+        toggleArrow.style.transition = 'transform 0.5s'; // Allow transition for toggle arrow
     }
 
     if (isCollapsed) {
         sidebar.classList.add("collapsed");
         mainContent.style.marginLeft = window.matchMedia("(max-width: 768px)").matches ? "20px" : "60px"; // Adjust for mobile
         logo.classList.add("hidden");
+        toggleArrow.style.transform = 'rotate(180deg)'; // Rotate arrow when collapsed
     } else {
         sidebar.classList.remove("collapsed");
         mainContent.style.marginLeft = window.matchMedia("(max-width: 768px)").matches ? "250px" : "250px"; // Adjust for mobile
         logo.classList.remove("hidden");
+        toggleArrow.style.transform = 'rotate(0deg)'; // Reset arrow rotation when expanded
+    }
+
+    // Reset transition style after initial update
+    if (avoidAnimation) {
+        setTimeout(() => {
+            sidebar.style.transition = 'width 0.5s'; // Enable transition for future toggles
+            toggleArrow.style.transition = 'transform 0.5s'; // Enable transition for future toggles
+        }, 0);
     }
 }
 
@@ -38,12 +54,14 @@ function updateSidebarState(forceCollapse) {
 function toggleSidebar() {
     // Toggle the state and update the sidebar accordingly
     isCollapsed = !isCollapsed;
+
     updateSidebarState(); // Update the sidebar state based on the new value
 
     // Save the current state to localStorage
     const settings = { collapsed: isCollapsed };
     localStorage.setItem('sidebarState', JSON.stringify(settings));
 }
+
 
 // Function to update the title with the notification count or app name
 const originalTitle = document.title;

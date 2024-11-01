@@ -18,11 +18,11 @@ if (isUserLoggedIn()) {
         // echo "User is an admin.";
     } else {
         // echo "User is not an admin.";
-        header("Location: ../../pages/login.php?error=User%20not%20super%20admin");
+        header("Location:  ../../../../login.php?error=User%20not%20super%20admin");
         exit();
     }
 } else {
     // echo "User is not logged in.";
-    header("Location: ../../pages/login.php?error=User%20not%20logged%20in");
+    header("Location: ../../../../login.php?error=User%20not%20logged%20in");
     exit();
 }

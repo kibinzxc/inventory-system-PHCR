@@ -7,21 +7,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // Check if sidebarState exists and set isCollapsed accordingly
     if (sidebarState && sidebarState.collapsed) {
         isCollapsed = true; // Set the state based on saved preference
-        updateSidebarState(); // Initialize the sidebar state
-    } else {
-        updateSidebarState(false); // Ensure sidebar is expanded
     }
+
+    // Initialize the sidebar state
+    updateSidebarState();
 });
 
 // Function to update the sidebar and main content based on the collapsed state
-function updateSidebarState(forceCollapse) {
+function updateSidebarState() {
     const sidebar = document.getElementById("mySidebar");
     const mainContent = document.getElementById("main-content");
     const logo = document.getElementById("sidebarLogo");
 
-    if (forceCollapse !== undefined) {
-        isCollapsed = forceCollapse; // Force set the collapsed state if provided
-    }
+    // Set transition style based on current state
+    sidebar.style.transition = isCollapsed ? "none" : "width 0.5s"; // No transition if collapsed
 
     if (isCollapsed) {
         sidebar.classList.add("collapsed");
@@ -32,12 +31,18 @@ function updateSidebarState(forceCollapse) {
         mainContent.style.marginLeft = window.matchMedia("(max-width: 768px)").matches ? "250px" : "250px"; // Adjust for mobile
         logo.classList.remove("hidden");
     }
+
+    // Delay the transition to enable toggling animations
+    setTimeout(() => {
+        sidebar.style.transition = "width 0.5s"; // Enable transition for future toggles
+    }, 0);
 }
 
 // Function to toggle the sidebar
 function toggleSidebar() {
     // Toggle the state and update the sidebar accordingly
     isCollapsed = !isCollapsed;
+
     updateSidebarState(); // Update the sidebar state based on the new value
 
     // Save the current state to localStorage

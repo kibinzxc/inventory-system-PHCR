@@ -20,8 +20,8 @@
                     <img src="../../assets/filter.svg" alt="" class="filter_icon">
                     <span class="sort-label">SORT BY:</span>
                     <select class="select" id="sort">
-                        <option value="ingredientsID" selected>Code</option>
-                        <option value="name">Name</option>
+                        <option value="name" selected>Name</option>
+                        <option value="itemID">Code</option>
                         <option value="shelfLife">Shelf Life</option>
                         <option value="date">Date</option>
                         <option value="addedBy">Added By</option>

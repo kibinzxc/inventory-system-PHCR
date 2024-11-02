@@ -7,7 +7,7 @@ if (isset($_GET['itemID'])) {
     $sql = "DELETE FROM items WHERE itemID = ?";
 
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("i", $itemID);
+        $stmt->bind_param("s", $itemID);
 
         if ($stmt->execute()) {
             header("Location: items.php?action=del&reason=ingredient_deleted");

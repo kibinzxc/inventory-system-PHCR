@@ -34,7 +34,7 @@ $result = $stmt->get_result();
             <th>#</th>
             <th>Name</th>
             <th>Code</th>
-            <th>Shelf Life</th>
+            <th>Shelf Life (avg)</th>
             <th>Date Added</th>
             <th>Added By</th>
             <th>Actions</th>

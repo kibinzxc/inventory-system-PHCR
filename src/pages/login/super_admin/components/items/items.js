@@ -37,7 +37,7 @@ document.getElementById('refresh-btn').addEventListener('click', function (e) {
 });
 
 // Function to load the table
-function loadTable(search = '', sort = 'uid', sortOrder = 'asc') {
+function loadTable(search = '', sort = 'itemID', sortOrder = 'asc') {
 
     let xhr = new XMLHttpRequest();
     xhr.open('GET', 'itemsTable.php?search=' + encodeURIComponent(search) + '&sort=' + encodeURIComponent(sort) + '&order=' + encodeURIComponent(sortOrder), true);
@@ -125,9 +125,9 @@ function attachDeleteListeners() {
 
             // Retrieve the UID from the closest table row (assuming the button is in a table row)
             const row = button.closest('tr'); // Get the closest <tr> to the button
-            const uid = row.querySelector('td:nth-child(2)').textContent; // Assuming UID is in the second column
+            const itemID = row.querySelector('td:nth-child(3)').textContent; // Assuming UID is in the second column
 
-            openConfirmModal(uid); // Call the function to open the confirm modal
+            openConfirmModal(itemID); // Call the function to open the confirm modal
         };
     });
 }

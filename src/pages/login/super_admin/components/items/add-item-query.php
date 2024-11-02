@@ -15,18 +15,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // Generate a unique itemID starting with the first letter(s) of the name
-    $nameParts = explode(' ', $name);
-    $initials = '';
+    // Generate itemID
+    $nameParts = explode(' ', $name); // Split the name into words
+    $prefix = ''; // Initialize prefix
+
+    // Create the prefix from the first letter of each word
     foreach ($nameParts as $part) {
-        $initials .= strtoupper(substr($part, 0, 1)); // Get the first letter of each part
+        $prefix .= strtoupper(substr($part, 0, 1)); // Append the first letter of each word
     }
 
-    do {
-        // Ensure the total length of itemID is 8 (2 letters + 6 random characters)
-        $randomCode = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6); // Generate a 6-character random string
-        $itemID = $initials . $randomCode; // Prepend initials to the random code
+    $numWords = count($nameParts); // Count the number of words
 
+    // Calculate how many random digits to add
+    $digitsToAdd = max(6 - strlen($prefix), 0); // Ensure at least 0 digits if prefix is already 6 or more
+
+    // Generate the suffix with random digits
+    $suffix = str_pad(mt_rand(0, pow(10, $digitsToAdd) - 1), $digitsToAdd, '0', STR_PAD_LEFT); // Generate random digits
+
+    // Concatenate to form the complete itemID
+    $itemID = $prefix . $suffix;
+
+    do {
         // Check if itemID already exists in the database
         $checkSql = "SELECT COUNT(*) FROM items WHERE itemID = ?";
         $checkStmt = $conn->prepare($checkSql);
@@ -35,6 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $checkStmt->bind_result($count);
         $checkStmt->fetch();
         $checkStmt->close();
+
+        if ($count > 0) {
+            // If itemID exists, regenerate it
+            $suffix = str_pad(mt_rand(0, pow(10, $digitsToAdd) - 1), $digitsToAdd, '0', STR_PAD_LEFT); // Generate new random digits
+            $itemID = $prefix . $suffix; // Recreate the itemID with the new suffix
+        }
     } while ($count > 0); // Repeat until a unique itemID is generated
 
     // Retrieve the name of the current user from the database

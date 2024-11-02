@@ -3,7 +3,7 @@ function openEditModal(uid, name, email, userType) {
     document.getElementById('edit-uid').value = uid;
     document.getElementById('edit-name').value = name;
     document.getElementById('edit-email').value = email;
-
+    document.getElementById('edit-userType').value = userType;
 
     var modal = document.getElementById('editModal');
     modal.style.display = 'block';

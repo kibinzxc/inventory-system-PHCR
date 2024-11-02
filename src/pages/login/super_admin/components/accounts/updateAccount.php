@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capitalize all characters in the name and make the email lowercase
     $name = strtoupper($_POST['name']);
     $email = strtolower($_POST['email']);
+    $userType = trim($_POST['userType']); // Capture userType without converting to uppercase
 
     $password = $_POST['password'];
     $confirmPassword = $_POST['confirmPassword'];
@@ -20,6 +21,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (trim($email) === '') {
             header("Location: accounts.php?action=error&reason=email_empty&messages=Email cannot be blank.");
+            exit();
+        }
+
+        if (trim($userType) === '') {
+            header("Location: accounts.php?action=error&reason=userType_empty&messages=User type cannot be blank.");
             exit();
         }
 
@@ -49,9 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     $hashedPassword = md5($password);
 
-                    $sql = "UPDATE accounts SET name = ?, email = ?, password = ? WHERE uid = ?";
-                    $params = [$name, $email, $hashedPassword, $uid];
-                    $paramTypes = 'sssi';
+                    $sql = "UPDATE accounts SET name = ?, email = ?, password = ?, userType = ? WHERE uid = ?";
+                    $params = [$name, $email, $hashedPassword, $userType, $uid];
+                    $paramTypes = 'ssssi';
                 } else {
                     header("Location: accounts.php?action=error&reason=password_mismatch");
                     exit();
@@ -61,9 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 exit();
             }
         } else {
-            $sql = "UPDATE accounts SET name = ?, email = ? WHERE uid = ?";
-            $params = [$name, $email, $uid];
-            $paramTypes = 'ssi';
+            $sql = "UPDATE accounts SET name = ?, email = ?, userType = ? WHERE uid = ?";
+            $params = [$name, $email, $userType, $uid];
+            $paramTypes = 'sssi';
         }
 
         if ($stmt = $conn->prepare($sql)) {

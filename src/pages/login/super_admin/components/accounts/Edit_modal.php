@@ -20,6 +20,14 @@
                     <input type="email" id="edit-email" name="email">
                 </div>
                 <div class="form-group">
+                    <label for="edit-userType">Role</label>
+                    <select id="edit-userType" name="userType">
+                        <option value="" disabled selected hidden>Select user type</option>
+                        <option value="admin">Admin</option>
+                        <option value="stockman">Stockman</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="edit-password">Password</label>
                     <input type="password" id="edit-password" name="password" placeholder="Leave blank if not changing">
                 </div>

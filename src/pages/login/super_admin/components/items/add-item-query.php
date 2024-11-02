@@ -15,8 +15,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // Generate a unique itemID
-    $itemID = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6);
+    // Generate a unique itemID starting with the first letter(s) of the name
+    $nameParts = explode(' ', $name);
+    $initials = '';
+    foreach ($nameParts as $part) {
+        $initials .= strtoupper(substr($part, 0, 1)); // Get the first letter of each part
+    }
+
+    do {
+        // Ensure the total length of itemID is 8 (2 letters + 6 random characters)
+        $randomCode = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 6); // Generate a 6-character random string
+        $itemID = $initials . $randomCode; // Prepend initials to the random code
+
+        // Check if itemID already exists in the database
+        $checkSql = "SELECT COUNT(*) FROM items WHERE itemID = ?";
+        $checkStmt = $conn->prepare($checkSql);
+        $checkStmt->bind_param('s', $itemID);
+        $checkStmt->execute();
+        $checkStmt->bind_result($count);
+        $checkStmt->fetch();
+        $checkStmt->close();
+    } while ($count > 0); // Repeat until a unique itemID is generated
 
     // Retrieve the name of the current user from the database
     session_start();

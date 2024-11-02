@@ -11,7 +11,7 @@ include '../../authentication/check_login_admin.php';
     <link rel="shortcut icon" href="../../assets/pizzahut-logo.png" type="image/x-icon">
     <link rel="icon" sizes="32x32" href="../../assets/pizzahut-logo.png" type="image/png">
     <link rel="icon" sizes="192x192" href="../../assets/pizzahut-logo.png" type="image/png">
-    <title>Ingredients | Pizza Hut</title>
+    <title>Items | Pizza Hut</title>
 
 </head>
 

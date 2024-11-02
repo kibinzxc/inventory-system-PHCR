@@ -3,21 +3,21 @@ include '../../connection/database.php';
 
 // Handle search and sort inputs
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'ingredientsID';
-$order = isset($_GET['order']) ? $_GET['order'] : 'asc'; // Get order parameter
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'itemID';
+$order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
-// Define valid columns for sorting and valid order directions to prevent SQL injection
-$valid_sort_columns = ['ingredientsID', 'name', 'addedBy', 'date'];
+// Define valid columns for sorting and valid order directions
+$valid_sort_columns = ['itemID', 'name', 'addedBy', 'date', 'shelfLife'];
 $valid_order_directions = ['asc', 'desc'];
 
-$sort = in_array($sort, $valid_sort_columns) ? $sort : 'ingredientsID';
-$order = in_array($order, $valid_order_directions) ? $order : 'asc'; // Validate order
+$sort = in_array($sort, $valid_sort_columns) ? $sort : 'itemID';
+$order = in_array($order, $valid_order_directions) ? $order : 'asc';
 
 // SQL query using prepared statements to prevent SQL injection
-$sql = "SELECT ingredientsID, name, addedBy, date 
-        FROM ingredients 
-        WHERE (name LIKE ? OR addedBy LIKE ? OR ingredientsID LIKE ?)
-        ORDER BY $sort $order"; // Include order
+$sql = "SELECT itemID, name, addedBy, date, shelfLife 
+        FROM items 
+        WHERE (name LIKE ? OR addedBy LIKE ? OR itemID LIKE ?)
+        ORDER BY $sort $order";
 
 $stmt = $conn->prepare($sql);
 $search_param = "%$search%";
@@ -26,7 +26,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 ?>
 
-<link rel="stylesheet" href="IngredientsTable.css">
+<link rel="stylesheet" href="itemsTable.css">
 
 <table border="1">
     <thead>
@@ -34,9 +34,10 @@ $result = $stmt->get_result();
             <th>#</th>
             <th>Name</th>
             <th>Code</th>
-            <th>Added By</th>
+            <th>Shelf Life</th>
             <th>Date Added</th>
-            <th>Actions</th><!-- This column will be hidden on mobile -->
+            <th>Added By</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -47,17 +48,18 @@ $result = $stmt->get_result();
                 echo "<tr>";
                 echo "<td>" . $count++ . "</td>";
                 echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["ingredientsID"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["addedBy"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["itemID"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["shelfLife"]) . " days</td>";
 
                 // Format the date
-                $formatted_date = date("F j, Y g:i A", strtotime($row["date"]));
-                echo "<td>" . $formatted_date . "</td>"; // Output the formatted date
+                $formatted_date = date("F j, Y", strtotime($row["date"]));
+                echo "<td>" . $formatted_date . "</td>";
+
+                echo "<td>" . htmlspecialchars($row["addedBy"]) . "</td>";
 
                 echo "<td>
                 <div class='actions_icon'>
-
-                    <a href='#' onclick=\"openConfirmModal('" . $row["ingredientsID"] . "')\" data-icon-tooltip='Remove'>
+                    <a href='#' onclick=\"openConfirmModal('" . $row["itemID"] . "')\" data-icon-tooltip='Remove'>
                         <img src='../../assets/trash-2.svg' alt='Remove' class='remove_icon'>
                     </a>
                 </div>
@@ -65,7 +67,7 @@ $result = $stmt->get_result();
                 echo "</tr>";
             }
         } else {
-            echo "<tr><td colspan='6'>No ingredients found</td></tr>"; // Updated colspan to match the table headers
+            echo "<tr><td colspan='7'>No items found</td></tr>";
         }
         ?>
     </tbody>

@@ -40,7 +40,7 @@ document.getElementById('refresh-btn').addEventListener('click', function (e) {
 function loadTable(search = '', sort = 'uid', sortOrder = 'asc') {
 
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'IngredientsTable.php?search=' + encodeURIComponent(search) + '&sort=' + encodeURIComponent(sort) + '&order=' + encodeURIComponent(sortOrder), true);
+    xhr.open('GET', 'itemsTable.php?search=' + encodeURIComponent(search) + '&sort=' + encodeURIComponent(sort) + '&order=' + encodeURIComponent(sortOrder), true);
 
     xhr.onload = function () {
         if (xhr.status === 200) {

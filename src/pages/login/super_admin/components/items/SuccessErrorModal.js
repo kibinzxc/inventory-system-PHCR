@@ -12,21 +12,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Show success modal if action is add or update
     if (action === 'add') {
-        successMessage.textContent = message || "User successfully added."; // Default message for add
+        successMessage.textContent = message || "Ingredient successfully added."; // Default message for add
         successModal.style.display = "flex"; // Show the success modal
 
         setTimeout(() => {
             successModal.style.display = "none";
         }, 5000); // Hide after 5 seconds
     } else if (action === 'update') {
-        successMessage.textContent = message || "User successfully updated."; // Default message for update
+        successMessage.textContent = message || "Ingredient successfully updated."; // Default message for update
         successModal.style.display = "flex"; // Show the success modal
 
         setTimeout(() => {
             successModal.style.display = "none";
         }, 5000); // Hide after 5 seconds
     } else if (action === 'newpass') {
-        successMessage.textContent = message || "Password successfully updated."; // Default message for update
+        successMessage.textContent = message || "Ingredient successfully updated."; // Default message for update
         successModal.style.display = "flex"; // Show the success modal
 
         setTimeout(() => {
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 5000); // Hide after 5 seconds
 
     } else if (action === 'del') {
-        successMessage.textContent = message || "User successfully deleted."; // Default message for update
+        successMessage.textContent = message || "Ingredient successfully deleted."; // Default message for update
         successModal.style.display = "flex"; // Show the success modal
 
         setTimeout(() => {
@@ -78,6 +78,8 @@ document.addEventListener("DOMContentLoaded", function () {
             case 'uid_missing':
                 errorMsg += "UID is missing.";
                 break;
+            case 'shelfLife_invalid':
+                errorMsg;
             case 'incorrect_password':
                 errorMsg += message;
             default:

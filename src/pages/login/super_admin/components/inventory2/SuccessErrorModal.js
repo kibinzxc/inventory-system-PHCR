@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Show error modal if there is an error
     else if (action === 'error') {
-        let errorMsg = "An error occurred. ";
+        let errorMsg = "An error occurred.\n";
 
         // Check for specific reasons and set error message accordingly
         switch (reason) {
@@ -82,8 +82,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 errorMsg;
             case 'incorrect_password':
                 errorMsg += message;
+            case 'item_exists':
+                errorMsg += message;
+            case 'no_changes':
+                errorMsg += message;
+            case 'inventoryID_not_found':
+                errorMsg += message;
+            case 'qty_invalid':
+                errorMsg += message;
             default:
-                errorMsg += "Please try again.";
+                errorMsg += " Please try again.";
                 break;
         }
 

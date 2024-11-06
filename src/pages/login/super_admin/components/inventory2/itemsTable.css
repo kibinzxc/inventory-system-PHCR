@@ -66,6 +66,34 @@ table th {
     filter: invert(28%) sepia(77%) saturate(355%) hue-rotate(320deg) brightness(90%) contrast(90%);
 }
 
+/* Ensure measurement and status are capitalized */
+td.measurement,
+td.status {
+    text-transform: uppercase;
+}
+
+/* Styling for 'In Stock' status */
+.in-stock {
+    color: #006D6D;
+    font-weight: 600;
+    background: rgba(0, 151, 151, 0.15);
+}
+
+/* Styling for 'Low Stock' status */
+.low-stock {
+    color: #DB7600;
+    font-weight: 600;
+    background: rgba(255, 156, 7, 0.15);
+}
+
+/* Styling for 'Out of Stock' status */
+.out-of-stock {
+    color: #B70000;
+    font-weight: 600;
+    background: rgba(242, 0, 0, 0.15);
+}
+
+
 /* Tooltip container */
 [data-icon-tooltip] {
     position: relative;
@@ -96,6 +124,7 @@ table th {
     visibility: visible;
     opacity: 1;
 }
+
 
 @media (max-width: 768px) {
     table {

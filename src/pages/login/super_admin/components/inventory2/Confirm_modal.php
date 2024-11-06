@@ -2,7 +2,7 @@
 <div class="confirmation-modal" id="uniqueConfirmModal">
     <div class="confirmation-modal-content1">
         <div class="confirmation-modal-header">
-            <h2>Delete Ingredient</h2>
+            <h2 id="deleteItemHeading">Delete Item</h2> <!-- This will be dynamically updated -->
             <span class="confirmation-close">&times;</span>
         </div>
         <div class="confirmation-modal-body">

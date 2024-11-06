@@ -4,14 +4,38 @@ include '../../connection/database.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitize and format input
     $name = ucwords(trim($_POST['name'])); // Capitalize the first letter of each word
-    $shelfLife = isset($_POST['shelfLife']) ? (int)$_POST['shelfLife'] : 0;
+    $measurement = isset($_POST['measurement']) ? $_POST['measurement'] : ''; // Assign the value of measurement
+    $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 0; // Get quantity from the form and set default to 0
+
+    // Set status based on quantity
+    if ($quantity == 0) {
+        $status = 'out of stock';
+    } elseif ($quantity < 5) {
+        $status = 'low stock';
+    } else {
+        $status = 'in stock';
+    }
 
     // Input validation
     if (empty($name)) {
-        header("Location: items.php?action=error&reason=name_empty&message=Item name cannot be empty.&name=$name&shelfLife=$shelfLife");
+        header("Location: items.php?action=error&reason=name_empty&message=Item name cannot be empty.&name=$name&measurement=$measurement&quantity=$quantity");
         exit();
-    } elseif ($shelfLife <= 0) {
-        header("Location: items.php?action=error&reason=shelfLife_invalid&message=Invalid Input.&name=$name");
+    } elseif (empty($measurement)) {
+        header("Location: items.php?action=error&reason=measurement_empty&message=Measurement type cannot be empty.&name=$name&quantity=$quantity");
+        exit();
+    }
+
+    // Check if item already exists in the database
+    $checkSql = "SELECT COUNT(*) FROM inventory WHERE name = ?";
+    $checkStmt = $conn->prepare($checkSql);
+    $checkStmt->bind_param('s', $name);
+    $checkStmt->execute();
+    $checkStmt->bind_result($existingItemCount);
+    $checkStmt->fetch();
+    $checkStmt->close();
+
+    if ($existingItemCount > 0) {
+        header("Location: items.php?action=error&reason=item_exists&message=Item already exists in the inventory. &name=$name&measurement=$measurement&quantity=$quantity");
         exit();
     }
 
@@ -37,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     do {
         // Check if itemID already exists in the database
-        $checkSql = "SELECT COUNT(*) FROM items WHERE itemID = ?";
+        $checkSql = "SELECT COUNT(*) FROM inventory WHERE itemID = ?";
         $checkStmt = $conn->prepare($checkSql);
         $checkStmt->bind_param('s', $itemID);
         $checkStmt->execute();
@@ -63,9 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userName = $userResult->fetch_assoc()['name'] ?? 'Unknown User'; // Fallback if user not found
 
     // Prepare SQL for inserting new item
-    $sql = "INSERT INTO items (itemID, name, shelfLife, addedBy) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO inventory (itemID, name, qty, measurement, status, updated_by) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ssis', $itemID, $name, $shelfLife, $userName);
+    $stmt->bind_param('ssisss', $itemID, $name, $quantity, $measurement, $status, $userName);
 
     // Execute the insert operation
     if ($stmt->execute()) {

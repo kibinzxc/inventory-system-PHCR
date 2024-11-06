@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     updateSidebarState(true); // Pass true to avoid animation
 });
 
-// Function to update the sidebar and main content based on the collapsed state
+
 function updateSidebarState(avoidAnimation = false) {
     const sidebar = document.getElementById("mySidebar");
     const mainContent = document.getElementById("main-content");
@@ -32,11 +32,13 @@ function updateSidebarState(avoidAnimation = false) {
     if (isCollapsed) {
         sidebar.classList.add("collapsed");
         mainContent.style.marginLeft = window.matchMedia("(max-width: 768px)").matches ? "20px" : "60px"; // Adjust for mobile
+        mainContent.style.overflow = window.matchMedia("(max-width: 768px)").matches ? "hidden" : "auto"; // Hide overflow on mobile
         logo.classList.add("hidden");
         toggleArrow.style.transform = 'rotate(180deg)'; // Rotate arrow when collapsed
     } else {
         sidebar.classList.remove("collapsed");
-        mainContent.style.marginLeft = window.matchMedia("(max-width: 768px)").matches ? "250px" : "250px"; // Adjust for mobile
+        mainContent.style.marginLeft = window.matchMedia("(max-width: 768px)").matches ? "60px" : "250px"; // Adjust for mobile
+        mainContent.style.overflow = "auto"; // Show overflow when sidebar is expanded
         logo.classList.remove("hidden");
         toggleArrow.style.transform = 'rotate(0deg)'; // Reset arrow rotation when expanded
     }

@@ -15,11 +15,11 @@
     <div class="bglinks">
         <a href="../dashboard/dashboard.php" data-tooltip="Dashboard"><img src="../../assets/home.svg" alt=""><span class="links">Dashboard</span></a>
         <hr class="hr_style" />
-        <a href="../../components/inventory.php" data-tooltip="Inventory"><img src="../../assets/package.svg" alt=""><span class="links">Inventory</span></a>
-        <a href="../items/items.php" data-tooltip="Items"><img src="../../assets/archive.svg" alt=""><span class="links">Items</span></a>
+        <a href="../inventory/accounts.php" data-tooltip="Inventory"><img src="../../assets/package.svg" alt=""><span class="links">Inventory</span></a>
+        <a href="../inventory2/items.php" data-tooltip="Notifications"><img src="../../assets/mail.svg" alt=""><span class="links">Notifications</span> <span class="notification-badge">3</span></a>
+
         <hr class="hr_style" />
         <a href="../accounts/accounts.php" data-tooltip="Accounts"><img src="../../assets/user.svg" alt=""><span class="links">Accounts</span></a>
-        <a href="#" data-tooltip="Notifications"><img src="../../assets/mail.svg" alt=""><span class="links">Notifications</span> <span class="notification-badge">3</span></a>
     </div>
 
     <!-- Logout Link -->

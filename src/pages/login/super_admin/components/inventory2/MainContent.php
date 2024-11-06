@@ -22,9 +22,10 @@
                     <select class="select" id="sort">
                         <option value="name" selected>Name</option>
                         <option value="itemID">Code</option>
-                        <option value="shelfLife">Shelf Life</option>
-                        <option value="date">Date</option>
-                        <option value="addedBy">Added By</option>
+                        <option value="qty">Quantity</option>
+                        <option value="measurement">Measurement</option>
+                        <option value="last_update">Last Update</option>
+                        <option value="updated_by">Updated By</option>
 
                     </select>
 

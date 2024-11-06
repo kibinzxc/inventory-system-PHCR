@@ -17,9 +17,15 @@
                         value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>">
                 </div>
                 <div class="form-group">
-                    <label for="add-shelfLife">Shelf Life <span style="color:gray; font-weight:400;">(day/s)</span></label>
-                    <input type="number" id="add-shelfLife" name="shelfLife" placeholder="Enter the item's shelf life (e.g. 30 days)"
-                        value="<?php echo isset($_GET['shelfLife']) ? htmlspecialchars($_GET['shelfLife']) : ''; ?>">
+                    <label for="add-qty">Quantity</label>
+                    <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="add-measurement">Measurement</label>
+                    <select id="add-measurement" name="measurement">
+                        <option value="pcs" <?php echo (isset($_GET['measurement']) && $_GET['measurement'] == 'pcs') || empty($_GET['measurement']) ? 'selected' : ''; ?>>pcs</option>
+                        <option value="grams" <?php echo isset($_GET['measurement']) && $_GET['measurement'] == 'grams' ? 'selected' : ''; ?>>grams</option>
+                    </select>
                 </div>
 
             </form>

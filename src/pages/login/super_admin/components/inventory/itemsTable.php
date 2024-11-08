@@ -3,11 +3,11 @@ include '../../connection/database.php';
 
 // Handle search, sort, and order inputs
 $search = isset($_GET['search']) ? $_GET['search'] : '';
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'inventoryID';
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'name';
 $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
 // Define valid columns for sorting and valid order directions
-$valid_sort_columns = ['inventoryID', 'itemID', 'name', 'beginning', 'transfers_in', 'transfers_out', 'waste', 'ending', 'variance', 'notes', 'usage_count', 'status', 'last_update', 'updated_by'];
+$valid_sort_columns = ['inventoryID', 'itemID', 'name', 'beginning', 'purchases', 'transfers_in', 'transfers_out', 'waste', 'ending', 'variance', 'notes', 'usage_count', 'status', 'last_update', 'updated_by'];
 $valid_order_directions = ['asc', 'desc'];
 
 // Ensure valid sort column
@@ -16,7 +16,7 @@ $sort = in_array($sort, $valid_sort_columns) ? $sort : 'inventoryID';
 $order = in_array($order, $valid_order_directions) ? $order : 'asc';
 
 // SQL query using prepared statements to prevent SQL injection
-$sql = "SELECT inventoryID, itemID, name, uom, beginning, transfers_in, transfers_out, waste, ending, variance, notes, last_update, updated_by, usage_count, status
+$sql = "SELECT inventoryID, itemID, name, uom, beginning, purchases, transfers_in, transfers_out, waste, ending, variance, notes, last_update, updated_by, usage_count, status
         FROM inventory
         WHERE (name LIKE ? OR updated_by LIKE ? OR itemID LIKE ? OR inventoryID LIKE ?)
         ORDER BY $sort $order";
@@ -38,6 +38,7 @@ $result = $stmt->get_result();
             <th>Code</th>
             <th>UoM</th>
             <th>Beginning</th>
+            <th>Purchases</th>
             <th>Transfers In</th>
             <th>Transfers Out</th>
             <th>Waste</th>
@@ -87,6 +88,7 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($row["itemID"]) . "</td>";
                 echo "<td>" . strtoupper(htmlspecialchars($row["uom"])) . "</td>";
                 echo "<td>" . htmlspecialchars($row["beginning"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["purchases"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_in"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_out"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["waste"]) . "</td>";
@@ -106,7 +108,7 @@ $result = $stmt->get_result();
 
                 echo "<td>
                 <div class='actions_icon'>
-                    <a href='#' onclick=\"openEditModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "','" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['waste']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['variance']) . "', '" . addslashes($row['notes']) . "', '" . addslashes($row['usage_count']) . "', '" . addslashes($row['status']) . "')\" data-icon-tooltip='Edit'>
+                    <a href='#' onclick=\"openEditModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "','" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['purchases']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['waste']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['variance']) . "', '" . addslashes($row['notes']) . "', '" . addslashes($row['usage_count']) . "', '" . addslashes($row['status']) . "')\" data-icon-tooltip='Edit'>
                         <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'>
                     </a>
                     <a href='#' onclick=\"openConfirmModal('" . $row['inventoryID'] . "', '" . addslashes($row['name']) . "')\" data-icon-tooltip='Delete'>
@@ -117,7 +119,7 @@ $result = $stmt->get_result();
                 echo "</tr>";
             }
         } else {
-            echo "<tr><td colspan='16'>No items found</td></tr>";
+            echo "<tr><td colspan='17'>No items found</td></tr>";
         }
         ?>
     </tbody>

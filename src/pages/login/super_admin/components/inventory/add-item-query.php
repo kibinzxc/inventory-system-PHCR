@@ -57,6 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Concatenate to form the complete itemID
     $itemID = $prefix . $suffix;
 
+    // Remove any non-alphanumeric characters from itemID (if any were generated accidentally)
+    $itemID = preg_replace('/[^a-zA-Z0-9]/', '', $itemID);
+
     do {
         // Check if itemID already exists in the database
         $checkSql = "SELECT COUNT(*) FROM inventory WHERE itemID = ?";
@@ -71,8 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // If itemID exists, regenerate it
             $suffix = str_pad(mt_rand(0, pow(10, $digitsToAdd) - 1), $digitsToAdd, '0', STR_PAD_LEFT); // Generate new random digits
             $itemID = $prefix . $suffix; // Recreate the itemID with the new suffix
+            $itemID = preg_replace('/[^a-zA-Z0-9]/', '', $itemID); // Remove non-alphanumeric characters again
         }
     } while ($count > 0); // Repeat until a unique itemID is generated
+
 
     // Retrieve the name of the current user from the database
     session_start();

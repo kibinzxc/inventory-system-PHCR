@@ -6,10 +6,18 @@
         <div class="header">
             <h2>Inventory Management</h2>
             <div class="btn-wrapper">
-                <a href="#" class="btn" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add New Item</a>
+                <a href="#" class="btn" onclick="openAddModal()"> Current Week Overview</a>
+                <a href="#" class="btn" onclick="openAddModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>
             </div>
-        </div>
 
+
+        </div>
+        <br>
+        <div class="btn-wrapper2">
+            <a href="#" class="btn2" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add New Item</a>
+            <a href="#" class="btn2" onclick="openAddReport()"><img src="../../assets/edit-3.svg" alt=""> Submit Report</a>
+            <a href="#" class="btn2" onclick="openAddModal()"><img src="../../assets/check.svg" alt=""> End-of-Day Inventory</a>
+        </div>
         <div class="table_container">
             <div class="btns_container">
                 <a href="#" class="icon_btn"><img src="../../assets/printer.svg" alt=""></a>
@@ -52,6 +60,7 @@
 
     </div>
     <?php include 'add-items.php' ?>
+    <?php include 'submit-report.php' ?>
     <?php include 'SuccessErrorModal.php'; ?>
     <script src="SuccessErrorModal.js"></script>
 </div>

@@ -68,6 +68,7 @@ function loadTable(search = '', sort = 'itemID', sortOrder = 'asc') {
 function attachModalListeners() {
     function closeModal() {
         var modal = document.getElementById('editModal');
+        var modal = document.getElementById('addReport');
         modal.style.display = 'none';
     }
 
@@ -84,6 +85,7 @@ function attachModalListeners() {
 
     }
 }
+
 
 // Function to attach delete listeners
 function attachDeleteListeners() {

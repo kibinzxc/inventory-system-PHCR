@@ -1,13 +1,13 @@
 <?php
 include '../../connection/database.php';
 
-if (isset($_GET['itemID'])) {
-    $itemID = $_GET['itemID'];
+if (isset($_GET['inventoryID'])) {
+    $inventoryID = $_GET['inventoryID'];
 
-    $sql = "DELETE FROM inventory WHERE itemID = ?";
+    $sql = "DELETE FROM inventory WHERE inventoryID = ?";
 
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("s", $itemID);
+        $stmt->bind_param("s", $inventoryID);
 
         if ($stmt->execute()) {
             header("Location: items.php?action=del&reason=ingredient_deleted");

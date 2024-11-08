@@ -80,16 +80,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 break;
             case 'shelfLife_invalid':
                 errorMsg;
+                break;
             case 'incorrect_password':
                 errorMsg += message;
+                break;
             case 'item_exists':
                 errorMsg += message;
+                break;
             case 'no_changes':
                 errorMsg += message;
+                break;
             case 'inventoryID_not_found':
                 errorMsg += message;
+                break;
             case 'qty_invalid':
                 errorMsg += message;
+                break;
             default:
                 errorMsg += " Please try again.";
                 break;

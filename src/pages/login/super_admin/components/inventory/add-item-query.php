@@ -3,25 +3,23 @@ include '../../connection/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Sanitize and format input
-    $name = ucwords(trim($_POST['name'])); // Capitalize the first letter of each word
-    $measurement = isset($_POST['measurement']) ? $_POST['measurement'] : ''; // Assign the value of measurement
-    $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 0; // Get quantity from the form and set default to 0
+    $name = strtolower(trim($_POST['name'])); // Convert the name to lowercase
+    $uom = isset($_POST['uom']) ? $_POST['uom'] : ''; // Assign the value of uom (unit of measurement)
+    $beginning = isset($_POST['beginning']) ? (float)$_POST['beginning'] : 0; // Get beginning stock from the form and set default to 0
 
-    // Set status based on quantity
-    if ($quantity == 0) {
-        $status = 'out of stock';
-    } elseif ($quantity < 5) {
-        $status = 'low stock';
+    // Set status based on beginning stock
+    if ($beginning == 0) {
+        $status = 'pending';
     } else {
-        $status = 'in stock';
+        $status = 'pending'; // Default to in stock if beginning is greater than 0
     }
 
     // Input validation
     if (empty($name)) {
-        header("Location: items.php?action=error&reason=name_empty&message=Item name cannot be empty.&name=$name&measurement=$measurement&quantity=$quantity");
+        header("Location: items.php?action=error&reason=name_empty&message=Item name cannot be empty.&name=$name&uom=$uom&beginning=$beginning");
         exit();
-    } elseif (empty($measurement)) {
-        header("Location: items.php?action=error&reason=measurement_empty&message=Measurement type cannot be empty.&name=$name&quantity=$quantity");
+    } elseif (empty($uom)) {
+        header("Location: items.php?action=error&reason=uom_empty&message=UOM cannot be empty.&name=$name&beginning=$beginning");
         exit();
     }
 
@@ -35,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $checkStmt->close();
 
     if ($existingItemCount > 0) {
-        header("Location: items.php?action=error&reason=item_exists&message=Item already exists in the inventory. &name=$name&measurement=$measurement&quantity=$quantity");
+        header("Location: items.php?action=error&reason=item_exists&message=$name already exists in the inventory.&name=$name&uom=$uom&beginning=$beginning");
         exit();
     }
 
@@ -86,14 +84,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userResult = $userStmt->get_result();
     $userName = $userResult->fetch_assoc()['name'] ?? 'Unknown User'; // Fallback if user not found
 
-    // Prepare SQL for inserting new item
-    $sql = "INSERT INTO inventory (itemID, name, qty, measurement, status, updated_by) VALUES (?, ?, ?, ?, ?, ?)";
+    // Prepare SQL for inserting new item, including the uom and beginning stock
+    $sql = "INSERT INTO inventory (itemID, name, uom, beginning, status, updated_by) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ssisss', $itemID, $name, $quantity, $measurement, $status, $userName);
+    $stmt->bind_param('sssdss', $itemID, $name, $uom, $beginning, $status, $userName);
 
     // Execute the insert operation
     if ($stmt->execute()) {
-        header("Location: items.php?action=add&message=Item successfully added.");
+        header("Location: items.php?action=add&message=$name successfully added.");
         exit();
     } else {
         header("Location: items.php?action=error&reason=sql_failure&name=$name");

@@ -1,10 +1,9 @@
 table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
+    border-collapse: collapse;
+    /* Change to collapse to combine borders */
     margin-top: 20px;
     text-align: center;
-    border-radius: 10px;
     overflow: hidden;
     border: 1px solid #ddd;
     margin-bottom: 40px;
@@ -13,14 +12,21 @@ table {
 
 table td,
 table th {
-    border: none;
     padding: 8px;
+    border-right: 1px solid #c4c4c4;
+    /* Add vertical borders */
 }
 
-table td {
-    height: 40px;
-    background: #FFF;
-    border-bottom: 1px solid #ddd;
+table th {
+    height: 45px;
+    background: #343434;
+    color: white;
+}
+
+/* Remove the last vertical border in the last column */
+table th:last-child,
+table td:last-child {
+    border-right: none;
 }
 
 /* Alternate row colors */
@@ -33,7 +39,8 @@ table tr:nth-child(even) td {
 }
 
 /* Hover effect for table rows */
-table tr:hover td {
+table tr:hover td,
+table th {
     background-color: #e0e0e0;
 }
 
@@ -45,6 +52,11 @@ table th {
     height: 45px;
     background: #343434;
     color: white;
+}
+
+td.ending {
+    font-weight: 600;
+    /* Ensures the ending column stands out */
 }
 
 .settings_icon {
@@ -60,6 +72,7 @@ table th {
     display: flex;
     justify-content: center;
     gap: 10px;
+    margin: 0 10px;
 }
 
 .remove_icon {
@@ -72,26 +85,6 @@ td.status {
     text-transform: uppercase;
 }
 
-/* Styling for 'In Stock' status */
-.in-stock {
-    color: #006D6D;
-    font-weight: 600;
-    background: rgba(0, 151, 151, 0.15);
-}
-
-/* Styling for 'Low Stock' status */
-.low-stock {
-    color: #DB7600;
-    font-weight: 600;
-    background: rgba(255, 156, 7, 0.15);
-}
-
-/* Styling for 'Out of Stock' status */
-.out-of-stock {
-    color: #B70000;
-    font-weight: 600;
-    background: rgba(242, 0, 0, 0.15);
-}
 
 
 /* Tooltip container */

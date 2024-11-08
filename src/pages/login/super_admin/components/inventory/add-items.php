@@ -17,24 +17,24 @@
                         value="<?php echo isset($_GET['name']) ? htmlspecialchars($_GET['name']) : ''; ?>">
                 </div>
                 <div class="form-group">
-                    <label for="add-qty">Quantity</label>
-                    <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" value="0">
+                    <label for="add-qty">Beginning</label>
+                    <input type="number" id="quantity" name="beginning" placeholder="Enter quantity of item" value="0" step="0.1">
                 </div>
                 <div class="form-group">
-                    <label for="add-measurement">Measurement</label>
-                    <select id="add-measurement" name="measurement">
-                        <option value="pcs" <?php echo (isset($_GET['measurement']) && $_GET['measurement'] == 'pcs') || empty($_GET['measurement']) ? 'selected' : ''; ?>>pcs</option>
-                        <option value="grams" <?php echo isset($_GET['measurement']) && $_GET['measurement'] == 'grams' ? 'selected' : ''; ?>>grams</option>
+                    <label for="add-measurement">Unit of Measurement (UoM)</label>
+                    <select id="add-measurement" name="uom">
+                        <option value="kg" <?php echo (isset($_GET['measurement']) && $_GET['measurement'] == 'kg') || empty($_GET['measurement']) ? 'selected' : ''; ?>>KG (Kilogram)</option>
+
                     </select>
                 </div>
-
-            </form>
+                <!-- Add closing tag for the form here -->
+            </form> <!-- This was missing, now added -->
         </div>
 
         <!-- Modal Footer / Button Area -->
-        <div class="modal-footer">
+        <div class="modal-footer2">
             <button type="button" id="cancelAddBtn" class="custom_btn cancel-btn">Cancel</button>
-            <button type="submit" form="addItemForm" class="custom_btn save-btn">Save Changes</button>
+            <button type="submit" form="addItemForm" class="custom_btn save-btn">Save</button>
         </div>
     </div>
 </div>

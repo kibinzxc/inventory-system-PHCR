@@ -4,15 +4,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const cancelBtn = document.getElementById("uniqueCancelBtn");
     const modalHeader = document.querySelector('.confirmation-modal-header h2'); // The modal's header
 
-    // Opens the confirmation modal and sets the itemID for deletion
-    window.openConfirmModal = function (itemID, itemName) {
+    // Opens the confirmation modal and sets the inventoryID for deletion
+    window.openConfirmModal = function (inventoryID, itemName) {
         confirmModal.style.display = "flex";
 
         // Update the modal header with the item name
         modalHeader.textContent = `Delete Item: ${itemName}`; // Set the text in the header to "Delete Item: itemName"
 
         confirmBtn.onclick = function () {
-            window.location.href = 'delete.php?itemID=' + itemID; // Redirect to delete.php with the specified itemID
+            window.location.href = 'delete.php?inventoryID=' + inventoryID; // Redirect to delete.php with the specified itemID
         };
     };
 

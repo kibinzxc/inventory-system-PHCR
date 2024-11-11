@@ -11,7 +11,7 @@
 
 .modal-content {
     background-color: #f4f4f4;
-    margin: 5% auto;
+    margin: 2% auto;
     padding: 0;
     border-radius: 8px;
     width: 40%;
@@ -20,7 +20,6 @@
     overflow: hidden;
 }
 
-/* Modal Header */
 .modal-header {
     background-color: #343434;
     padding: 15px;
@@ -28,59 +27,63 @@
     text-align: left;
     font-size: 15px;
     position: relative;
-    padding: 15px 25px;
 }
 
 .modal-header h2 {
     margin: 0;
 }
 
-/* Close button in header */
 .modal-header .close {
     position: absolute;
     right: 15px;
     top: 15px;
     font-size: 24px;
     font-weight: bold;
-    /* Make the 'X' bold */
     cursor: pointer;
     color: #fff;
-    /* Keep the color white */
     padding: 5px 10px;
-    /* Add some padding for a clickable area */
-    line-height: 1;
-    /* Ensure the text aligns nicely */
     border-radius: 50%;
 }
 
 .modal-header .close:hover {
     background-color: rgba(242, 242, 242, 0.2);
-    /* 50% opacity */
 }
 
-/* Modal Body (Content Area) */
 .modal-body {
     background-color: #fff;
-    /* White */
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    /* Adds space between form elements */
 }
 
-.form-group {
+/* Row Styling */
+.form-row {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
 }
 
-.form-group label {
+.transfers-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-direction: row;
+    /* Ensures that the two input fields are aligned side by side */
+}
+
+.half {
+    width: 48%;
+    /* Ensures the inputs are side by side */
+}
+
+.form-row label {
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-.form-group input {
+.form-row input,
+.form-row select {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -91,7 +94,6 @@
 /* Modal Footer (Button Area) */
 .modal-footer {
     background-color: #f1f1f1;
-    /* Customizable color */
     padding: 20px;
     text-align: right;
 }
@@ -105,7 +107,6 @@
     margin-left: 10px;
 }
 
-/* Cancel Button */
 .cancel-btn {
     background-color: #f1f1f1;
     color: #333;
@@ -116,12 +117,9 @@
     background-color: #e0e0e0;
 }
 
-/* Save Changes Button */
 .save-btn {
     background-color: #006D6D;
     color: #fff;
-    padding: 11px 16px;
-    font-weight: 500;
 }
 
 .save-btn:hover {
@@ -131,5 +129,14 @@
 @media (max-width: 768px) {
     .modal-content {
         width: 80%;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-row .half {
+        width: 100%;
+        margin-right: 0;
     }
 }

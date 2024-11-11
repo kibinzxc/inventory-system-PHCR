@@ -7,7 +7,7 @@ $sort = isset($_GET['sort']) ? $_GET['sort'] : 'name';
 $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
 // Define valid columns for sorting and valid order directions
-$valid_sort_columns = ['inventoryID', 'itemID', 'name', 'beginning', 'purchases', 'transfers_in', 'transfers_out', 'waste', 'ending', 'variance', 'notes', 'usage_count', 'status', 'last_update', 'updated_by'];
+$valid_sort_columns = ['inventoryID', 'itemID', 'name', 'beginning', 'deliveries', 'transfers_in', 'transfers_out', 'spoilage', 'ending', 'notes', 'usage_count', 'status', 'last_update', 'updated_by'];
 $valid_order_directions = ['asc', 'desc'];
 
 // Ensure valid sort column
@@ -16,14 +16,44 @@ $sort = in_array($sort, $valid_sort_columns) ? $sort : 'inventoryID';
 $order = in_array($order, $valid_order_directions) ? $order : 'asc';
 
 // SQL query using prepared statements to prevent SQL injection
-$sql = "SELECT inventoryID, itemID, name, uom, beginning, purchases, transfers_in, transfers_out, waste, ending, variance, notes, last_update, updated_by, usage_count, status
+$sql = "SELECT inventoryID, itemID, name, uom, beginning, deliveries, transfers_in, transfers_out, spoilage, ending, notes, last_update, updated_by, usage_count, status
         FROM inventory
-        WHERE (name LIKE ? OR updated_by LIKE ? OR itemID LIKE ? OR inventoryID LIKE ?)
+WHERE 
+            (name LIKE ? 
+            OR itemID LIKE ? 
+            OR uom LIKE ? 
+            OR beginning LIKE ? 
+            OR deliveries LIKE ? 
+            OR transfers_in LIKE ? 
+            OR transfers_out LIKE ? 
+            OR spoilage LIKE ? 
+            OR ending LIKE ? 
+            OR usage_count LIKE ? 
+            OR status LIKE ? 
+            OR notes LIKE ? 
+            OR updated_by LIKE ? 
+            OR last_update LIKE ?)
         ORDER BY $sort $order";
 
 $stmt = $conn->prepare($sql);
 $search_param = "%$search%";
-$stmt->bind_param('ssss', $search_param, $search_param, $search_param, $search_param);
+$stmt->bind_param(
+    'ssssssssssssss',
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param,
+    $search_param
+);
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
@@ -36,17 +66,15 @@ $result = $stmt->get_result();
             <th>#</th>
             <th>Name</th>
             <th>Code</th>
-            <th>UoM</th>
-            <th>Beginning</th>
-            <th>Purchases</th>
+            <th>Base Unit of Measurement</th>
+            <th>Beginning Inv.</th>
+            <th>Deliveries</th>
             <th>Transfers In</th>
             <th>Transfers Out</th>
-            <th>Waste</th>
-            <th>Ending</th>
-            <th>Variance</th>
+            <th>Spoilage</th>
+            <th>Ending Inv.</th>
             <th>Usage</th>
             <th>Status</th>
-            <th>Notes</th>
             <th>Last Update</th>
             <th>Updated By</th>
             <th>Actions</th>
@@ -88,17 +116,15 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($row["itemID"]) . "</td>";
                 echo "<td>" . strtoupper(htmlspecialchars($row["uom"])) . "</td>";
                 echo "<td>" . htmlspecialchars($row["beginning"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["purchases"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["deliveries"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_in"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_out"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["waste"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["spoilage"]) . "</td>";
                 echo "<td style='$ending_style'>" . htmlspecialchars($row["ending"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["variance"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
 
                 // Display status with assigned class and style
                 echo "<td class='$status_class' style='$status_style'>" . strtoupper(htmlspecialchars($row["status"])) . "</td>";
-                echo "<td>" . htmlspecialchars($row["notes"]) . "</td>";
 
                 // Format the last update date
                 $formatted_date = date("F j, Y g:i A", strtotime($row["last_update"]));
@@ -108,7 +134,7 @@ $result = $stmt->get_result();
 
                 echo "<td>
                 <div class='actions_icon'>
-                    <a href='#' onclick=\"openEditModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "','" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['purchases']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['waste']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['variance']) . "', '" . addslashes($row['notes']) . "', '" . addslashes($row['usage_count']) . "', '" . addslashes($row['status']) . "')\" data-icon-tooltip='Edit'>
+                    <a href='#' onclick=\"openEditModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "','" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['deliveries']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['spoilage']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['usage_count']) . "', '" . addslashes($row['status']) . "')\" data-icon-tooltip='Edit'>
                         <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'>
                     </a>
                     <a href='#' onclick=\"openConfirmModal('" . $row['inventoryID'] . "', '" . addslashes($row['name']) . "')\" data-icon-tooltip='Delete'>

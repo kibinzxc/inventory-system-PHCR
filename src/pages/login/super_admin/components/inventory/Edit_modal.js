@@ -91,3 +91,30 @@ function calculateUsage() {
     // Update the usage_count field with the calculated value
     document.getElementById('edit-usage_count').value = usage_count.toFixed(2);  // No rounding applied
 }
+
+function validateForm() {
+    // Retrieve all necessary values
+    var beginning = parseFloat(document.getElementById('edit-qty').value) || 0;
+    var deliveries = parseFloat(document.getElementById('edit-deliveries').value) || 0;
+    var transfers_in = parseFloat(document.getElementById('edit-transfers_in').value) || 0;
+    var transfers_out = parseFloat(document.getElementById('edit-transfers_out').value) || 0;
+    var spoilage = parseFloat(document.getElementById('edit-spoilage').value) || 0;
+    var usage_count = parseFloat(document.getElementById('edit-usage_count').value) || 0;
+    var ending = parseFloat(document.getElementById('edit-ending').value) || 0;
+
+    // Get the error message element for displaying errors
+    var errorMessage = document.getElementById('form-error-message');
+
+    // Check if any value is negative
+    if (beginning < 0 || deliveries < 0 || transfers_in < 0 || transfers_out < 0 || spoilage < 0 || usage_count < 0 || ending < 0) {
+        // Display error message
+        errorMessage.style.display = 'block';
+        errorMessage.textContent = "Warning: Negative values are detected. Please check your inputs.";
+
+        // Prevent form submission by returning false
+        return false;
+    }
+
+    // If all values are valid (non-negative), allow form submission
+    return true;
+}

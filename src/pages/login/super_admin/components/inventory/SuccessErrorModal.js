@@ -93,6 +93,9 @@ document.addEventListener("DOMContentLoaded", function () {
             case 'inventoryID_not_found':
                 errorMsg += message;
                 break;
+            case 'negative_input':
+                errorMsg += message;
+                break;
             case 'qty_invalid':
                 errorMsg += message;
                 break;

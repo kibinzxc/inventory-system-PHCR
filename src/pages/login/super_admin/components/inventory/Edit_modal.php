@@ -7,7 +7,7 @@
         </div>
 
         <div class="modal-body">
-            <form id="editItemForm" action="updateItem.php" method="POST">
+            <form id="editItemForm" action="updateItem.php" method="POST" onsubmit="return validateForm()">
                 <input type="hidden" name="inventoryID" id="edit-inventoryID">
 
                 <!-- Row 1: Name -->
@@ -86,6 +86,7 @@
                     <span id="usage-error-message" style="color: red; display: none; font-size: 12px;"></span> <!-- Error message container -->
 
                 </div>
+                <span id="ending-error-message" style="color: red; display: none;"></span>
 
             </form>
         </div>

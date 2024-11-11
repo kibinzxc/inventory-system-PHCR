@@ -14,7 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ending = $_POST['ending'];
     $usage = $_POST['usage_count'];
 
-
+    // Validate negative values
+    if ($beginning < 0 || $transfers_in < 0 || $deliveries < 0 || $transfers_out < 0 || $spoilage < 0 || $ending < 0 || $usage < 0) {
+        header("Location: items.php?action=error&reason=negative_input&message=Please+check+your+input%2C+negative+values+are+detected.&name=$name&beginning=$beginning&uom=$uom");
+        exit();
+    }
 
     // Start session to get the logged-in user's ID
     session_start();

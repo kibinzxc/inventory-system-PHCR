@@ -8,9 +8,9 @@
 
         <div class="modal-body report">
             <div class="btn-wrapper4">
-                <a href="#" class="btn3" onclick="openAddModal()">Transfers in / Transfers out</a>
-                <a href="#" class="btn3" onclick="openAddReport()">Deliveries / Purchases</a>
-                <a href="#" class="btn3" onclick="openAddReport()">Waste / Spoilage</a>
+                <a href="reports/transfers-report.php" target="_blank" class="btn3">Transfers in / Transfers out</a>
+                <a href="#" class="btn3">Deliveries / Purchases</a>
+                <a href="#" class="btn3">Waste / Spoilage</a>
             </div>
         </div>
 

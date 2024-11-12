@@ -23,16 +23,23 @@ document.getElementById('refresh-btn').addEventListener('click', function (e) {
     // Show loader before reloading the table
     document.getElementById('loader').style.display = 'block';
 
-    // Add the rotating class to the image
-    const refreshIcon = this.querySelector('img');
-    refreshIcon.classList.add('rotating');
+
+    const refreshContainer = this;
+    const loaderCircle = refreshContainer.querySelector('.loader-circle');
+    const refreshIcon = refreshContainer.querySelector('img');
+
+
+    // Show loader circle and hide the refresh icon
+    loaderCircle.style.display = 'block';
+    refreshIcon.style.display = 'none';
 
     // Call the function to reload the table
     loadTable(document.getElementById('search').value, document.getElementById('sort').value, document.getElementById('sortOrder').value);
 
-    // Remove the rotation class after the table is loaded
+    // Hide loader circle and show the refresh icon after the table is loaded
     setTimeout(() => {
-        refreshIcon.classList.remove('rotating');
+        loaderCircle.style.display = 'none'; // Hide loader
+        refreshIcon.style.display = 'block'; // Show refresh icon
     }, 1000); // Adjust timing to match the animation duration
 });
 
@@ -101,6 +108,8 @@ function attachModalListeners() {
         cancelBtn.onclick = closeModal;
 
     }
+
+
 }
 
 

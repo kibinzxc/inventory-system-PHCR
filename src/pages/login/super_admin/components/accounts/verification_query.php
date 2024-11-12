@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit();
         } else {
             // Incorrect password message with retrieved password
-            header("Location: accounts.php?action=error&reason=incorrect_password&message=Incorrect Password.");
+            header("Location: accounts.php?action=error&reason=incorrect_password&message=Incorrect Password.%20");
             exit();
         }
     } else {

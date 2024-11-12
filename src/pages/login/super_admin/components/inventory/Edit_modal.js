@@ -118,3 +118,50 @@ function validateForm() {
     // If all values are valid (non-negative), allow form submission
     return true;
 }
+
+// Function to validate each input for negative values
+function validateInput(inputElement) {
+    let value = parseFloat(inputElement.value);
+    let errorMessage = '';
+    let errorElement;
+
+    // Determine which error span to use based on the input field
+    if (inputElement.id === 'edit-qty') {
+        errorElement = document.getElementById('beginning-error-message');
+    } else if (inputElement.id === 'edit-transfers_in') {
+        errorElement = document.getElementById('transfers_in-error-message');
+    } else if (inputElement.id === 'edit-deliveries') {
+        errorElement = document.getElementById('deliveries-error-message');
+    } else if (inputElement.id === 'edit-transfers_out') {
+        errorElement = document.getElementById('transfers_out-error-message');
+    } else if (inputElement.id === 'edit-spoilage') {
+        errorElement = document.getElementById('spoilage-error-message');
+    }
+
+    // Validate for negative or invalid number
+    if (isNaN(value) || value < 0) {
+        errorMessage = getErrorMessage(inputElement.id);
+        errorElement.innerText = errorMessage;
+        errorElement.style.display = 'block';  // Show the error message
+    } else {
+        errorElement.style.display = 'none';  // Hide the error message if valid
+    }
+}
+
+// Function to get the specific error message based on the field
+function getErrorMessage(inputId) {
+    switch (inputId) {
+        case 'edit-qty':
+            return "Beginning Inventory must be a positive number.";
+        case 'edit-transfers_in':
+            return "Transfers In must be a positive number.";
+        case 'edit-deliveries':
+            return "Deliveries must be a positive number.";
+        case 'edit-transfers_out':
+            return "Transfers Out must be a positive number.";
+        case 'edit-spoilage':
+            return "Spoilage must be a positive number.";
+        default:
+            return "Invalid input.";
+    }
+}

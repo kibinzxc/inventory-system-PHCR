@@ -9,9 +9,9 @@
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.modal-content {
+.modal-content2 {
     background-color: #f4f4f4;
-    margin: 2% auto;
+    margin: 1.5% auto;
     padding: 0;
     border-radius: 8px;
     width: 40%;
@@ -89,6 +89,8 @@
     border-radius: 4px;
     width: 100%;
     box-sizing: border-box;
+    font-size: 1.1rem;
+
 }
 
 /* Modal Footer (Button Area) */

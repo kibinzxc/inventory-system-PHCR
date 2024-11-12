@@ -72,8 +72,8 @@ $result = $stmt->get_result();
             <th>Transfers In</th>
             <th>Transfers Out</th>
             <th>Spoilage</th>
-            <th>Ending Inv.</th>
             <th>Usage</th>
+            <th>Ending Inv.</th>
             <th>Status</th>
             <th>Last Update</th>
             <th>Updated By</th>
@@ -103,11 +103,11 @@ $result = $stmt->get_result();
                 // Add emphasis to the Ending column if stock is low or out
                 $ending_style = "";
                 if ($status == "low stock") {
-                    $ending_style = "background-color: rgba(255, 156, 7, 0.25); color: #DB7600; font-weight: 600;";
+                    $ending_style = "color: #DB7600; font-weight: 700;";
                 } elseif ($status == "out of stock") {
-                    $ending_style = "background-color: rgba(242, 0, 0, 0.25); color: #B70000; font-weight: 600;";
+                    $ending_style = " color: #B70000; font-weight: 700;";
                 } elseif ($status == "in stock") {
-                    $ending_style = "background-color: rgba(0, 151, 151, 0.25); color: #006D6D; font-weight: 600;";
+                    $ending_style = " color: #006D6D; font-weight: 700;";
                 }
 
                 echo "<tr>";
@@ -120,8 +120,9 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($row["transfers_in"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_out"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["spoilage"]) . "</td>";
-                echo "<td style='$ending_style'>" . htmlspecialchars($row["ending"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
+
+                echo "<td style='$ending_style'>" . htmlspecialchars($row["ending"]) . "</td>";
 
                 // Display status with assigned class and style
                 echo "<td class='$status_class' style='$status_style'>" . strtoupper(htmlspecialchars($row["status"])) . "</td>";

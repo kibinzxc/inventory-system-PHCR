@@ -25,8 +25,19 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(() => {
             successModal.style.display = "none";
         }, 5000); // Hide after 5 seconds
+
+
+    } else if (action === 'success') {
+        successMessage.textContent = message; // Default message for update
+        successModal.style.display = "flex"; // Show the success modal
+
+        setTimeout(() => {
+            successModal.style.display = "none";
+        }, 5000); // Hide after 5 seconds
+
+
     } else if (action === 'newpass') {
-        successMessage.textContent = message || "Item successfully updated."; // Default message for update
+        successMessage.textContent = message || "Password successfully updated."; // Default message for update
         successModal.style.display = "flex"; // Show the success modal
 
         setTimeout(() => {

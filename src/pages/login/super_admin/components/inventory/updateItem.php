@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } while ($count > 0);
 
     // Determine stock status based on quantity
-    $status = $beginning > 0 ? 'in stock' : 'out of';
+    $status = $beginning > 0 ? 'in stock' : 'out of stock';
 
     // Prepare the update query to include new fields
     $query = "UPDATE inventory SET name = ?, itemID = ?, beginning = ?, uom = ?, transfers_in = ?, deliveries = ?, transfers_out = ?, spoilage = ?, ending = ?, usage_count = ?,  updated_by = ?, status = ? WHERE inventoryID = ?";
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                header("Location: items.php?success=1");
+                header("Location: items.php?action=success&message=$name successfully updated.");
                 exit();
             } else {
                 header("Location: items.php?action=error&reason=no_changes&message=No+changes+made.");

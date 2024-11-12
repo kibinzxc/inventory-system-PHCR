@@ -30,7 +30,14 @@
                     <select class="select" id="sort" onchange="updateSort()">
                         <option value="name" selected>Name</option>
                         <option value="itemID">Code</option>
-                        <option value="uom">UoM</option>
+                        <option value="uom">Unit of Measurement</option>
+                        <option value="beginning">Beginning Inventory</option>
+                        <option value="deliveries">Deliveries</option>
+                        <option value="transfers_in">Transfers In</option>
+                        <option value="transfers_out">Transfers Out</option>
+                        <option value="spoilage">Spoilage</option>
+                        <option value="ending">Ending Inventory</option>
+                        <option value="usage">Usage</option>
                         <option value="status">Status</option>
                         <option value="last_update">Last Update</option>
                         <option value="updated_by">Updated By</option>

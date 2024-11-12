@@ -67,9 +67,15 @@ function loadTable(search = '', sort = 'itemID', sortOrder = 'asc') {
 // Function to attach modal button event listeners
 function attachModalListeners() {
     function closeModal() {
-        var modal = document.getElementById('editModal');
-        var modal = document.getElementById('addReport');
-        modal.style.display = 'none';
+        const editModal = document.getElementById('editModal');
+        const addReportModal = document.getElementById('addReport');
+
+        if (editModal) {
+            editModal.style.display = 'none';
+        }
+        if (addReportModal) {
+            addReportModal.style.display = 'none';
+        }
     }
 
     // Close the modal when clicking on the 'X' button
@@ -77,9 +83,20 @@ function attachModalListeners() {
     if (closeBtn) {
         closeBtn.onclick = closeModal;
     }
+    var closeBtn = document.querySelector('.modal-header .close3');
+    if (closeBtn) {
+        closeBtn.onclick = closeModal;
+    }
+
 
     // Close the modal when clicking the Cancel button
     var cancelBtn = document.getElementById('cancelBtn');
+    if (cancelBtn) {
+        cancelBtn.onclick = closeModal;
+
+    }
+
+    var cancelBtn = document.getElementById('cancelBtn3');
     if (cancelBtn) {
         cancelBtn.onclick = closeModal;
 

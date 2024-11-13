@@ -11,7 +11,7 @@ include '../../authentication/check_login_admin.php';
     <link rel="shortcut icon" href="../../assets/pizzahut-logo.png" type="image/x-icon">
     <link rel="icon" sizes="32x32" href="../../assets/pizzahut-logo.png" type="image/png">
     <link rel="icon" sizes="192x192" href="../../assets/pizzahut-logo.png" type="image/png">
-    <title>Report Transfers In & Out | Pizza Hut Chino Roces</title>
+    <title>Report Spoilage | Pizza Hut Chino Roces</title>
 
 </head>
 
@@ -21,7 +21,7 @@ include '../../authentication/check_login_admin.php';
 
 
 
-    <?php include 'transfers-report-content.php'; ?>
+    <?php include 'spoilage-report-content.php'; ?>
 
     <script src="../Sidebar/Sidebar.js"></script>
 

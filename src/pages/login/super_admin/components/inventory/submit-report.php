@@ -9,8 +9,8 @@
         <div class="modal-body report">
             <div class="btn-wrapper4">
                 <a href="transfers-report.php" target="_blank" class="btn3">Transfers in / Transfers out</a>
-                <a href="#" class="btn3">Deliveries / Purchases</a>
-                <a href="#" class="btn3">Waste / Spoilage</a>
+                <a href="deliveries-report.php" target="_blank" class="btn3">Deliveries / Purchases</a>
+                <a href="spoilage-report.php" target="_blank" class="btn3">Waste / Spoilage</a>
             </div>
         </div>
 

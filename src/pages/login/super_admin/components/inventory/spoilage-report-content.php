@@ -1,13 +1,16 @@
-<link rel="stylesheet" href="transfers-report.css">
+<link rel="stylesheet" href="deliveries-report.css">
 
 <?php
 include '../../connection/database.php';
 
-// Query to fetch items from the 'inventory' table
+// Query to fetch items from the 'inventory' table order by name    
+
+
 $sql = "SELECT inventoryID, name, uom FROM daily_inventory ORDER BY name ASC";
 $result = $conn->query($sql);
 $inventoryItems = [];
 
+// Define UOM abbreviation to full name mapping
 $uom_map = [
     'bag' => 'Bag',
     'bt' => 'Bottle',
@@ -37,7 +40,7 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
 <div id="main-content">
     <div class="container">
         <div class="header">
-            <h1>Transfers In & Out</h1>
+            <h1>Report Spoilage</h1>
             <div class="btn-wrapper">
                 <a href="items.php" class="btn"><img src="../../assets/arrow-left.svg" alt=""> Back</a>
             </div>
@@ -50,11 +53,10 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                 <button type="button" id="show-all-btn" class="btn3" style="display: none;">Show All</button>
             </div>
 
-            <form class="transfer-form" method="POST" action="submit_transfers.php">
+            <form class="transfer-form" method="POST" action="submit_spoilage.php">
                 <div class="form-row header-row">
                     <span>Item Name</span>
-                    <span>Transfers In</span>
-                    <span>Transfers Out</span>
+                    <span>Spoilage</span>
                     <span>Unit of Measurement</span>
                 </div>
                 <div class="scroll">
@@ -66,12 +68,14 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                     if (count($filteredItems) === 0 && $searchQuery) {
                         echo "<center><p>No results found for '$searchQuery'</p><center>";
                     } else {
-                        foreach ($filteredItems as $item): $fullUOM = isset($uom_map[$item['uom']]) ? $uom_map[$item['uom']] : $item['uom']; ?>
+                        foreach ($filteredItems as $item):
+                            // Get the full UOM name using the mapping
+                            $fullUOM = isset($uom_map[$item['uom']]) ? $uom_map[$item['uom']] : $item['uom']; // Default to abbreviation if no mapping found
+                    ?>
                             <div class="form-row" id="item-<?= $item['inventoryID'] ?>">
                                 <label><?= htmlspecialchars($item['name']) ?></label>
-                                <input type="number" name="transfers_in[<?= $item['inventoryID'] ?>]" placeholder="0">
-                                <input type="number" name="transfers_out[<?= $item['inventoryID'] ?>]" placeholder="0">
-                                <p class="label-uom"><?= htmlspecialchars($fullUOM) ?></p>
+                                <input type="number" name="spoilage[<?= $item['inventoryID'] ?>]" placeholder="0">
+                                <p class="label-uom"><?= htmlspecialchars($fullUOM) ?></p> <!-- Display full UOM name -->
                             </div>
                         <?php endforeach; ?>
                     <?php } ?>
@@ -79,12 +83,13 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                 <hr class="horizontal-border">
                 <div class="submit-btn-container">
                     <a href="items.php" class="cancelBtn">Cancel</a>
-                    <button type="submit">Submit Transfers In & Out</button>
+                    <button type="submit">Submit Spoilage Report</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const searchInput = document.getElementById("search");

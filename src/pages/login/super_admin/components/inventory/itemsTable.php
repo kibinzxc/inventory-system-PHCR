@@ -17,7 +17,7 @@ $order = in_array($order, $valid_order_directions) ? $order : 'asc';
 
 // SQL query using prepared statements to prevent SQL injection
 $sql = "SELECT inventoryID, itemID, name, uom, beginning, deliveries, transfers_in, transfers_out, spoilage, ending, notes, last_update, updated_by, usage_count, status
-        FROM inventory
+        FROM daily_inventory
 WHERE 
             (name LIKE ? 
             OR itemID LIKE ? 

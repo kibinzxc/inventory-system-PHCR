@@ -7,7 +7,7 @@
     <!-- Header Section -->
     <div class="container">
         <div class="header">
-            <h1>Inventory</h1>
+            <h1>Daily Inventory</h1>
             <div class="btn-wrapper">
                 <a href="#" class="btn" onclick="openCurrentWeekOverview()"> Current Week Overview</a>
                 <a href="#" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>

@@ -6,7 +6,7 @@ $inventoryItems = [];
 
 if ($query) {
     // Query to fetch items based on the search query
-    $sql = "SELECT inventoryID, name FROM inventory WHERE LOWER(name) LIKE ?";
+    $sql = "SELECT inventoryID, name FROM daily_inventory WHERE LOWER(name) LIKE ?";
     $stmt = $conn->prepare($sql);
     $searchTerm = "%" . $query . "%";
     $stmt->bind_param("s", $searchTerm);

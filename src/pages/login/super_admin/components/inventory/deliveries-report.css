@@ -187,11 +187,18 @@ a.btn {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 15px;
+    padding: 15px 0;
     border-bottom: 1px solid #DBDBDB;
-    padding: 20px 0;
-    transition: visibility 0.3s ease, height 0.3s ease;
-    /* Add transition for smooth hiding */
 }
+
+.form-row span {
+    display: inline-block;
+    margin-left: -10px;
+    /* Shift the span to the left */
+    padding-left: 5px;
+    /* Optional: add padding if you need extra spacing from the label */
+}
+
 
 .form-row:last-child {
     border-bottom: none;
@@ -205,8 +212,11 @@ a.btn {
     border-bottom: 2px solid #555;
     margin-bottom: 20px;
     text-align: center;
-    padding-right: 50px;
 
+}
+
+.header-row .dv {
+    margin-right: 250px;
 }
 
 .header-row span {
@@ -216,22 +226,16 @@ a.btn {
 
 .form-row label {
     width: 30%;
-    text-align: center;
-    /* Align Item Name label to the left */
+    text-align: left;
+    /* Align to the left for item name */
+    font-weight: 700;
+    text-transform: capitalize;
 }
+
 
 .header-row span:last-child {
     text-align: center;
-    width: 10%;
-}
-
-.form-row p.label-uom {
-    width: 10%;
-    text-align: center;
-    /* Center UOM label */
-    margin: 0;
-    font-weight: 700;
-    text-transform: capitalize;
+    width: 15%;
 }
 
 .header-row span:first-child,
@@ -243,14 +247,22 @@ a.btn {
 }
 
 .form-row input[type="number"] {
-    width: 25%;
-    padding: 8px 0;
+    width: 30%;
+    padding: 8px;
     border-radius: 5px;
     border: 1px solid #DBDBDB;
     text-align: center;
     font-size: 18px;
 }
 
+.form-row p.label-uom {
+    width: 10%;
+    text-align: center;
+    /* Center UOM label */
+    margin: 0;
+    font-weight: 700;
+    text-transform: capitalize;
+}
 
 
 .submit-btn-container {

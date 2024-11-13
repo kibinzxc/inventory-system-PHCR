@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Check if item already exists in the database
-    $checkSql = "SELECT COUNT(*) FROM inventory WHERE name = ?";
+    $checkSql = "SELECT COUNT(*) FROM daily_inventory WHERE name = ?";
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->bind_param('s', $name);
     $checkStmt->execute();
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     do {
         // Check if itemID already exists in the database
-        $checkSql = "SELECT COUNT(*) FROM inventory WHERE itemID = ?";
+        $checkSql = "SELECT COUNT(*) FROM daily_inventory WHERE itemID = ?";
         $checkStmt = $conn->prepare($checkSql);
         $checkStmt->bind_param('s', $itemID);
         $checkStmt->execute();
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userName = $userResult->fetch_assoc()['name'] ?? 'Unknown User'; // Fallback if user not found
 
     // Prepare SQL for inserting new item, including the uom and beginning stock
-    $sql = "INSERT INTO inventory (itemID, name, uom, beginning, status, updated_by) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO daily_inventory (itemID, name, uom, beginning, status, updated_by) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('sssdss', $itemID, $name, $uom, $beginning, $status, $userName);
 

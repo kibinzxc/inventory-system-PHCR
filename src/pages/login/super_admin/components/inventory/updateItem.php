@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Check if name already exists, excluding the current item
-    $checkNameSql = "SELECT COUNT(*) FROM inventory WHERE name = ? AND inventoryID != ?";
+    $checkNameSql = "SELECT COUNT(*) FROM daily_inventory WHERE name = ? AND inventoryID != ?";
     $checkStmt = $conn->prepare($checkNameSql);
     $checkStmt->bind_param('si', $name, $inventoryID);
     $checkStmt->execute();
@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Ensure the new itemID is unique, excluding the current item
     do {
-        $checkIdSql = "SELECT COUNT(*) FROM inventory WHERE itemID = ? AND inventoryID != ?";
+        $checkIdSql = "SELECT COUNT(*) FROM daily_inventory WHERE itemID = ? AND inventoryID != ?";
         $checkIdStmt = $conn->prepare($checkIdSql);
         $checkIdStmt->bind_param('si', $itemID, $inventoryID);
         $checkIdStmt->execute();
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $beginning > 0 ? 'in stock' : 'out of stock';
 
     // Prepare the update query to include new fields
-    $query = "UPDATE inventory SET name = ?, itemID = ?, beginning = ?, uom = ?, transfers_in = ?, deliveries = ?, transfers_out = ?, spoilage = ?, ending = ?, usage_count = ?,  updated_by = ?, status = ? WHERE inventoryID = ?";
+    $query = "UPDATE daily_inventory SET name = ?, itemID = ?, beginning = ?, uom = ?, transfers_in = ?, deliveries = ?, transfers_out = ?, spoilage = ?, ending = ?, usage_count = ?,  updated_by = ?, status = ? WHERE inventoryID = ?";
     if ($stmt = $conn->prepare($query)) {
         $stmt->bind_param('ssdsdddddsssi', $name, $itemID, $beginning, $uom, $transfers_in, $deliveries, $transfers_out, $spoilage, $ending, $usage, $updated_by, $status, $inventoryID);
 

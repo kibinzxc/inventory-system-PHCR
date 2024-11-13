@@ -1,7 +1,7 @@
 <?php
 include '../../connection/database.php';
 
-$sql = "SELECT COUNT(*) AS item_count FROM inventory";
+$sql = "SELECT COUNT(*) AS item_count FROM daily_inventory";
 $result = mysqli_query($conn, $sql);
 
 if ($result) {
@@ -16,7 +16,7 @@ $sql = "
         SUM(CASE WHEN status = 'in stock' THEN 1 ELSE 0 END) AS in_stock,
         SUM(CASE WHEN status = 'low stock' THEN 1 ELSE 0 END) AS low_stock,
         SUM(CASE WHEN status = 'out of stock' THEN 1 ELSE 0 END) AS out_of_stock
-    FROM inventory
+    FROM daily_inventory
 ";
 
 $result = mysqli_query($conn, $sql);

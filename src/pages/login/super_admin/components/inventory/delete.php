@@ -4,7 +4,7 @@ include '../../connection/database.php';
 if (isset($_GET['inventoryID'])) {
     $inventoryID = $_GET['inventoryID'];
 
-    $sql = "DELETE FROM inventory WHERE inventoryID = ?";
+    $sql = "DELETE FROM daily_inventory WHERE inventoryID = ?";
 
     if ($stmt = $conn->prepare($sql)) {
         $stmt->bind_param("s", $inventoryID);

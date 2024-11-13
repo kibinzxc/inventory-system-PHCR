@@ -54,7 +54,7 @@ if ($result) {
 
     <!-- <a href="https://www.flaticon.com/free-icons/tick" title="tick icons">Tick icons created by Roundicons - Flaticon</a> -->
     <div class="item">
-        <img src="../../assets/checked.png" class="item-icon" alt="Products">
+        <img src="../../assets/checked.png" class="item-icon" alt="available products">
         <div class="item-details">
             <span class="item-count">0</span>
             <span class="item-label">Available Products</span>
@@ -63,7 +63,7 @@ if ($result) {
 
     <!-- <a href="https://www.flaticon.com/free-icons/inventory" title="inventory icons">Inventory icons created by Ida Desi Mariana - Flaticon</a>   -->
     <div class="item">
-        <img src="../../assets/good-product.png" class="item-icon" alt="Products">
+        <img src="../../assets/good-product.png" class="item-icon" alt="in stock">
         <div class="item-details">
             <span class="item-count"><?php echo $inStock; ?></span>
             <span class="item-label">In Stock Items</span>
@@ -72,7 +72,7 @@ if ($result) {
 
     <!-- <a href="https://www.flaticon.com/free-icons/risk-management" title="risk-management icons">Risk-management icons created by Ida Desi Mariana - Flaticon</a> -->
     <div class="item">
-        <img src="../../assets/risk-management.png" class="item-icon" alt="Charms">
+        <img src="../../assets/risk-management.png" class="item-icon" alt="low stock">
         <div class="item-details">
             <span class="item-count"><?php echo $lowStock; ?></span>
             <span class="item-label">Low Stock Items</span>
@@ -81,7 +81,7 @@ if ($result) {
 
     <!-- <a href="https://www.flaticon.com/free-icons/out-of-stock" title="out-of-stock icons">Out-of-stock icons created by Freepik - Flaticon</a> -->
     <div class="item">
-        <img src="../../assets/nostock.png" class="item-icon" alt="Charms">
+        <img src="../../assets/nostock.png" class="item-icon" alt="out of stock">
         <div class="item-details">
             <span class="item-count"><?php echo $outOfStock; ?></span>
             <span class="item-label">Out of Stock Items</span>

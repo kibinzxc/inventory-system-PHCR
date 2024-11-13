@@ -1,7 +1,8 @@
-function openEditModal(inventoryID, itemID, name, uom, beginning, deliveries, transfers_in, transfers_out, spoilage, ending, usage_count) {
-    console.log("Opening modal for itemID: " + inventoryID);  // Check if the ID is correctly passed
-    console.log("Ending Inventory: " + ending);  // Check if 'ending' is passed correctly
+function openEditModal(inventoryID, itemID, name, uom, beginning, deliveries, transfers_in, transfers_out, spoilage, ending, usage_count, event) {
 
+    if (event && typeof event.preventDefault === 'function') {
+        event.preventDefault();  // Prevent page reload
+    }
     document.getElementById('edit-name').value = name;
     document.getElementById('edit-itemID').value = itemID;
     document.getElementById('edit-measurement').value = uom;

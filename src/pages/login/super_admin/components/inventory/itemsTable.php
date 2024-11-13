@@ -135,10 +135,10 @@ $result = $stmt->get_result();
 
                 echo "<td>
                 <div class='actions_icon'>
-                    <a href='#' onclick=\"openEditModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "','" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['deliveries']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['spoilage']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['usage_count']) . "', '" . addslashes($row['status']) . "')\" data-icon-tooltip='Edit'>
-                        <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'>
-                    </a>
-                    <a href='#' onclick=\"openConfirmModal('" . $row['inventoryID'] . "', '" . addslashes($row['name']) . "')\" data-icon-tooltip='Delete'>
+                <a href='#' onclick=\"openEditModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "', '" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['deliveries']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['spoilage']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['usage_count']) . "', '" . addslashes($row['status']) . "', event); return false;\" data-icon-tooltip='Edit'>
+                    <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'>
+                </a>
+                    <a href='#' onclick=\"openConfirmModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "', event)\" data-icon-tooltip='Delete'>
                         <img src='../../assets/trash-2.svg' alt='Remove' class='remove_icon'>
                     </a>
                 </div>

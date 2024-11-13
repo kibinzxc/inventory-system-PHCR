@@ -2,30 +2,34 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmModal = document.getElementById("uniqueConfirmModal");
     const confirmBtn = document.getElementById("uniqueConfirmBtn");
     const cancelBtn = document.getElementById("uniqueCancelBtn");
-    const modalHeader = document.querySelector('.confirmation-modal-header h2'); // The modal's header
+    const modalHeader = document.querySelector('.confirmation-modal-header h2');
 
     // Opens the confirmation modal and sets the inventoryID for deletion
-    window.openConfirmModal = function (inventoryID, itemName) {
-        confirmModal.style.display = "flex";
+    window.openConfirmModal = function (inventoryID, itemID, event) {
+        if (event) event.preventDefault(); // Prevent page jump
 
-        // Update the modal header with the item name
-        modalHeader.textContent = `Delete Item: ${itemName}`; // Set the text in the header to "Delete Item: itemName"
+        confirmModal.style.display = "flex";
+        modalHeader.textContent = `Delete Item: ${itemID}`;
 
         confirmBtn.onclick = function () {
-            window.location.href = 'delete.php?inventoryID=' + inventoryID; // Redirect to delete.php with the specified itemID
+            window.location.href = 'delete.php?inventoryID=' + inventoryID;
         };
     };
 
-
     // Hides the modal when the close button is clicked
-    document.querySelector('.confirmation-close').onclick = function () {
-        confirmModal.style.display = "none";
-    };
+    const closeButton = document.querySelector('.confirmation-close');
+    if (closeButton) {
+        closeButton.onclick = function () {
+            confirmModal.style.display = "none";
+        };
+    }
 
     // Hides the modal on cancel button click
-    cancelBtn.onclick = function () {
-        confirmModal.style.display = "none";
-    };
+    if (cancelBtn) {
+        cancelBtn.onclick = function () {
+            confirmModal.style.display = "none";
+        };
+    }
 
     // Closes the modal if clicked outside of its content
     window.onclick = function (event) {

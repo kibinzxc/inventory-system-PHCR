@@ -242,6 +242,27 @@ a.btn {
     justify-content: flex-end;
     margin-top: 20px;
     /* Optional: Adjust for spacing */
+    gap: 10px;
+}
+
+.cancelBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.submit-btn-container a {
+    text-decoration: none;
+}
+
+.cancelBtn:hover {
+    background-color: #e0e0e0;
 }
 
 button[type="submit"] {

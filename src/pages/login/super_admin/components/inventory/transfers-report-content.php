@@ -61,6 +61,7 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                 </div>
                 <hr class="horizontal-border">
                 <div class="submit-btn-container">
+                    <a href="items.php" class="cancelBtn">Cancel</a>
                     <button type="submit">Submit Transfers In & Out</button>
                 </div>
             </form>

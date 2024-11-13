@@ -39,7 +39,7 @@ if ($result) {
         <img src="../../assets/packaging.png" class="item-icon" alt="Items">
         <div class="item-details">
             <span class="item-count"><?php echo $itemCount; ?></span>
-            <span class="item-label">Items</span>
+            <span class="item-label">Total Items</span>
         </div>
     </div>
 
@@ -48,7 +48,7 @@ if ($result) {
         <img src="../../assets/cutlery.png" class="item-icon" alt="Products">
         <div class="item-details">
             <span class="item-count">0</span>
-            <span class="item-label">Products</span>
+            <span class="item-label">Total Products</span>
         </div>
     </div>
 

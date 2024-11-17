@@ -19,7 +19,7 @@
         <div class="btn-wrapper2">
             <a href="#" class="btn2" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add New Item</a>
             <a href="#" class="btn2" onclick="openAddReport()"><img src="../../assets/edit-3.svg" alt=""> Submit Report</a>
-            <a href="#" class="btn2" onclick="openEndOfDayModal()"><img src="../../assets/check.svg" alt=""> End-of-Day Inventory</a>
+            <a href="#" class="btn2" onclick="openEndOfDayModal()"><img src="../../assets/check.svg" alt=""> Submit End-of-Day Inventory</a>
         </div>
 
         <div class="table_container">

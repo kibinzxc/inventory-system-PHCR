@@ -17,7 +17,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
         <a href="../dashboard/dashboard.php" data-tooltip="Dashboard" class="<?= ($currentPage == 'dashboard.php') ? 'active' : '' ?>"><img src="../../assets/home.svg" alt=""><span class="links">Dashboard</span></a>
         <hr class="hr_style" />
         <a href="../inventory/items.php" data-tooltip="Inventory" class="<?= ($currentPage == 'items.php' || $currentPage == 'daily-summary.php' || $currentPage == 'products.php' || $currentPage == 'spoilage-report.php' || $currentPage == 'transfers-report.php' || $currentPage == 'deliveries-report.php') ? 'active' : '' ?>"><img src="../../assets/package.svg" alt=""><span class="links">Inventory</span></a>
-        <a href="../inventory/items.php" data-tooltip="Inventory" class="<?= ($currentPage == 'products.php') ? 'active' : '' ?>"><img src="../../assets/package.svg" alt=""><span class="links">Products</span></a>
+        <a href="../inventory/items.php" data-tooltip="Inventory" class="<?= ($currentPage == 'products-usage.php') ? 'active' : '' ?>"><img src="../../assets/package.svg" alt=""><span class="links">Products</span></a>
         <a href="#" data-tooltip="Notifications" class="<?= ($currentPage == 'notifications.php') ? 'active' : '' ?>"><img src="../../assets/mail.svg" alt=""><span class="links">Notifications</span> <span class="notification-badge">3</span></a>
 
         <hr class="hr_style" />

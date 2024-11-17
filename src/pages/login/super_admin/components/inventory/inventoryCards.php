@@ -29,6 +29,28 @@ if ($result) {
 } else {
     $inStock = $lowStock = $outOfStock = 0; // Default to 0 if the query fails
 }
+
+// Fetch total number of products from the 'products' table
+$sql = "SELECT COUNT(*) AS total_products FROM products";
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $totalProducts = $row['total_products']; // Fetch the total product count
+} else {
+    $totalProducts = 0; // Default value if query fails
+}
+
+// Fetch the count of products with status = 'available'
+$sql = "SELECT COUNT(*) AS available_products FROM products WHERE status = 'available'";
+$result = mysqli_query($conn, $sql);
+
+if ($result) {
+    $row = mysqli_fetch_assoc($result);
+    $availableProducts = $row['available_products']; // Fetch the available product count
+} else {
+    $availableProducts = 0; // Default value if query fails
+}
 ?>
 
 <link rel="stylesheet" href="inventoryCards.css">
@@ -47,7 +69,7 @@ if ($result) {
     <div class="item">
         <img src="../../assets/cutlery.png" class="item-icon" alt="Products">
         <div class="item-details">
-            <span class="item-count">0</span>
+            <span class="item-count"><?php echo $totalProducts; ?></span>
             <span class="item-label">Total Products</span>
         </div>
     </div>
@@ -56,7 +78,7 @@ if ($result) {
     <div class="item">
         <img src="../../assets/checked.png" class="item-icon" alt="available products">
         <div class="item-details">
-            <span class="item-count">0</span>
+            <span class="item-count"><?php echo $availableProducts; ?></span>
             <span class="item-label">Available Products</span>
         </div>
     </div>

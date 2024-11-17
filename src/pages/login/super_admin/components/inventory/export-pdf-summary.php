@@ -22,12 +22,9 @@ function headerTable($pdf)
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->SetFillColor(200, 220, 255); // Light blue background for headers
     $pdf->Cell(10, 10, '#', 1, 0, 'C', true); // Add the "#" column
-    $pdf->Cell(70, 10, 'Name', 1, 0, 'L', true);
-    $pdf->Cell(10, 10, 'UOM', 1, 0, 'C', true);
-    $pdf->Cell(20, 10, 'Beginning', 1, 0, 'C', true);
-    $pdf->Cell(20, 10, 'Deliveries', 1, 0, 'C', true);
-    $pdf->Cell(25, 10, 'Transfers In', 1, 0, 'C', true);
-    $pdf->Cell(25, 10, 'Transfers Out', 1, 0, 'C', true);
+    $pdf->Cell(85, 10, 'Name', 1, 0, 'L', true);
+    $pdf->Cell(50, 10, 'Unit of Measurement', 1, 0, 'C', true);
+    $pdf->Cell(40, 10, 'Current Inventory', 1, 0, 'C', true); // Show current inventory instead of individual values
     $pdf->Cell(20, 10, 'Spoilage', 1, 0, 'C', true);
 
     $pdf->SetFillColor(255, 255, 153); // Highlight color for "Ending"
@@ -44,9 +41,9 @@ $pdf->Image('../../assets/logo-black.png', 10, 10, 50); // Adjust path, x, y, an
 
 // Add title on the first page (centered)
 $pdf->SetFont('Arial', 'B', 14);
-$titleWidth = $pdf->GetStringWidth('Daily Inventory Report - Chino Roces') + 6; // Get the width of the title
+$titleWidth = $pdf->GetStringWidth('Daily Inventory Summary Report - Chino Roces') + 6; // Get the width of the title
 $pdf->SetX((300 - $titleWidth) / 2); // Center the title (210 is the page width in mm for A4)
-$pdf->Cell($titleWidth, 10, 'Daily Inventory Report - Chino Roces', 0, 0, 'C'); // Title centered
+$pdf->Cell($titleWidth, 10, 'Daily Inventory Summary Report - Chino Roces', 0, 0, 'C'); // Title centered
 
 // Add current date on the same line, aligned to the right
 $pdf->SetFont('Arial', '', 12);
@@ -62,20 +59,27 @@ $pdf->SetFont('Arial', '', 10);
 if ($result->num_rows > 0) {
     $counter = 1; // Initialize row counter
     while ($row = $result->fetch_assoc()) {
+        // Calculate current inventory
+        $current_inventory = $row["beginning"] + $row["deliveries"] + $row["transfers_in"] - $row["transfers_out"];
+
+        // Remove ".00" if the value is a whole number
+        $current_inventory = (strpos(number_format($current_inventory, 2), '.00') !== false) ? number_format($current_inventory, 0) : number_format($current_inventory, 2);
+
         // Add data row
         // Add row number
         $pdf->Cell(10, 10, $counter++, 1, 0, 'C'); // Increment and display row number
 
         // Capitalize and bold the name
         $pdf->SetFont('Arial', 'B', 10); // Set bold font for name
-        $pdf->Cell(70, 10, strtoupper($row['name']), 1, 0, 'L'); // Left-align and capitalize name
+        $pdf->Cell(85, 10, strtoupper($row['name']), 1, 0, 'L'); // Left-align and capitalize name
         $pdf->SetFont('Arial', '', 10); // Reset to normal font for other columns
 
-        $pdf->Cell(10, 10, $row['uom'], 1, 0, 'C');
-        $pdf->Cell(20, 10, $row['beginning'], 1, 0, 'C');
-        $pdf->Cell(20, 10, $row['deliveries'], 1, 0, 'C');
-        $pdf->Cell(25, 10, $row['transfers_in'], 1, 0, 'C');
-        $pdf->Cell(25, 10, $row['transfers_out'], 1, 0, 'C');
+        // Capitalize and bold 'uom' field
+        $pdf->SetFont('Arial', 'B', 10); // Set bold font for 'uom'
+        $pdf->Cell(50, 10, strtoupper($row['uom']), 1, 0, 'C'); // Capitalized and bold 'uom', center-aligned
+        $pdf->SetFont('Arial', '', 10); // Reset font to normal for next fields
+
+        $pdf->Cell(40, 10, $current_inventory, 1, 0, 'C'); // Display current inventory, formatted to 2 decimal places
 
         // Highlight spoilage if greater than 1
         if ($row['spoilage'] > 1) {
@@ -107,16 +111,14 @@ if ($result->num_rows > 0) {
         // Reset the text color after the status row
         $pdf->SetTextColor(0, 0, 0);
 
-        // Add a new page if necessary (after each set of rows)
         if ($pdf->GetY() > 150) {  // Adjust this value based on your row height and page layout
             $pdf->AddPage();
             // Add title on subsequent pages
             $pdf->Image('../../assets/logo-black.png', 10, 10, 50); // Add logo
             $pdf->SetFont('Arial', 'B', 14);
-            $titleWidth = $pdf->GetStringWidth('Daily Inventory Report - Chino Roces') + 6; // Get the width of the title
+            $titleWidth = $pdf->GetStringWidth('Daily Inventory Summary Report - Chino Roces') + 6; // Get the width of the title
             $pdf->SetX((300 - $titleWidth) / 2); // Center the title (210 is the page width in mm for A4)
-            $pdf->Cell($titleWidth, 10, 'Daily Inventory Report - Chino Roces', 0, 0, 'C'); // Title centered
-
+            $pdf->Cell($titleWidth, 10, 'Daily Inventory Summary Report - Chino Roces', 0, 0, 'C'); // Title centered
             // Add current date on the same line, aligned to the right
             $pdf->SetFont('Arial', '', 12);
             $pdf->Cell(0, 10, 'Date: ' . date('F j, Y'), 0, 0, 'R'); // Date aligned to the right
@@ -129,4 +131,4 @@ if ($result->num_rows > 0) {
 }
 
 // Output the PDF
-$pdf->Output('D', 'daily_inventory_report.pdf'); // D to force download
+$pdf->Output('D', 'daily_inventory_summary_report.pdf'); // D to force download

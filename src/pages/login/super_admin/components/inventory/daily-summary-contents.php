@@ -40,8 +40,7 @@
         <div class="table_container">
             <!-- Utility Buttons and Sorting Options -->
             <div class="btns_container">
-                <a href="#" class="icon_btn"><img src="../../assets/printer.svg" alt="Print"></a>
-                <a href="#" class="icon_btn"><img src="../../assets/save.svg" alt="Save"></a>
+                <a href="export-pdf-summary.php" class="icon_btn"><img src="../../assets/save.svg" alt="Save"></a>
                 <input type="text" name="search" id="search" placeholder="Search" class="search_btn">
 
                 <!-- Sorting Options -->

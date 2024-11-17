@@ -7,7 +7,8 @@
     box-sizing: border-box;
 }
 
-.header h1 {
+.header h1,
+h2 {
     color: #343434;
 }
 
@@ -75,7 +76,7 @@ body {
 
 .btn-wrapper2 {
     display: flex;
-    gap: 15px;
+    gap: 10px;
 }
 
 .btn-wrapper2 a:hover {
@@ -93,7 +94,7 @@ body {
     align-items: center;
     display: flex;
     justify-content: center;
-    padding: 0 30px;
+    padding: 0 40px;
 }
 
 a.btn2 {
@@ -365,24 +366,10 @@ a.btn {
     /* Change text color on hover */
 }
 
-/* Disable button style */
-a.btn2.disabled {
-    pointer-events: none;
-    /* Disable clicking */
-    opacity: 0.5;
-    /* Make the button look inactive */
-    cursor: not-allowed;
-    /* Change the cursor to indicate it's disabled */
+h2 {
+    font-size: 1.5rem;
+    text-align: center;
 }
-
-/* Remove hover effect on disabled button */
-a.btn2.disabled:hover {
-    background: none;
-    /* Remove any hover effect */
-    color: inherit;
-    /* Retain original text color */
-}
-
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
@@ -419,6 +406,7 @@ a.btn2.disabled:hover {
     h1 {
         align-self: center;
     }
+
 
     .btn-container {
         margin-left: 0;

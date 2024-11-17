@@ -40,7 +40,7 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
         <div class="header">
             <h1>Received Deliveries</h1>
             <div class="btn-wrapper">
-                <a href="items.php" class="btn"><img src="../../assets/arrow-left.svg" alt=""> Back</a>
+                <a href="javascript:history.back()" class="btn"><img src="../../assets/arrow-left.svg" alt=""> Back</a>
             </div>
         </div>
         <div class="table_container">

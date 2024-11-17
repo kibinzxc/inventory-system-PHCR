@@ -131,4 +131,5 @@ if ($result->num_rows > 0) {
 }
 
 // Output the PDF
-$pdf->Output('D', 'daily_inventory_summary_report.pdf'); // D to force download
+$filename = date('Y-m-d') . '_inventory-summary-report.pdf'; // File name with today's date
+$pdf->Output('D', $filename); // D to force download

@@ -158,3 +158,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+
+// Save scroll position when the page is about to unload
+window.onbeforeunload = function () {
+    sessionStorage.setItem("scrollPosition", window.scrollY);
+};
+
+// On page load, check if there's a saved scroll position and scroll to it
+window.onload = function () {
+    var scrollPosition = sessionStorage.getItem("scrollPosition");
+    if (scrollPosition) {
+        window.scrollTo(0, scrollPosition);
+        sessionStorage.removeItem("scrollPosition"); // Clear scroll position after it's used
+    }
+};

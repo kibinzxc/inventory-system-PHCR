@@ -1,29 +1,22 @@
 <?php
-include '../../connection/database.php';
+// Set the timezone if necessary
+date_default_timezone_set('Asia/Manila'); // Adjust according to your timezone
 
-// Set timezone to Manila
-date_default_timezone_set('Asia/Manila');
+// Get the current date
+$currentDate = new DateTime();
 
-// Get current time
-$currentDateTime = new DateTime();
-$currentHour = $currentDateTime->format('H'); // Get current hour (24-hour format)
+// Calculate the current week's start (Monday) and end (Sunday)
+$startOfWeek = clone $currentDate;
+$startOfWeek->modify('monday this week'); // Modify to get the Monday of the current week
+$endOfWeek = clone $currentDate;
+$endOfWeek->modify('sunday this week'); // Modify to get the Sunday of the current week
 
-// Set the inventory date (previous day or current day based on time)
-if ($currentHour < 6) {
-    $inventoryDate = $currentDateTime->modify('-1 day')->format('Y-m-d');
-} else {
-    $inventoryDate = $currentDateTime->format('Y-m-d');
-}
-
-// Query to check if a record exists for the given date
-$query = "SELECT COUNT(*) AS recordCount FROM records_inventory WHERE inventory_date = '$inventoryDate'";
-$result = $conn->query($query);
-$row = $result->fetch_assoc();
-$recordExists = $row['recordCount'] > 0;
+// Format the dates to display in the desired format
+$startDateFormatted = $startOfWeek->format('M j, Y');
+$endDateFormatted = $endOfWeek->format('M j, Y');
 ?>
 
-<!-- HTML below -->
-<link rel="stylesheet" href="MainContent.css">
+<link rel="stylesheet" href="week-overview.css">
 
 <div id="main-content">
     <!-- Tooltip for button hints -->
@@ -32,36 +25,15 @@ $recordExists = $row['recordCount'] > 0;
     <!-- Header Section -->
     <div class="container">
         <div class="header">
-            <h1>Daily Inventory</h1>
+            <h1>Current Week Overview</h1>
             <div class="btn-wrapper">
-                <a href="week-overview.php" class="btn"> Current Week Overview</a>
-                <a href="#" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>
+                <a href="javascript:history.back()" class="btn"><img src="../../assets/arrow-left.svg" alt=""> Back</a>
             </div>
         </div>
 
-        <!-- Action Buttons Section -->
-        <br>
-        <div class="btn-wrapper2">
-            <a href="#" class="btn2" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add New Item</a>
-            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" onclick="openAddReport()"><img src="../../assets/edit-3.svg" alt=""> Submit Report</a>
-            <!-- Disable the button if record exists -->
-            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" <?php echo $recordExists ? 'aria-disabled="true"' : ''; ?> onclick="openSubmitModal()">
-                <img src="../../assets/check.svg" alt="">
-                <?php echo $recordExists ? 'Inventory Already Submitted ' : 'Submit End-of-Day Inventory'; ?>
-            </a>
-        </div>
+        <!-- Dynamic Date Range Display -->
+        <h2><?php echo $startDateFormatted . ' - ' . $endDateFormatted; ?></h2>
 
-        <div class="table_container">
-            <?php include 'inventoryCards.php'; ?>
-        </div>
-
-        <div class="btncontents">
-            <a href="#" class="active"><img src="../../assets/inventory.png" class="img-btn-link">Daily Inventory</a>
-            <a href="daily-summary.php"><img src="../../assets/text-file.png" class="img-btn-link">Daily Summary</a>
-            <a href="products.php"><img src="../../assets/cutlery.png" class="img-btn-link">Product List</a>
-        </div>
-
-        <br>
         <!-- Table Container Section -->
         <div class="table_container">
             <!-- Utility Buttons and Sorting Options -->
@@ -122,7 +94,6 @@ $recordExists = $row['recordCount'] > 0;
     <?php include 'add-items.php'; ?>
     <?php include 'submit-report.php'; ?>
     <?php include 'SuccessErrorModal.php'; ?>
-    <?php include 'confirm_submit.php'; ?>
     <script src="SuccessErrorModal.js"></script>
 </div>
 <script src="items.js"></script>

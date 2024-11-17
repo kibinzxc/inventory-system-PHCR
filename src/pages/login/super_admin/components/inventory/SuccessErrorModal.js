@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 5000); // Hide after 5 seconds
 
     } else if (action === 'del') {
-        successMessage.textContent = message || "Item successfully deleted."; // Default message for update
+        successMessage.textContent = message; // Default message for update
         successModal.style.display = "flex"; // Show the success modal
 
         setTimeout(() => {

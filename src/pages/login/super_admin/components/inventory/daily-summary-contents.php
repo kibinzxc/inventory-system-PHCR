@@ -1,3 +1,26 @@
+<?php
+include '../../connection/database.php';
+
+// Set timezone to Manila
+date_default_timezone_set('Asia/Manila');
+
+// Get current time
+$currentDateTime = new DateTime();
+$currentHour = $currentDateTime->format('H'); // Get current hour (24-hour format)
+
+// Set the inventory date (previous day or current day based on time)
+if ($currentHour < 6) {
+    $inventoryDate = $currentDateTime->modify('-1 day')->format('Y-m-d');
+} else {
+    $inventoryDate = $currentDateTime->format('Y-m-d');
+}
+
+// Query to check if a record exists for the given date
+$query = "SELECT COUNT(*) AS recordCount FROM records_inventory WHERE inventory_date = '$inventoryDate'";
+$result = $conn->query($query);
+$row = $result->fetch_assoc();
+$recordExists = $row['recordCount'] > 0;
+?>
 <link rel="stylesheet" href="MainContent.css">
 
 <div id="main-content">
@@ -9,7 +32,7 @@
         <div class="header">
             <h1>Daily Summary</h1>
             <div class="btn-wrapper">
-                <a href="#" class="btn" onclick="openCurrentWeekOverview()"> Current Week Overview</a>
+                <a href="week-overview.php" class="btn" onclick="openCurrentWeekOverview()"> Current Week Overview</a>
                 <a href="#" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>
             </div>
         </div>
@@ -18,8 +41,12 @@
         <br>
         <div class="btn-wrapper2">
             <a href="#" class="btn2" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add New Item</a>
-            <a href="#" class="btn2" onclick="openAddReport()"><img src="../../assets/edit-3.svg" alt=""> Submit Report</a>
-            <a href="#" class="btn2" onclick="openEndOfDayModal()"><img src="../../assets/check.svg" alt=""> Submit End-of-Day Inventory</a>
+            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" onclick="openAddReport()"><img src="../../assets/edit-3.svg" alt=""> Submit Report</a>
+            <!-- Disable the button if record exists -->
+            <a href="submit-inventory.php" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" <?php echo $recordExists ? 'aria-disabled="true"' : ''; ?>>
+                <img src="../../assets/check.svg" alt="">
+                <?php echo $recordExists ? 'Inventory Already Submitted ' : 'Submit End-of-Day Inventory'; ?>
+            </a>
         </div>
 
         <div class="table_container">

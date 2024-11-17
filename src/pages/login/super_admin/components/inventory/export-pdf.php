@@ -128,5 +128,6 @@ if ($result->num_rows > 0) {
     $pdf->Cell(0, 10, 'No data available', 1, 1, 'C');
 }
 
-// Output the PDF
-$pdf->Output('D', 'daily_inventory_report.pdf'); // D to force download
+// Output the PDF with the date-based filename
+$filename = date('Y-m-d') . '_inventory-report.pdf'; // File name with today's date
+$pdf->Output('D', $filename); // D to force download

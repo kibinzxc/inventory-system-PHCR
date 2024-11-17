@@ -33,16 +33,28 @@
     margin: 0;
 }
 
-.modal-header .close {
+.modal-header .close,
+.close2 {
     position: absolute;
+    /* Absolute positioning */
     right: 15px;
+    /* Align right */
     top: 15px;
+    /* Align top */
     font-size: 24px;
+    /* Font size for close button */
     font-weight: bold;
+    /* Bold text */
     cursor: pointer;
+    /* Pointer cursor */
     color: #fff;
+    /* White color */
     padding: 5px 10px;
+    /* Padding for clickable area */
+    line-height: 1;
+    /* Line height */
     border-radius: 50%;
+    /* Rounded close button */
 }
 
 .modal-header .close:hover {

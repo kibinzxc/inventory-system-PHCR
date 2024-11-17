@@ -1,6 +1,5 @@
 <?php
 include '../../authentication/check_login_admin.php';
-include 'daily_update.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +11,7 @@ include 'daily_update.php';
     <link rel="shortcut icon" href="../../assets/pizzahut-logo.png" type="image/x-icon">
     <link rel="icon" sizes="32x32" href="../../assets/pizzahut-logo.png" type="image/png">
     <link rel="icon" sizes="192x192" href="../../assets/pizzahut-logo.png" type="image/png">
-    <title>Dashboard | Pizza Hut</title>
+    <title>Inventory | Pizza Hut Chino Roces</title>
 
 </head>
 
@@ -22,7 +21,7 @@ include 'daily_update.php';
 
 
 
-    <?php include 'MainContent.php'; ?>
+    <?php include 'week-overview-content.php'; ?>
 
     <script src="../Sidebar/Sidebar.js"></script>
 

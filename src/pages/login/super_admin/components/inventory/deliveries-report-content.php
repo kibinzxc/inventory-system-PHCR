@@ -3,10 +3,8 @@
 <?php
 include '../../connection/database.php';
 
-// Query to fetch items from the 'inventory' table order by name    
-
-
-$sql = "SELECT inventoryID, name, uom FROM daily_inventory ORDER BY name ASC";
+// Query to fetch items from the 'daily_inventory' table, including received quantities
+$sql = "SELECT inventoryID, name, uom, deliveries FROM daily_inventory ORDER BY name ASC";
 $result = $conn->query($sql);
 $inventoryItems = [];
 
@@ -74,7 +72,9 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                     ?>
                             <div class="form-row" id="item-<?= $item['inventoryID'] ?>">
                                 <label><?= htmlspecialchars($item['name']) ?></label>
-                                <input type="number" name="deliveries[<?= $item['inventoryID'] ?>]" placeholder="0">
+                                <input type="number" name="deliveries[<?= $item['inventoryID'] ?>]"
+                                    value="<?= isset($item['deliveries']) ? htmlspecialchars($item['deliveries']) : 0 ?>"
+                                    placeholder="0">
                                 <p class="label-uom"><?= htmlspecialchars($fullUOM) ?></p> <!-- Display full UOM name -->
                             </div>
                         <?php endforeach; ?>
@@ -106,7 +106,6 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
 
         // Function to trigger the search
         function triggerSearch(query) {
-            // This will set the value of the search query and submit the form or initiate any action you need
             const url = new URL(window.location.href);
             url.searchParams.set('search', query);
             window.location.href = url.toString(); // Update the URL with the search query
@@ -143,10 +142,9 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                 div.classList.add("dropdown-item");
                 div.textContent = item.name;
 
-                // When an item is clicked, set the search input to that item and trigger the search
                 div.addEventListener("click", function() {
                     searchInput.value = item.name;
-                    dropdown.style.display = "none"; // Hide the dropdown
+                    dropdown.style.display = "none";
                     triggerSearch(item.name); // Trigger the search with the selected item
                 });
 

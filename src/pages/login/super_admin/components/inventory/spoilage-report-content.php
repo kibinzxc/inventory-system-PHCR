@@ -1,12 +1,10 @@
-<link rel="stylesheet" href="deliveries-report.css">
+<link rel="stylesheet" href="spoilage-report.css">
 
 <?php
 include '../../connection/database.php';
 
-// Query to fetch items from the 'inventory' table order by name    
-
-
-$sql = "SELECT inventoryID, name, uom FROM daily_inventory ORDER BY name ASC";
+// Query to fetch items from the 'daily_inventory' table along with spoilage and remarks
+$sql = "SELECT inventoryID, name, uom, spoilage, remarks FROM daily_inventory ORDER BY name ASC";
 $result = $conn->query($sql);
 $inventoryItems = [];
 
@@ -56,8 +54,9 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
             <form class="transfer-form" method="POST" action="submit_spoilage.php">
                 <div class="form-row header-row">
                     <span>Item Name</span>
-                    <span>Spoilage</span>
-                    <span>Unit of Measurement</span>
+                    <span>Qty</span>
+                    <span>UoM</span>
+                    <span>Remarks</span>
                 </div>
                 <div class="scroll">
                     <?php
@@ -74,12 +73,14 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                     ?>
                             <div class="form-row" id="item-<?= $item['inventoryID'] ?>">
                                 <label><?= htmlspecialchars($item['name']) ?></label>
-                                <input type="number" name="spoilage[<?= $item['inventoryID'] ?>]" placeholder="0">
+                                <input type="number" name="spoilage[<?= $item['inventoryID'] ?>]" placeholder="0" min="0" value="<?= htmlspecialchars($item['spoilage']) ?>">
                                 <p class="label-uom"><?= htmlspecialchars($fullUOM) ?></p> <!-- Display full UOM name -->
+                                <input type="text" name="remarks[<?= $item['inventoryID'] ?>]" placeholder="Add remarks" class="remarks-input" value="<?= htmlspecialchars($item['remarks']) ?>">
                             </div>
                         <?php endforeach; ?>
                     <?php } ?>
                 </div>
+
                 <hr class="horizontal-border">
                 <div class="submit-btn-container">
                     <a href="items.php" class="cancelBtn">Cancel</a>

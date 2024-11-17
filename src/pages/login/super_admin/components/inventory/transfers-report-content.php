@@ -3,7 +3,7 @@
 <?php
 include '../../connection/database.php';
 
-// Query to fetch items from the 'inventory' table
+// Query to fetch items from the 'daily_inventory' table
 $sql = "SELECT inventoryID, name, uom FROM daily_inventory ORDER BY name ASC";
 $result = $conn->query($sql);
 $inventoryItems = [];
@@ -23,11 +23,24 @@ $uom_map = [
     'tnk' => 'Tank'
 ];
 
+// Fetch inventory items
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         $inventoryItems[] = $row;
     }
 }
+
+// Fetch transfer data (for Transfers In and Transfers Out)
+$sql_transfers = "SELECT inventoryID, transfers_in, transfers_out FROM daily_inventory WHERE inventoryID IN (" . implode(',', array_column($inventoryItems, 'inventoryID')) . ")";
+$transferResult = $conn->query($sql_transfers);
+$transfers = [];
+
+if ($transferResult->num_rows > 0) {
+    while ($row = $transferResult->fetch_assoc()) {
+        $transfers[$row['inventoryID']] = $row;
+    }
+}
+
 $conn->close();
 
 // Get search query if it exists
@@ -59,6 +72,7 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                 </div>
                 <div class="scroll">
                     <?php
+                    // Filter items based on search query
                     $filteredItems = array_filter($inventoryItems, function ($item) use ($searchQuery) {
                         return !$searchQuery || strpos(strtolower($item['name']), $searchQuery) !== false;
                     });
@@ -66,15 +80,26 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                     if (count($filteredItems) === 0 && $searchQuery) {
                         echo "<center><p>No results found for '$searchQuery'</p><center>";
                     } else {
-                        foreach ($filteredItems as $item): $fullUOM = isset($uom_map[$item['uom']]) ? $uom_map[$item['uom']] : $item['uom']; ?>
+                        foreach ($filteredItems as $item):
+                            $fullUOM = isset($uom_map[$item['uom']]) ? $uom_map[$item['uom']] : $item['uom'];
+                    ?>
                             <div class="form-row" id="item-<?= $item['inventoryID'] ?>">
                                 <label><?= htmlspecialchars($item['name']) ?></label>
-                                <input type="number" name="transfers_in[<?= $item['inventoryID'] ?>]" placeholder="0">
-                                <input type="number" name="transfers_out[<?= $item['inventoryID'] ?>]" placeholder="0">
+
+                                <!-- Transfer In Input Field, prefilled with existing value if available -->
+                                <input type="number" name="transfers_in[<?= $item['inventoryID'] ?>]"
+                                    value="<?= isset($transfers[$item['inventoryID']]) ? $transfers[$item['inventoryID']]['transfers_in'] : 0 ?>"
+                                    placeholder="0">
+
+                                <!-- Transfer Out Input Field, prefilled with existing value if available -->
+                                <input type="number" name="transfers_out[<?= $item['inventoryID'] ?>]"
+                                    value="<?= isset($transfers[$item['inventoryID']]) ? $transfers[$item['inventoryID']]['transfers_out'] : 0 ?>"
+                                    placeholder="0">
+
                                 <p class="label-uom"><?= htmlspecialchars($fullUOM) ?></p>
                             </div>
-                        <?php endforeach; ?>
-                    <?php } ?>
+                    <?php endforeach;
+                    } ?>
                 </div>
                 <hr class="horizontal-border">
                 <div class="submit-btn-container">
@@ -85,6 +110,7 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
         </div>
     </div>
 </div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const searchInput = document.getElementById("search");

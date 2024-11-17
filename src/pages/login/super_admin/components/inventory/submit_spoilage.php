@@ -2,8 +2,9 @@
 include '../../connection/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['spoilage'])) {
+    if (isset($_POST['spoilage'], $_POST['remarks'])) {
         $spoilage = $_POST['spoilage'];
+        $remarks = $_POST['remarks']; // Fetch remarks data
 
         // Begin a transaction to ensure all updates happen together
         $conn->begin_transaction();
@@ -20,11 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     continue;
                 }
 
+                // Ensure a remark exists for the corresponding inventoryID
+                $remarkText = isset($remarks[$inventoryID]) ? $remarks[$inventoryID] : '';
+
+                // Prepare the SQL to update spoilage and remarks
                 $updateSql = "UPDATE daily_inventory 
-                              SET spoilage = spoilage + ? 
+                              SET spoilage = spoilage + ?, remarks = CONCAT(IFNULL(remarks, ''), ?) 
                               WHERE inventoryID = ?";
                 $stmt = $conn->prepare($updateSql);
-                $stmt->bind_param("ii", $receivedAmount, $inventoryID);
+                $stmt->bind_param("isi", $receivedAmount, $remarkText, $inventoryID);
 
                 // Execute the update query
                 if ($stmt->execute() && $stmt->affected_rows > 0) {

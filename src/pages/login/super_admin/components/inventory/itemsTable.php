@@ -7,7 +7,7 @@ $sort = isset($_GET['sort']) ? $_GET['sort'] : 'name';
 $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 
 // Define valid columns for sorting and valid order directions
-$valid_sort_columns = ['inventoryID', 'itemID', 'name', 'beginning', 'deliveries', 'transfers_in', 'transfers_out', 'spoilage', 'ending', 'notes', 'usage_count', 'status', 'last_update', 'updated_by'];
+$valid_sort_columns = ['inventoryID', 'itemID', 'name', 'beginning', 'deliveries', 'transfers_in', 'transfers_out', 'spoilage', 'ending', 'usage_count', 'status', 'last_update', 'updated_by'];
 $valid_order_directions = ['asc', 'desc'];
 
 // Ensure valid sort column
@@ -16,7 +16,7 @@ $sort = in_array($sort, $valid_sort_columns) ? $sort : 'inventoryID';
 $order = in_array($order, $valid_order_directions) ? $order : 'asc';
 
 // SQL query using prepared statements to prevent SQL injection
-$sql = "SELECT inventoryID, itemID, name, uom, beginning, deliveries, transfers_in, transfers_out, spoilage, ending, notes, last_update, updated_by, usage_count, status
+$sql = "SELECT inventoryID, itemID, name, uom, beginning, deliveries, transfers_in, transfers_out, spoilage, ending, last_update, updated_by, usage_count, status
         FROM daily_inventory
 WHERE 
             (name LIKE ? 
@@ -30,7 +30,6 @@ WHERE
             OR ending LIKE ? 
             OR usage_count LIKE ? 
             OR status LIKE ? 
-            OR notes LIKE ? 
             OR updated_by LIKE ? 
             OR last_update LIKE ?)
         ORDER BY $sort $order";
@@ -38,8 +37,7 @@ WHERE
 $stmt = $conn->prepare($sql);
 $search_param = "%$search%";
 $stmt->bind_param(
-    'ssssssssssssss',
-    $search_param,
+    'sssssssssssss',
     $search_param,
     $search_param,
     $search_param,

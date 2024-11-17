@@ -15,7 +15,7 @@ $sort = in_array($sort, $valid_sort_columns) ? $sort : 'inventoryID';
 $order = in_array($order, $valid_order_directions) ? $order : 'asc';
 
 // SQL query using prepared statements to prevent SQL injection
-$sql = "SELECT inventoryID, itemID, name, uom, beginning, deliveries, transfers_in, transfers_out, spoilage, ending, notes, last_update, updated_by, usage_count, status,(beginning + deliveries + transfers_in - transfers_out) AS current_inventory
+$sql = "SELECT inventoryID, itemID, name, uom, beginning, deliveries, transfers_in, transfers_out, spoilage, ending, last_update, updated_by, usage_count, status,(beginning + deliveries + transfers_in - transfers_out) AS current_inventory
         FROM daily_inventory
         WHERE 
             (name LIKE ? 
@@ -25,7 +25,6 @@ $sql = "SELECT inventoryID, itemID, name, uom, beginning, deliveries, transfers_
             OR ending LIKE ? 
             OR usage_count LIKE ? 
             OR status LIKE ? 
-            OR notes LIKE ? 
             OR updated_by LIKE ? 
             OR last_update LIKE ?)
         ORDER BY $sort $order";
@@ -33,8 +32,7 @@ $sql = "SELECT inventoryID, itemID, name, uom, beginning, deliveries, transfers_
 $stmt = $conn->prepare($sql);
 $search_param = "%$search%";
 $stmt->bind_param(
-    'ssssssssss',
-    $search_param,
+    'sssssssss',
     $search_param,
     $search_param,
     $search_param,

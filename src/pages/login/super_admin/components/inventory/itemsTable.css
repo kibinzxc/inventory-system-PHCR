@@ -86,7 +86,23 @@ td.status {
     text-transform: uppercase;
 }
 
+/* Disable button style */
+a.btn2.disabled {
+    pointer-events: none;
+    /* Disable clicking */
+    opacity: 0.5;
+    /* Make the button look inactive */
+    cursor: not-allowed;
+    /* Change the cursor to indicate it's disabled */
+}
 
+/* Remove hover effect on disabled button */
+a.btn2.disabled:hover {
+    background: none;
+    /* Remove any hover effect */
+    color: inherit;
+    /* Retain original text color */
+}
 
 /* Tooltip container */
 [data-icon-tooltip] {

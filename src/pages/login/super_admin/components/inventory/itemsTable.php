@@ -1,5 +1,24 @@
 <?php
 include '../../connection/database.php';
+// Set timezone to Manila
+date_default_timezone_set('Asia/Manila');
+
+// Get current time
+$currentDateTime = new DateTime();
+$currentHour = $currentDateTime->format('H'); // Get current hour (24-hour format)
+
+// Set the inventory date (previous day or current day based on time)
+if ($currentHour < 6) {
+    $inventoryDate = $currentDateTime->modify('-1 day')->format('Y-m-d');
+} else {
+    $inventoryDate = $currentDateTime->format('Y-m-d');
+}
+
+// Query to check if a record exists for the given date
+$query = "SELECT COUNT(*) AS recordCount FROM records_inventory WHERE inventory_date = '$inventoryDate'";
+$result = $conn->query($query);
+$row = $result->fetch_assoc();
+$recordExists = $row['recordCount'] > 0;
 
 // Handle search, sort, and order inputs
 $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -132,15 +151,28 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($row["updated_by"]) . "</td>";
 
                 echo "<td>
-                <div class='actions_icon'>
-                <a href='#' onclick=\"openEditModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "', '" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['deliveries']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['spoilage']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['usage_count']) . "', '" . addslashes($row['status']) . "', event); return false;\" data-icon-tooltip='Edit'>
-                    <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'>
-                </a>
-                    <a href='#' onclick=\"openConfirmModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "', event)\" data-icon-tooltip='Delete'>
-                        <img src='../../assets/trash-2.svg' alt='Remove' class='remove_icon'>
-                    </a>
-                </div>
-              </td>";
+                <div class='actions_icon'>";
+
+                // Check if a record exists, if so, disable the icons
+                if ($recordExists) {
+                    // Add the 'disabled' attribute or style for disabling actions
+                    echo "<a href='#' onclick=\"return false;\" data-icon-tooltip='Edit'>
+                            <img src='../../assets/edit.svg' alt='Edit' class='settings_icon' style='opacity: 0.5; cursor: not-allowed;'>
+                          </a>
+                          <a href='#' onclick=\"return false;\" data-icon-tooltip='Delete'>
+                            <img src='../../assets/trash-2.svg' alt='Remove' class='remove_icon' style='opacity: 0.5; cursor: not-allowed;'>
+                          </a>";
+                } else {
+                    // Default actions (enabled)
+                    echo "<a href='#' onclick=\"openEditModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "', '" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['deliveries']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['spoilage']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['usage_count']) . "', '" . addslashes($row['status']) . "', event); return false;\" data-icon-tooltip='Edit'>
+                            <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'>
+                          </a>
+                          <a href='#' onclick=\"openConfirmModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "', event)\" data-icon-tooltip='Delete'>
+                            <img src='../../assets/trash-2.svg' alt='Remove' class='remove_icon'>
+                          </a>";
+                }
+
+                echo "</div></td>";
                 echo "</tr>";
             }
         } else {

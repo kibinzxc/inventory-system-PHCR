@@ -43,9 +43,9 @@ if ($googleServerTime) {
 $currentTimezone = date_default_timezone_get();
 
 // Display current time, date, and timezone
-// echo "Current time: " . $currentTime . "<br>";
-// echo "Current date: " . $currentDate . "<br>";
-// echo "Current timezone: " . $currentTimezone . "<br>";
+echo "Current time: " . $currentTime . "<br>";
+echo "Current date: " . $currentDate . "<br>";
+echo "Current timezone: " . $currentTimezone . "<br>";
 
 // Define the start time for checking updates (6:00 AM)
 $startOfDay = new DateTime('today 06:00 AM'); // 6:00 AM today
@@ -64,15 +64,28 @@ $lastUpdateResult = $conn->query($lastUpdateQuery);
 $lastUpdateRow = $lastUpdateResult->fetch_assoc();
 $lastUpdate = new DateTime($lastUpdateRow['last_update']);
 $lastUpdateTime = $lastUpdate->format('H:i'); // Extract time part
+$lastUpdateDate = $lastUpdate->format('Y-m-d'); // Extract date part
+
+// Echo the last_update details
+echo "Last update time: " . $lastUpdateTime . "<br>";
+echo "Last update date: " . $lastUpdateDate . "<br>";
 
 // Step 2: Determine which date to check based on last_update time
-if ($lastUpdateTime < '06:00') {
-    // If the last update was before 6:00 AM today, we are working with yesterday's inventory
-    $yesterdayDate = $lastUpdate->modify('-1 day')->format('Y-m-d'); // Get yesterday's date (e.g., 2024-11-17)
+if ($lastUpdateDate < $currentDate) {
+    // If last_update date is before the current date
+    if ($lastUpdateTime < '06:00') {
+        // If last_update was before 6:00 AM, use the day before yesterday
+        $yesterdayDate = $lastUpdate->modify('-1 day')->format('Y-m-d');
+    } else {
+        // Otherwise, use yesterday's date
+        $yesterdayDate = $lastUpdateDate;
+    }
 } else {
-    // If the last update is after 6:00 AM today, proceed with today's inventory
-    $yesterdayDate = $currentDate; // Use today (e.g., 2024-11-18)
+    // If the last update is today
+    $yesterdayDate = $currentDate;
 }
+
+echo "Determined date to check: " . $yesterdayDate . "<br>";
 
 // Step 3: Check if there are records for the determined date (yesterdayDate) in records_inventory
 $checkInventoryQuery = "
@@ -103,7 +116,7 @@ $updateCount = $updateRow['updateCount'];
 if ($updateCount == 0) {
     // No updates found in daily_inventory since 6:01 AM today
     if ($inventoryCount > 0) {
-        // If there are records for the previous day (Nov 17 or Nov 18), proceed with flush
+        // If there are records for the previous day, proceed with flush
         $flushQuery = "
             UPDATE daily_inventory
             SET 
@@ -127,17 +140,17 @@ if ($updateCount == 0) {
 
         // Execute the flush query
         if ($conn->query($flushQuery) === TRUE) {
-            // echo "Inventory data for $yesterdayDate has been flushed successfully.";
+            echo "Inventory data for $yesterdayDate has been flushed successfully.";
         } else {
-            // echo "Error flushing inventory data: " . $conn->error;
+            echo "Error flushing inventory data: " . $conn->error;
         }
     } else {
         // If no records for the previous day, do not flush
-        // echo "No records for $yesterdayDate in records_inventory. Data will not be flushed.";
+        echo "No records for $yesterdayDate in records_inventory. Data will not be flushed.";
     }
 } else {
     // If there were updates after 6:00 AM, do not flush
-    // echo "There were updates after 6:00 AM today. Data will not be flushed.";
+    echo "There were updates after 6:00 AM today. Data will not be flushed.";
 }
 
 $conn->close();  // Close the database connection

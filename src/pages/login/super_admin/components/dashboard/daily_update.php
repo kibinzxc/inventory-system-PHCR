@@ -5,17 +5,53 @@ error_reporting(0);
 // Set timezone to Manila
 date_default_timezone_set('Asia/Manila');
 
-// Get current time
-$currentDateTime = new DateTime();
-$currentTime = $currentDateTime->format('H:i'); // Current time (HH:MM)
-$currentDate = $currentDateTime->format('Y-m-d'); // Current date (e.g., 2024-11-18)
+// Fetch the current time from Google server
+function getGoogleServerTime()
+{
+    $url = "http://www.google.com"; // You can use other websites too
+
+    // Get the headers from the response
+    $headers = get_headers($url, 1);
+
+    // Check if the Date header is available
+    if (isset($headers['Date'])) {
+        $dateHeader = $headers['Date'];  // The date header contains the time from the server
+        $googleTime = strtotime($dateHeader);  // Convert to Unix timestamp
+
+        // Return formatted time and date
+        return date('Y-m-d H:i:s', $googleTime); // Example: '2024-11-18 05:19:00'
+    }
+    return false;
+}
+
+// Get the time from Google's server
+$googleServerTime = getGoogleServerTime();
+
+// If we successfully retrieved the time from Google
+if ($googleServerTime) {
+    $currentDateTime = new DateTime($googleServerTime);  // Create DateTime object from Google time
+    $currentTime = $currentDateTime->format('H:i');  // Get current time (HH:MM)
+    $currentDate = $currentDateTime->format('Y-m-d');  // Get current date (YYYY-MM-DD)
+} else {
+    // Fallback to the server's system time if the Google time couldn't be fetched
+    $currentDateTime = new DateTime();
+    $currentTime = $currentDateTime->format('H:i');
+    $currentDate = $currentDateTime->format('Y-m-d');
+}
+
+// Get the current timezone
+$currentTimezone = date_default_timezone_get();
+
+// Display current time, date, and timezone
+// echo "Current time: " . $currentTime . "<br>";
+// echo "Current date: " . $currentDate . "<br>";
+// echo "Current timezone: " . $currentTimezone . "<br>";
 
 // Define the start time for checking updates (6:00 AM)
 $startOfDay = new DateTime('today 06:00 AM'); // 6:00 AM today
 $startOfDayStr = $startOfDay->format('Y-m-d H:i:s'); // Format it as string for query
 
 // Step 1: Check last_update in daily_inventory
-// If last_update is before 6:00 AM today, we need to check records for the previous day (yesterday)
 $lastUpdateQuery = "
     SELECT last_update
     FROM daily_inventory

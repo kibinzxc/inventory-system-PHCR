@@ -13,8 +13,6 @@
 
         <div class="table_container">
             <div class="btns_container">
-                <a href="#" class="icon_btn"><img src="../../assets/printer.svg" alt=""></a>
-                <a href="#" class="icon_btn"><img src="../../assets/save.svg" alt=""></a>
                 <input type="text" name="search" id="search" placeholder="Search" class="search_btn">
 
                 <div class="sort-container">

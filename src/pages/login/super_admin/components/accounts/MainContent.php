@@ -6,7 +6,7 @@
         <div class="header">
             <h2>Account Management</h2>
             <div class="btn-wrapper">
-                <a href="#" class="btn" onclick="openVerificationModal()"><img src="../../assets/editpass.svg" alt=""> Edit Password</a>
+                <a href="#" class="btn" onclick="openVerificationModal()"><img src="../../assets/editpass.svg" alt=""> Edit Account</a>
                 <a href="#" class="btn" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add Account</a>
             </div>
         </div>

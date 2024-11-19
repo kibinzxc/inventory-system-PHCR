@@ -46,18 +46,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Check if name already exists, excluding the current item
-    $checkNameSql = "SELECT COUNT(*) FROM daily_inventory WHERE name = ? AND inventoryID != ?";
-    $checkStmt = $conn->prepare($checkNameSql);
-    $checkStmt->bind_param('si', $name, $inventoryID);
-    $checkStmt->execute();
-    $checkStmt->bind_result($existingItemCount);
-    $checkStmt->fetch();
-    $checkStmt->close();
+    // Fetch the current values from the database to compare
+    $query = "SELECT name, beginning, uom, transfers_in, deliveries, transfers_out, spoilage, ending, usage_count, status FROM daily_inventory WHERE inventoryID = ?";
+    if ($stmt = $conn->prepare($query)) {
+        $stmt->bind_param('i', $inventoryID);
+        $stmt->execute();
+        $stmt->bind_result($current_name, $current_beginning, $current_uom, $current_transfers_in, $current_deliveries, $current_transfers_out, $current_spoilage, $current_ending, $current_usage, $current_status);
+        $stmt->fetch();
+        $stmt->close();
 
-    if ($existingItemCount > 0) {
-        header("Location: items.php?action=error&reason=name_exists&message=Item+name+already+exists&name=$name&beginning=$beginning&uom=$uom");
-        exit();
+        // Check if any values have actually changed
+        if (
+            $name === $current_name &&
+            $beginning == $current_beginning &&
+            $uom === $current_uom &&
+            $transfers_in == $current_transfers_in &&
+            $deliveries == $current_deliveries &&
+            $transfers_out == $current_transfers_out &&
+            $spoilage == $current_spoilage &&
+            $ending == $current_ending &&
+            $usage == $current_usage
+        ) {
+            // If no changes, redirect with a message
+            header("Location: items.php?action=error&reason=no_changes&message=No+changes+were+made+to+the+item.");
+            exit();
+        }
     }
 
     // Generate itemID based on the updated name
@@ -94,13 +107,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $status = $beginning > 0 ? 'in stock' : 'out of stock';
 
     // Prepare the update query to include new fields
-    $query = "UPDATE daily_inventory SET name = ?, itemID = ?, beginning = ?, uom = ?, transfers_in = ?, deliveries = ?, transfers_out = ?, spoilage = ?, ending = ?, usage_count = ?,  updated_by = ?, status = ? WHERE inventoryID = ?";
+    $query = "UPDATE daily_inventory SET name = ?, itemID = ?, beginning = ?, uom = ?, transfers_in = ?, deliveries = ?, transfers_out = ?, spoilage = ?, ending = ?, usage_count = ?, updated_by = ?, status = ? WHERE inventoryID = ?";
     if ($stmt = $conn->prepare($query)) {
         $stmt->bind_param('ssdsdddddsssi', $name, $itemID, $beginning, $uom, $transfers_in, $deliveries, $transfers_out, $spoilage, $ending, $usage, $updated_by, $status, $inventoryID);
 
         if ($stmt->execute()) {
             if ($stmt->affected_rows > 0) {
-                header("Location: items.php?action=success&message=$name successfully updated.");
+                header("Location: items.php?action=success&message=$name+successfully+updated.");
                 exit();
             } else {
                 header("Location: items.php?action=error&reason=no_changes&message=No+changes+made.");
@@ -113,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt->close();
     } else {
-        header("Location: items.php?action=error&reason=query_preparation_failed&message=Failed+to+prepare+query.&qty=$qty");
+        header("Location: items.php?action=error&reason=query_preparation_failed&message=Failed+to+prepare+query.");
         exit();
     }
 

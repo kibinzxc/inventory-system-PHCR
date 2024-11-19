@@ -5,53 +5,28 @@ error_reporting(0);
 // Set timezone to Manila
 date_default_timezone_set('Asia/Manila');
 
-// // Fetch the current time from Google server
-// function getGoogleServerTime()
-// {
-//     $url = "http://www.google.com"; // You can use other websites too
-
-//     // Get the headers from the response
-//     $headers = get_headers($url, 1);
-
-//     // Check if the Date header is available
-//     if (isset($headers['Date'])) {
-//         $dateHeader = $headers['Date'];  // The date header contains the time from the server
-//         $googleTime = strtotime($dateHeader);  // Convert to Unix timestamp
-
-//         // Return formatted time and date
-//         return date('Y-m-d H:i:s', $googleTime); // Example: '2024-11-18 05:19:00'
-//     }
-//     return false;
-// }
-
-// // Get the time from Google's server
-// $googleServerTime = getGoogleServerTime();
-
-// // If we successfully retrieved the time from Google
-// if ($googleServerTime) {
-//     $currentDateTime = new DateTime($googleServerTime);  // Create DateTime object from Google time
-//     $currentTime = $currentDateTime->format('H:i');  // Get current time (HH:MM)
-//     $currentDate = $currentDateTime->format('Y-m-d');  // Get current date (YYYY-MM-DD)
-// } else {
-// Fallback to the server's system time if the Google time couldn't be fetched
+// Get current time
 $currentDateTime = new DateTime();
-$currentTime = $currentDateTime->format('H:i');
-$currentDate = $currentDateTime->format('Y-m-d');
-// }
+$currentTime = $currentDateTime->format('H:i'); // Current time (HH:MM)
+$currentDate = $currentDateTime->format('Y-m-d'); // Current date (e.g., 2024-11-19)
 
-// Get the current timezone
-$currentTimezone = date_default_timezone_get();
+// Display current date and time
+// echo "Current Date and Time: " . $currentDate . " " . $currentTime . "<br>";
 
-// Display current time, date, and timezone
-// echo "Current time: " . $currentTime . "<br>";
-// echo "Current date: " . $currentDate . "<br>";
-// echo "Current timezone: " . $currentTimezone . "<br>";
+// Define the start and end times for "yesterday" and "today"
+$startOfYesterday = new DateTime('yesterday 06:00 AM'); // Start of yesterday
+$endOfYesterday = new DateTime('today 05:00 AM');  // End of yesterday (5:00 AM today)
 
-// Define the start time for checking updates (6:00 AM)
-$startOfDay = new DateTime('today 06:00 AM'); // 6:00 AM today
-$startOfDayStr = $startOfDay->format('Y-m-d H:i:s'); // Format it as string for query
+$startOfToday = new DateTime('today 06:00 AM');  // Start of today (6:00 AM)
+$endOfToday = new DateTime('tomorrow 06:00 AM'); // End of today (until 6:00 AM tomorrow)
 
-// Step 1: Check last_update in daily_inventory
+// Display the date range for yesterday and today
+// echo "Start of Yesterday: " . $startOfYesterday->format('Y-m-d H:i:s') . "<br>";
+// echo "End of Yesterday: " . $endOfYesterday->format('Y-m-d H:i:s') . "<br>";
+// echo "Start of Today: " . $startOfToday->format('Y-m-d H:i:s') . "<br>";
+// echo "End of Today (until 6:00 AM tomorrow): " . $endOfToday->format('Y-m-d H:i:s') . "<br>";
+
+// Step 1: Get the most recent last_update from daily_inventory
 $lastUpdateQuery = "
     SELECT last_update
     FROM daily_inventory
@@ -63,47 +38,63 @@ $lastUpdateQuery = "
 $lastUpdateResult = $conn->query($lastUpdateQuery);
 $lastUpdateRow = $lastUpdateResult->fetch_assoc();
 $lastUpdate = new DateTime($lastUpdateRow['last_update']);
+$lastUpdateDate = $lastUpdate->format('Y-m-d'); // Extract the date part
 $lastUpdateTime = $lastUpdate->format('H:i'); // Extract time part
 
-// Step 2: Determine which date to check based on last_update time
-if ($lastUpdateTime < '06:00') {
-    // If the last update was before 6:00 AM today, we are working with yesterday's inventory
-    $yesterdayDate = $lastUpdate->modify('-1 day')->format('Y-m-d'); // Get yesterday's date (e.g., 2024-11-17)
+// Display last update date and time
+// echo "Last Update: " . $lastUpdateDate . " " . $lastUpdateTime . "<br>";
+
+// Step 2: Determine if the last update is considered from yesterday or today
+if ($lastUpdate >= $startOfYesterday && $lastUpdate < $endOfYesterday) {
+    // If last update is between 6:00 AM yesterday and 5:00 AM today, it's considered yesterday
+    $inventoryDate = $startOfYesterday->format('Y-m-d'); // Check for yesterday's inventory
+    // echo "Last update was from yesterday, checking records for: " . $inventoryDate . "<br>";
+} elseif ($lastUpdate >= $startOfToday && $lastUpdate < $endOfToday) {
+    // If last update is between 6:00 AM today and 5:59 AM tomorrow, it's considered today
+    $inventoryDate = $currentDate; // Check for today's inventory
+    // echo "Last update was from today, checking records for: " . $inventoryDate . "<br>";
 } else {
-    // If the last update is after 6:00 AM today, proceed with today's inventory
-    $yesterdayDate = $currentDate; // Use today (e.g., 2024-11-18)
+    // echo "Last update is outside the expected range.<br>";
+    $inventoryDate = $currentDate; // Default to today if no valid match
 }
 
-// Step 3: Check if there are records for the determined date (yesterdayDate) in records_inventory
+// Step 3: Check if there are records for the calculated date in `records_inventory`
 $checkInventoryQuery = "
     SELECT COUNT(*) AS recordCount
     FROM records_inventory
-    WHERE inventory_date = '$yesterdayDate';
+    WHERE inventory_date = '$inventoryDate';
 ";
 
-// Execute the query to check for records in records_inventory
+// Execute the query to check for records in `records_inventory`
 $inventoryResult = $conn->query($checkInventoryQuery);
 $inventoryRow = $inventoryResult->fetch_assoc();
 $inventoryCount = $inventoryRow['recordCount'];
 
-// Step 4: Check if there are updates in daily_inventory since the last check time
-$checkUpdatesQuery = "
-    SELECT COUNT(*) AS updateCount
-    FROM daily_inventory
-    WHERE last_update >= '$startOfDayStr'
-        AND last_update < NOW();  -- Check if updates were made after 6:00 AM today
-";
+// Display inventory count and the day of the inventory record
+$inventoryDay = (new DateTime($inventoryDate))->format('l'); // Get the day of the week for the inventory date
+// echo "Inventory Count for $inventoryDate ($inventoryDay): " . $inventoryCount . "<br>";
 
-// Execute the query to check for updates
-$updateResult = $conn->query($checkUpdatesQuery);
-$updateRow = $updateResult->fetch_assoc();
-$updateCount = $updateRow['updateCount'];
+// Step 4: Check if it's past 6:00 AM today
+$past6AM = new DateTime(); // Current time
+$isPast6AM = $past6AM > $startOfToday; // Check if it's past 6:00 AM today
 
-// Step 5: Logic to flush data
-if ($updateCount == 0) {
-    // No updates found in daily_inventory since 6:01 AM today
-    if ($inventoryCount > 0) {
-        // If there are records for the previous day (Nov 17 or Nov 18), proceed with flush
+// Criteria Check Messages
+$criteriaMessages = [];
+
+// Check if it's past 6:00 AM today
+if (!$isPast6AM) {
+    $criteriaMessages[] = "It is not yet past 6:00 AM today.";
+}
+
+// Check if there are no records for the selected date in `records_inventory`
+if ($inventoryCount <= 0) {
+    $criteriaMessages[] = "There are no records for $inventoryDate in records_inventory.";
+}
+
+// Step 5: Flush only if the last update is **yesterday** and conditions are met
+if ($lastUpdate >= $startOfYesterday && $lastUpdate < $endOfYesterday) {
+    if ($isPast6AM && $inventoryCount > 0) {
+        // Step 6: Logic to flush data only if all conditions are met
         $flushQuery = "
             UPDATE daily_inventory
             SET 
@@ -127,17 +118,19 @@ if ($updateCount == 0) {
 
         // Execute the flush query
         if ($conn->query($flushQuery) === TRUE) {
-            // echo "Inventory data for $yesterdayDate has been flushed successfully.";
+            // echo "Inventory data for $inventoryDate ($inventoryDay) has been flushed successfully.";
         } else {
             // echo "Error flushing inventory data: " . $conn->error;
         }
     } else {
-        // If no records for the previous day, do not flush
-        // echo "No records for $yesterdayDate in records_inventory. Data will not be flushed.";
+        // echo "Conditions for flushing data are not met. Data will not be flushed.<br>";
+        if (empty($criteriaMessages)) {
+            // echo "Waiting for tomorrow to flush the data.<br>";
+        }
     }
 } else {
-    // If there were updates after 6:00 AM, do not flush
-    // echo "There were updates after 6:00 AM today. Data will not be flushed.";
+    // If last update is from today, wait until tomorrow
+    // echo "Last update is from today. Waiting until tomorrow to flush the data.<br>";
 }
 
 $conn->close();  // Close the database connection

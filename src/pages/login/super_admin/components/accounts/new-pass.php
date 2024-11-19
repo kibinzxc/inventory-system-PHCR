@@ -1,54 +1,35 @@
-<link rel="stylesheet" href="MainContent.css">
-
-<div id="main-content">
-    <div class="tooltip" id="tooltip" style="display: none;">Tooltip Text</div>
-    <div class="container">
-        <div class="header">
-            <h2>Account Management</h2>
-            <div class="btn-wrapper">
-                <a href="#" class="btn" onclick="openVerificationModal()"><img src="../../assets/editpass.svg" alt=""> Edit Password</a>
-                <a href="#" class="btn" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add Account</a>
-            </div>
+<link rel="stylesheet" href="edit_password.css">
+<div id="editpassModal" class="editpass-modal" style="display: <?php echo $showModal ? 'block' : 'none'; ?>;">
+    <div class="editpass-modal-content">
+        <!-- Modal Header -->
+        <div class="editpass-modal-header">
+            <h2>Change Password</h2>
+            <span class="editpass-close1">&times;</span>
         </div>
 
-        <div class="table_container">
-            <div class="btns_container">
-                <a href="#" class="icon_btn"><img src="../../assets/printer.svg" alt=""></a>
-                <a href="#" class="icon_btn"><img src="../../assets/save.svg" alt=""></a>
-                <input type="text" name="search" id="search" placeholder="Search" class="search_btn">
+        <!-- Modal Content -->
+        <div class="editpass-modal-body">
+            <form id="editpassAccountForm" action="edit_pass_query.php" method="POST">
+                <input type="hidden" name="uid" id="editpass-uid">
 
-                <div class="sort-container">
-                    <img src="../../assets/filter.svg" alt="" class="filter_icon">
-                    <span class="sort-label">SORT BY:</span>
-                    <select class="select" id="sort">
-                        <option value="uid" selected>EMPLOYEE ID</option>
-                        <option value="name">NAME</option>
-                        <option value="userType">USER TYPE</option>
-                    </select>
-
-                    <span class="sort-label">ORDER:</span>
-                    <select class="select2" id="sortOrder">
-                        <option value="asc" selected>Ascending</option>
-                        <option value="desc">Descending</option>
-                    </select>
+                <div class="editpass-form-group">
+                    <label for="editpass-password">New Password</label>
+                    <input type="password" id="editpass-password" name="password" placeholder="Enter your new password">
                 </div>
 
-                <a href="#" class="icon_btn" id="refresh-btn"><img src="../../assets/refresh-ccw.svg" alt=""></a>
-            </div>
-
-            <div class="loader" id="loader" style="display:none;"></div>
-            <div class="table" id="account-table"> <?php include 'AccountTable.php'; ?></div>
-
+                <div class="editpass-form-group">
+                    <label for="editpass-confirm-password">Confirm Password</label>
+                    <input type="password" id="editpass-confirm-password" name="confirmPassword" placeholder="Retype your new password">
+                </div>
+            </form>
         </div>
 
-        <blockquote class="mobile-note">
-            <strong>Note:</strong> On mobile devices, access is limited to viewing only. You cannot edit, add, or remove content.
-        </blockquote>
-
+        <!-- Modal Footer / Button Area -->
+        <div class="editpass-modal-footer">
+            <button type="button" id="editpass-cancelAddBtn" class="editpass-custom_btn editpass-cancel-btn">Cancel</button>
+            <button type="submit" form="editpassAccountForm" class="editpass-custom_btn editpass-save-btn">Save Changes</button>
+        </div>
     </div>
-    <?php include 'edit_password.php' ?>
-    <?php include 'add-account.php' ?>
-    <?php include 'SuccessErrorModal.php'; ?>
-    <script src="SuccessErrorModal.js"></script>
 </div>
-<script src="Accounts.js"></script>
+
+<script src="Edit_password.js"></script>

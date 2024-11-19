@@ -371,6 +371,68 @@ h2 {
     text-align: center;
 }
 
+/* Style for the #view-mode select element */
+#view-mode {
+    background-color: #006D6D;
+    /* Same color as btn2 */
+    color: white;
+    /* White text color */
+    font-size: 18px;
+    /* Similar font size */
+    border: none;
+    /* Remove default border */
+    padding: 10px 50px 10px 50px;
+    /* Padding to give space for the arrow on the right */
+    border-radius: 25px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Make it clickable */
+    width: auto;
+    /* Let it resize based on content */
+    transition: background-color 0.3s ease;
+    /* Smooth transition on hover/focus */
+    appearance: none;
+    /* Remove default dropdown arrow */
+    -webkit-appearance: none;
+    /* Safari/Chrome */
+    -moz-appearance: none;
+    /* Firefox */
+    position: relative;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6"%3E%3Cpolygon points="0,0 10,0 5,6" fill="%23fff" /%3E%3C/svg%3E');
+    /* Inline SVG arrow */
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+    /* Size of the arrow */
+}
+
+/* Option styling */
+#view-mode option {
+    background-color: #fff;
+    /* White background for options */
+    color: black;
+    /* Black text color */
+    padding: 10px;
+    /* Padding for options */
+}
+
+/* Hover state */
+#view-mode:hover {
+    background-color: #004d4d;
+    /* Darker green on hover */
+}
+
+
+/* Optional: Disabled state */
+#view-mode[disabled] {
+    background-color: #ccc;
+    /* Grey background for disabled select */
+    cursor: not-allowed;
+    /* Show not-allowed cursor */
+    color: #777;
+    /* Grey text */
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .btns_container {

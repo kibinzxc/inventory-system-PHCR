@@ -71,7 +71,7 @@ $weekRange = getWeekRange($currentWeekFromUrl, $firstMonday);
                     if (viewMode === 'weekly') {
                         window.location.href = 'week-overview.php';
                     } else if (viewMode === 'monthly') {
-                        window.location.href = 'month-overview-content.php';
+                        window.location.href = 'month-overview.php';
                     }
                 }
             </script>

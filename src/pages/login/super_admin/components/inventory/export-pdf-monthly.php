@@ -2,41 +2,22 @@
 require('../fpdf186/fpdf.php'); // Include the FPDF library
 include '../../connection/database.php';
 
-$week = isset($_GET['week']) ? (int)$_GET['week'] : 1;
-
 // Get the current date
 $currentDate = new DateTime();
 
 // Get the first day of the current month
 $firstDayOfMonth = new DateTime("first day of this month");
 
-// Find the first Monday of the month
-$firstMonday = clone $firstDayOfMonth;
-$firstMonday->modify('next monday');
+// Get the last day of the current month
+$lastDayOfMonth = new DateTime("last day of this month");
 
-// Function to calculate the start and end date for each week, starting from the first Monday
-function getWeekRange($weekNumber, $firstMonday)
-{
-    $firstWeekStartDate = clone $firstMonday;
-    $firstWeekStartDate->modify('+' . ($weekNumber - 1) . ' week'); // Calculate start date for the given week
+// Get the selected month and year from GET parameters, or default to current month and year
+$month = isset($_GET['month']) ? (int)$_GET['month'] : (int)$currentDate->format('m');
+$year = isset($_GET['year']) ? (int)$_GET['year'] : (int)$currentDate->format('Y');
 
-    // Calculate the end date (6 days after the start date)
-    $endDate = clone $firstWeekStartDate;
-    $endDate->modify('+6 days');
-
-    return [
-        'start' => $firstWeekStartDate->format('F j, Y'),  // e.g., "November 4, 2024"
-        'end' => $endDate->format('F j, Y')  // e.g., "November 10, 2024"
-    ];
-}
-
-// Get the range for the selected week
-$weekRange = getWeekRange($week, $firstMonday);
-
-// Fetch data from the records_inventory table based on the week
+// Fetch data from the records_inventory table based on the month and year
 $sql = "
     SELECT 
-        CONCAT('Week ', LEAST(FLOOR((DAY(inventory_date) - 1) / 7) + 1, 4)) AS week_of_month,
         name,
         itemID,
         uom,
@@ -52,7 +33,8 @@ $sql = "
         ) AS usage_count
     FROM records_inventory
     WHERE 
-        CONCAT('Week ', LEAST(FLOOR((DAY(inventory_date) - 1) / 7) + 1, 4)) = 'Week $week'
+        MONTH(inventory_date) = $month 
+        AND YEAR(inventory_date) = $year
     GROUP BY name, itemID, uom
     ORDER BY name ASC";
 $result = $conn->query($sql);
@@ -93,18 +75,18 @@ $pdf->Image('../../assets/logo-black.png', 10, 10, 50); // Adjust path, x, y, an
 
 // Add title on the first page (centered)
 $pdf->SetFont('Arial', 'B', 14);
-$titleWidth = $pdf->GetStringWidth('Weekly Inventory Report - Chino Roces') + 6; // Get the width of the title
+$titleWidth = $pdf->GetStringWidth('Monthly Inventory Report - Chino Roces') + 6; // Get the width of the title
 $pdf->SetX((300 - $titleWidth) / 2); // Center the title (210 is the page width in mm for A4)
-$pdf->Cell($titleWidth, 10, 'Weekly Inventory Report - Chino Roces', 0, 0, 'C'); // Title centered
+$pdf->Cell($titleWidth, 10, 'Monthly Inventory Report - Chino Roces', 0, 0, 'C'); // Title centered
 
 // Add current date on the same line, aligned to the right
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(0, 10, 'Date: ' . date('F j, Y'), 0, 0, 'R'); // Date aligned to the right
-$pdf->Ln(10); // Line break before week range
+$pdf->Ln(10); // Line break before month range
 
-// Display the week range below the title
+// Display the month range below the title
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(0, 10, 'Week ' . $week . ' | ' . $weekRange['start'] . ' - ' . $weekRange['end'], 0, 1, 'C'); // Week range centered
+$pdf->Cell(0, 10, 'Month: ' . date('F', mktime(0, 0, 0, $month, 10)) . ' ' . $year, 0, 1, 'C'); // Month and year centered
 
 $pdf->Ln(5); // Line break before table
 
@@ -116,8 +98,6 @@ $pdf->SetFont('Arial', '', 10);
 if ($result->num_rows > 0) {
     $counter = 1; // Initialize row counter
     while ($row = $result->fetch_assoc()) {
-        // Calculate current inventory
-
         // Add data row
         $pdf->Cell(10, 10, $counter++, 1, 0, 'C'); // Increment and display row number
         $pdf->SetFont('Arial', 'B', 10); // Set bold font for name
@@ -152,9 +132,10 @@ if ($result->num_rows > 0) {
     }
 } else {
     // If no data found, add a message
-    $pdf->Cell(0, 10, 'No inventory records found for this week.', 0, 1, 'C');
+    $pdf->Cell(0, 10, 'No inventory records found for this month.', 0, 1, 'C');
 }
 
 // Output the PDF
-//put the week number on the file name, e.g., report_week_1.pdf
-$pdf->Output('D', 'inventory_report_week_' . $week . '.pdf');
+// Generate file name with the month and year
+$filename = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-inventory-report.pdf'; // File name with year and month
+$pdf->Output('D', $filename); // D to force download

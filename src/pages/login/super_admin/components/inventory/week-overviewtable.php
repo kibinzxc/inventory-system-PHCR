@@ -1,6 +1,5 @@
 <?php
 include '../../connection/database.php';
-Error_reporting(1);
 
 // Handle search, sort, order, and week inputs
 $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -9,7 +8,7 @@ $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
 $week = isset($_GET['week']) ? $_GET['week'] : '';  // Week parameter from URL
 
 // Valid columns for sorting and valid order directions
-$valid_sort_columns = ['name', 'itemID', 'beginning', 'deliveries', 'transfers_in', 'transfers_out', 'spoilage', 'ending', 'usage_count'];
+$valid_sort_columns = ['recordID', 'name', 'itemID', 'beginning', 'deliveries', 'transfers_in', 'transfers_out', 'spoilage', 'ending', 'usage_count'];
 $valid_order_directions = ['asc', 'desc'];
 
 // Ensure valid inputs
@@ -35,7 +34,7 @@ $sql = "
         ) AS usage_count
     FROM records_inventory
     WHERE 
-        (name LIKE ? OR itemID LIKE ? OR uom LIKE ?) 
+        (name LIKE ? OR itemID LIKE ? OR uom LIKE ?)
         AND CONCAT('Week ', LEAST(FLOOR((DAY(inventory_date) - 1) / 7) + 1, 4)) = 'Week $week'
     GROUP BY week_of_month, name, itemID, uom
     ORDER BY $sort $order";
@@ -57,6 +56,7 @@ $result = $stmt->get_result();
 <table border="1">
     <thead>
         <tr>
+            <th>#</th>
             <th>Name</th>
             <th>Code</th>
             <th>Unit of Measurement</th>
@@ -72,8 +72,10 @@ $result = $stmt->get_result();
     <tbody>
         <?php
         if ($result->num_rows > 0) {
+            $count = 1;
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
+                echo "<td>" . $count++ . "</td>";
                 echo "<td><strong>" . strtoupper(htmlspecialchars($row["name"])) . "</strong></td>";
                 echo "<td>" . htmlspecialchars($row["itemID"]) . "</td>";
                 echo "<td>" . strtoupper(htmlspecialchars($row["uom"])) . "</td>";
@@ -82,12 +84,31 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($row["transfers_in"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_out"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["spoilage"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["ending"]) . "</td>";
+                echo "<td><strong>" . htmlspecialchars($row["ending"]) . "<strong></td>";
                 echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
                 echo "</tr>";
             }
         } else {
-            echo "<tr><td colspan='11'>No items found for Week $week</td></tr>";
+            // Determine the range for the given week number
+            $currentMonth = isset($_GET['month']) ? (int)$_GET['month'] : date('n'); // Use current month if not provided
+            $currentYear = isset($_GET['year']) ? (int)$_GET['year'] : date('Y');   // Use current year if not provided
+
+            $startOfMonth = new DateTime("$currentYear-$currentMonth-01");
+
+            // Find the first Monday of the month
+            $firstMonday = clone $startOfMonth;
+            $firstMonday->modify('first monday of this month');
+
+            // Calculate the start and end dates for the given week
+            $weekStart = clone $firstMonday;
+            $weekStart->modify('+' . (($week - 1) * 7) . ' days');
+            $weekEnd = clone $weekStart;
+            $weekEnd->modify('+6 days'); // Always count 6 days forward for Sunday
+
+            // Format the week range
+            $weekRange = $weekStart->format('F j') . ' - ' . $weekEnd->format('F j, Y');
+
+            echo "<tr><td colspan='12'>No items found for Week $week | $weekRange</td></tr>";
         }
         ?>
     </tbody>

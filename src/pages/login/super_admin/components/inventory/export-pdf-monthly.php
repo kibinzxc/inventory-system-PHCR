@@ -129,6 +129,28 @@ if ($result->num_rows > 0) {
         $pdf->Cell(35, 10, $row['ending'], 1, 0, 'C', true);
 
         $pdf->Cell(15, 10, $row['usage_count'], 1, 1, 'C');
+        // Reset the text color after the status row
+        $pdf->SetTextColor(0, 0, 0);
+
+        if ($pdf->GetY() > 150) {  // Adjust this value based on your row height and page layout
+            $pdf->AddPage();
+            // Add title on subsequent pages
+            $pdf->Image('../../assets/logo-black.png', 10, 10, 50); // Add logo
+            $pdf->SetFont('Arial', 'B', 14);
+            $titleWidth = $pdf->GetStringWidth('Monthly Inventory Report - Chino Roces') + 6; // Get the width of the title
+            $pdf->SetX((300 - $titleWidth) / 2); // Center the title (210 is the page width in mm for A4)
+            $pdf->Cell($titleWidth, 10, 'Monthly Inventory Report - Chino Roces', 0, 0, 'C'); // Title cent
+            // Add current date on the same line, aligned to the right
+            $pdf->SetFont('Arial', '', 12);
+            $pdf->Cell(0, 10, 'Date: ' . date('F j, Y'), 0, 0, 'R'); // Date aligned to the right
+            $pdf->Ln(10); // Add some spacing before the header
+            // Display the month range below the title
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(0, 10, 'Month: ' . date('F', mktime(0, 0, 0, $month, 10)) . ' ' . $year, 0, 1, 'C'); // Month and year centered
+
+            $pdf->Ln(5); // Line break before table
+            headerTable($pdf); // Add the header again on the new page
+        }
     }
 } else {
     // If no data found, add a message
@@ -137,5 +159,5 @@ if ($result->num_rows > 0) {
 
 // Output the PDF
 // Generate file name with the month and year
-$filename = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-inventory-report.pdf'; // File name with year and month
+$filename = $year . '-' . str_pad($month, 2, '0', STR_PAD_LEFT) . '-monthly-inventory-report.pdf'; // File name with year and month
 $pdf->Output('D', $filename); // D to force download

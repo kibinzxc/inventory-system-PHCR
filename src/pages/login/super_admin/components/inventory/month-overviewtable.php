@@ -65,6 +65,7 @@ $result = $stmt->get_result();
 <table border="1">
     <thead>
         <tr>
+            <th>#</th>
             <th>Name</th>
             <th>Code</th>
             <th>Unit of Measurement</th>
@@ -80,8 +81,10 @@ $result = $stmt->get_result();
     <tbody>
         <?php
         if ($result->num_rows > 0) {
+            $count = 1;
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
+                echo "<td>" . $count++ . "</td>";
                 echo "<td><strong>" . strtoupper(htmlspecialchars($row["name"])) . "</strong></td>";
                 echo "<td>" . htmlspecialchars($row["itemID"]) . "</td>";
                 echo "<td>" . strtoupper(htmlspecialchars($row["uom"])) . "</td>";
@@ -90,12 +93,15 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($row["transfers_in"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_out"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["spoilage"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["ending"]) . "</td>";
+                echo "<td><strong>" . htmlspecialchars($row["ending"]) . "<strong></td>";
                 echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
                 echo "</tr>";
             }
         } else {
-            echo "<tr><td colspan='10'>No items found for Month $month, Year $year</td></tr>";
+            $monthName = DateTime::createFromFormat('!m', $month)->format('F');
+
+            // Display the message with the month name
+            echo "<tr><td colspan='10'>No items found for Month of $monthName, Year $year</td></tr>";
         }
         ?>
     </tbody>

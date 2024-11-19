@@ -122,7 +122,6 @@ $conn->close();
                     <span class="sort-label">SORT BY:</span>
                     <select class="select" id="sort" onchange="updateSort()">
                         <option value="name" selected>Name</option>
-                        <option value="month">Month</option>
                         <option value="itemID">Code</option>
                         <option value="uom">Unit of Measurement</option>
                     </select>
@@ -145,7 +144,7 @@ $conn->close();
 
             <!-- Table Loader and Content -->
             <div class="loader" id="loader" style="display:none;"></div>
-            <div class="table" id="account-table">
+            <div class="table" id="month-table">
                 <?php include 'month-overviewtable.php'; ?>
             </div>
         </div>
@@ -158,3 +157,4 @@ $conn->close();
 <?php include 'SuccessErrorModal.php'; ?>
 <script src="SuccessErrorModal.js"></script>
 </div>
+<script src="month-overview.js"></script>

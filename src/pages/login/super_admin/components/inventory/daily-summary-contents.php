@@ -32,7 +32,7 @@ $recordExists = $row['recordCount'] > 0;
         <div class="header">
             <h1>Daily Summary</h1>
             <div class="btn-wrapper">
-                <a href="week-overview.php" class="btn" onclick="openCurrentWeekOverview()"> Current Week Overview</a>
+                <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Inventory Overview</a>
                 <a href="#" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>
             </div>
         </div>

@@ -86,8 +86,11 @@ if ($result->num_rows > 0) {
         $pdf->Cell(20, 10, $row['spoilage'], 1, 0, 'C', true);
 
         // Highlight Ending Inventory
+        $pdf->SetFont('Arial', 'B', 10); // Set bold font for name
+
         $pdf->SetFillColor(255, 255, 153); // Light yellow for Ending
         $pdf->Cell(25, 10, $row['ending'], 1, 0, 'C', true);
+        $pdf->SetFont('Arial', '', 10); // Set bold font for name
 
         $pdf->Cell(20, 10, $row['usage_count'], 1, 0, 'C');
         // Apply color only to the status column

@@ -149,6 +149,27 @@ if ($result->num_rows > 0) {
         $pdf->Cell(35, 10, $row['ending'], 1, 0, 'C', true);
 
         $pdf->Cell(15, 10, $row['usage_count'], 1, 1, 'C');
+        if ($pdf->GetY() > 150) {  // Adjust this value based on your row height and page layout
+            $pdf->AddPage();
+            // Add title on subsequent pages
+            $pdf->Image('../../assets/logo-black.png', 10, 10, 50); // Add logo
+            $pdf->SetFont('Arial', 'B', 14);
+            $titleWidth = $pdf->GetStringWidth('Weekly Inventory Report - Chino Roces') + 6; // Get the width of the title
+            $pdf->SetX((300 - $titleWidth) / 2); // Center the title (210 is the page width in mm for A4)
+            $pdf->Cell($titleWidth, 10, 'Weekly Inventory Report - Chino Roces', 0, 0, 'C'); // Title centered
+
+            // Add current date on the same line, aligned to the right
+            $pdf->SetFont('Arial', '', 12);
+            $pdf->Cell(0, 10, 'Date: ' . date('F j, Y'), 0, 0, 'R'); // Date aligned to the right
+            $pdf->Ln(10); // Line break before week range
+
+            // Display the week range below the title
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->Cell(0, 10, 'Week ' . $week . ' | ' . $weekRange['start'] . ' - ' . $weekRange['end'], 0, 1, 'C'); // Week range centered
+
+            $pdf->Ln(5); // Line break before table
+            headerTable($pdf); // Add the header again on the new page
+        }
     }
 } else {
     // If no data found, add a message

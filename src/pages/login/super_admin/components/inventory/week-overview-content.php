@@ -106,7 +106,6 @@ $weekRange = getWeekRange($currentWeekFromUrl, $firstMonday);
                     <span class="sort-label">SORT BY:</span>
                     <select class="select" id="sort" onchange="updateSort()">
                         <option value="name" selected>Name</option>
-                        <option value="week_number">Week</option>
                         <option value="itemID">Code</option>
                         <option value="uom">Unit of Measurement</option>
                     </select>
@@ -129,7 +128,7 @@ $weekRange = getWeekRange($currentWeekFromUrl, $firstMonday);
 
             <!-- Table Loader and Content -->
             <div class="loader" id="loader" style="display:none;"></div>
-            <div class="table" id="account-table">
+            <div class="table" id="week-table">
                 <?php include 'week-overviewtable.php'; ?>
             </div>
         </div>
@@ -142,3 +141,4 @@ $weekRange = getWeekRange($currentWeekFromUrl, $firstMonday);
 <?php include 'SuccessErrorModal.php'; ?>
 <script src="SuccessErrorModal.js"></script>
 </div>
+<script src="week-overview.js"></script>

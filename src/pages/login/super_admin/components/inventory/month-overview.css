@@ -381,7 +381,7 @@ h2 {
     /* Similar font size */
     border: none;
     /* Remove default border */
-    padding: 10px 50px 10px 50px;
+    padding: 10px 40px 10px 25px;
     /* Padding to give space for the arrow on the right */
     border-radius: 25px;
     /* Rounded corners */

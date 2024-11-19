@@ -1,11 +1,12 @@
 <?php
 include '../../connection/database.php';
+error_reporting(1);
 
 // Handle search, sort, order, and week inputs
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'name';
 $order = isset($_GET['order']) ? $_GET['order'] : 'asc';
-$week = isset($_GET['week']) ? $_GET['week'] : '';  // Week parameter from URL
+$week = isset($_GET['week']) ? (int)$_GET['week'] : 0;  // Week parameter from URL
 
 // Valid columns for sorting and valid order directions
 $valid_sort_columns = ['recordID', 'name', 'itemID', 'beginning', 'deliveries', 'transfers_in', 'transfers_out', 'spoilage', 'ending', 'usage_count'];
@@ -18,31 +19,56 @@ $order = in_array($order, $valid_order_directions) ? $order : 'asc';
 // SQL Query to fetch inventory data based on the week parameter
 $sql = "
     SELECT 
-        CONCAT('Week ', LEAST(FLOOR((DAY(inventory_date) - 1) / 7) + 1, 4)) AS week_of_month,
+        CONCAT('Week ', 
+            FLOOR((DATEDIFF(inventory_date, 
+                DATE_ADD(LAST_DAY(DATE_SUB(inventory_date, INTERVAL 1 MONTH)), 
+                    INTERVAL (9 - DAYOFWEEK(LAST_DAY(DATE_SUB(inventory_date, INTERVAL 1 MONTH)))) % 7 DAY)) 
+                ) / 7) + 1
+        ) AS week_of_month,
         name,
         itemID,
         uom,
-        MIN(beginning) AS beginning,
+        (
+            SELECT beginning 
+            FROM records_inventory ri_sub
+            WHERE ri_sub.inventory_date = MIN(ri.inventory_date)
+              AND ri_sub.name = ri.name
+              AND ri_sub.itemID = ri.itemID
+              AND ri_sub.uom = ri.uom
+        ) AS beginning,
         SUM(deliveries) AS deliveries,
         SUM(transfers_in) AS transfers_in,
         SUM(transfers_out) AS transfers_out,
         SUM(spoilage) AS spoilage,
-        MAX(ending) AS ending,
         (
-            MIN(beginning) + SUM(deliveries) + SUM(transfers_in) 
-            - MAX(ending) - SUM(transfers_out) - SUM(spoilage)
-        ) AS usage_count
-    FROM records_inventory
+            SELECT ending 
+            FROM records_inventory ri_sub
+            WHERE ri_sub.inventory_date = MAX(ri.inventory_date)
+              AND ri_sub.name = ri.name
+              AND ri_sub.itemID = ri.itemID
+              AND ri_sub.uom = ri.uom
+        ) AS ending,
+        SUM(usage_count) AS usage_count
+    FROM records_inventory ri
     WHERE 
         (name LIKE ? OR itemID LIKE ? OR uom LIKE ?)
-        AND CONCAT('Week ', LEAST(FLOOR((DAY(inventory_date) - 1) / 7) + 1, 4)) = 'Week $week'
+        AND CONCAT('Week ', 
+            FLOOR((DATEDIFF(inventory_date, 
+                DATE_ADD(LAST_DAY(DATE_SUB(inventory_date, INTERVAL 1 MONTH)), 
+                    INTERVAL (9 - DAYOFWEEK(LAST_DAY(DATE_SUB(inventory_date, INTERVAL 1 MONTH)))) % 7 DAY)) 
+                ) / 7) + 1
+        ) = ?
     GROUP BY week_of_month, name, itemID, uom
-    ORDER BY $sort $order";
+    ORDER BY $sort $order;
+";
+
 
 // Prepare the query and bind parameters
 $stmt = $conn->prepare($sql);
 $search_param = "%$search%";
-$stmt->bind_param('sss', $search_param, $search_param, $search_param); // Bind week parameter
+$week_param = "Week $week";  // Format the week for comparison in the query
+
+$stmt->bind_param('ssss', $search_param, $search_param, $search_param, $week_param);
 
 // Execute and handle errors
 if (!$stmt->execute()) {
@@ -84,7 +110,7 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($row["transfers_in"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_out"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["spoilage"]) . "</td>";
-                echo "<td><strong>" . htmlspecialchars($row["ending"]) . "<strong></td>";
+                echo "<td><strong>" . htmlspecialchars($row["ending"]) . "</strong></td>";
                 echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
                 echo "</tr>";
             }

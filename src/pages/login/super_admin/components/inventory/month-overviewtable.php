@@ -10,7 +10,7 @@ $month = isset($_GET['month']) ? $_GET['month'] : ''; // Month parameter from UR
 $year = isset($_GET['year']) ? $_GET['year'] : ''; // Year parameter from URL
 
 // Valid columns for sorting and valid order directions
-$valid_sort_columns = ['name', 'itemID', 'beginning', 'deliveries', 'transfers_in', 'transfers_out', 'spoilage', 'ending', 'usage_count'];
+$valid_sort_columns = ['name', 'itemID', 'uom'];
 $valid_order_directions = ['asc', 'desc'];
 
 // Ensure valid inputs
@@ -24,40 +24,68 @@ if (!checkdate($month, 1, $year)) {
     $year = date('Y');
 }
 
-// SQL Query to fetch inventory data based on the selected month and year
+// Set month number for SQL query
+$monthNumber = str_pad($month, 2, "0", STR_PAD_LEFT); // Ensure two digits
+
+// Search term setup
+$searchTerm = "%" . $search . "%"; // Set wildcard search for LIKE queries
 $sql = "
     SELECT 
+        CONCAT('Month ', MONTH(inventory_date)) AS month_of_year,
         name,
         itemID,
         uom,
-        MIN(beginning) AS beginning,
+        (
+            SELECT beginning
+            FROM records_inventory ri_sub
+            WHERE ri_sub.inventory_date = (
+                SELECT MIN(inventory_date)
+                FROM records_inventory ri_sub2
+                WHERE MONTH(ri_sub2.inventory_date) = MONTH(ri.inventory_date)
+                  AND YEAR(ri_sub2.inventory_date) = YEAR(ri.inventory_date)
+                  AND ri_sub2.name = ri.name 
+                  AND ri_sub2.itemID = ri.itemID
+                  AND ri_sub2.uom = ri.uom
+            )
+            AND ri_sub.name = ri.name
+            AND ri_sub.itemID = ri.itemID
+            AND ri_sub.uom = ri.uom
+        ) AS beginning,
         SUM(deliveries) AS deliveries,
         SUM(transfers_in) AS transfers_in,
         SUM(transfers_out) AS transfers_out,
         SUM(spoilage) AS spoilage,
-        MAX(ending) AS ending,
         (
-            MIN(beginning) + SUM(deliveries) + SUM(transfers_in) 
-            - MAX(ending) - SUM(transfers_out) - SUM(spoilage)
-        ) AS usage_count
-    FROM records_inventory
+            SELECT ending
+            FROM records_inventory ri_sub
+            WHERE ri_sub.inventory_date = (
+                SELECT MAX(inventory_date)
+                FROM records_inventory ri_sub2
+                WHERE MONTH(ri_sub2.inventory_date) = MONTH(ri.inventory_date)
+                  AND YEAR(ri_sub2.inventory_date) = YEAR(ri.inventory_date)
+                  AND ri_sub2.name = ri.name 
+                  AND ri_sub2.itemID = ri.itemID
+                  AND ri_sub2.uom = ri.uom
+            )
+            AND ri_sub.name = ri.name
+            AND ri_sub.itemID = ri.itemID
+            AND ri_sub.uom = ri.uom
+        ) AS ending,
+        SUM(usage_count) AS usage_count
+    FROM records_inventory ri
     WHERE 
-        (name LIKE ? OR itemID LIKE ? OR uom LIKE ?) 
-        AND MONTH(inventory_date) = ? 
-        AND YEAR(inventory_date) = ?
-    GROUP BY name, itemID, uom
-    ORDER BY $sort $order";
+        (name LIKE ? OR itemID LIKE ? OR uom LIKE ?)
+        AND MONTH(inventory_date) = ?
+    GROUP BY month_of_year, name, itemID, uom
+    ORDER BY $sort $order;
+";
 
-// Prepare the query and bind parameters
+
+
+
 $stmt = $conn->prepare($sql);
-$search_param = "%$search%";
-$stmt->bind_param('sssss', $search_param, $search_param, $search_param, $month, $year); // Bind parameters for search, month, and year
-
-// Execute and handle errors
-if (!$stmt->execute()) {
-    echo "SQL Error: " . $stmt->error;
-}
-
+$stmt->bind_param("ssss", $searchTerm, $searchTerm, $searchTerm, $monthNumber); // Bind all parameters
+$stmt->execute();
 $result = $stmt->get_result();
 ?>
 
@@ -99,8 +127,6 @@ $result = $stmt->get_result();
             }
         } else {
             $monthName = DateTime::createFromFormat('!m', $month)->format('F');
-
-            // Display the message with the month name
             echo "<tr><td colspan='10'>No items found for Month of $monthName, Year $year</td></tr>";
         }
         ?>

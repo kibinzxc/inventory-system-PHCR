@@ -18,8 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
         xhr.onload = function () {
             if (xhr.status === 200) {
                 document.getElementById('month-table').innerHTML = xhr.responseText;
-                attachDeleteListeners();
-                attachModalListeners();
             }
             document.getElementById('loader').style.display = 'none';
         };

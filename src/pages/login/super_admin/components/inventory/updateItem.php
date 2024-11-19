@@ -33,25 +33,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
             $stmt->bind_result($updated_by);
             if (!$stmt->fetch()) {
-                header("Location: items.php?action=error&reason=user_not_found&message=User+not+found+or+session+expired&qty=$qty");
+                header("Location: items.php?action=error&reason=user_not_found&message=User+not+found+or+session+expired");
                 exit();
             }
             $stmt->close();
         } else {
-            header("Location: items.php?action=error&reason=query_failed&message=Failed+to+retrieve+user+name&qty=$qty");
+            header("Location: items.php?action=error&reason=query_failed&message=Failed+to+retrieve+user+name");
             exit();
         }
     } else {
-        header("Location: items.php?action=error&reason=not_logged_in&message=You+must+be+logged+in+to+update+inventory&qty=$qty");
+        header("Location: items.php?action=error&reason=not_logged_in&message=You+must+be+logged+in+to+update+inventory");
         exit();
     }
 
     // Fetch the current values from the database to compare
-    $query = "SELECT name, beginning, uom, transfers_in, deliveries, transfers_out, spoilage, ending, usage_count, status FROM daily_inventory WHERE inventoryID = ?";
+    $query = "SELECT name, itemID, beginning, uom, transfers_in, deliveries, transfers_out, spoilage, ending, usage_count FROM daily_inventory WHERE inventoryID = ?";
     if ($stmt = $conn->prepare($query)) {
         $stmt->bind_param('i', $inventoryID);
         $stmt->execute();
-        $stmt->bind_result($current_name, $current_beginning, $current_uom, $current_transfers_in, $current_deliveries, $current_transfers_out, $current_spoilage, $current_ending, $current_usage, $current_status);
+        $stmt->bind_result($current_name, $current_itemID, $current_beginning, $current_uom, $current_transfers_in, $current_deliveries, $current_transfers_out, $current_spoilage, $current_ending, $current_usage);
         $stmt->fetch();
         $stmt->close();
 
@@ -71,42 +71,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: items.php?action=error&reason=no_changes&message=No+changes+were+made+to+the+item.");
             exit();
         }
-    }
 
-    // Generate itemID based on the updated name
-    $nameParts = explode(' ', $name);
-    $prefix = '';
+        // Generate a new itemID only if the name has changed
+        if ($name !== $current_name) {
+            $nameParts = explode(' ', $name);
+            $prefix = '';
 
-    foreach ($nameParts as $part) {
-        $prefix .= strtoupper(substr($part, 0, 1));
-    }
+            foreach ($nameParts as $part) {
+                $prefix .= strtoupper(substr($part, 0, 1));
+            }
 
-    $digitsToAdd = max(6 - strlen($prefix), 0);
-    $suffix = str_pad(mt_rand(0, pow(10, $digitsToAdd) - 1), $digitsToAdd, '0', STR_PAD_LEFT);
-    $itemID = $prefix . $suffix;
-    $itemID = preg_replace('/[^a-zA-Z0-9]/', '', $itemID);
-
-    // Ensure the new itemID is unique, excluding the current item
-    do {
-        $checkIdSql = "SELECT COUNT(*) FROM daily_inventory WHERE itemID = ? AND inventoryID != ?";
-        $checkIdStmt = $conn->prepare($checkIdSql);
-        $checkIdStmt->bind_param('si', $itemID, $inventoryID);
-        $checkIdStmt->execute();
-        $checkIdStmt->bind_result($count);
-        $checkIdStmt->fetch();
-        $checkIdStmt->close();
-
-        if ($count > 0) {
+            $digitsToAdd = max(6 - strlen($prefix), 0);
             $suffix = str_pad(mt_rand(0, pow(10, $digitsToAdd) - 1), $digitsToAdd, '0', STR_PAD_LEFT);
             $itemID = $prefix . $suffix;
             $itemID = preg_replace('/[^a-zA-Z0-9]/', '', $itemID);
+
+            // Ensure the new itemID is unique
+            do {
+                $checkIdSql = "SELECT COUNT(*) FROM daily_inventory WHERE itemID = ? AND inventoryID != ?";
+                $checkIdStmt = $conn->prepare($checkIdSql);
+                $checkIdStmt->bind_param('si', $itemID, $inventoryID);
+                $checkIdStmt->execute();
+                $checkIdStmt->bind_result($count);
+                $checkIdStmt->fetch();
+                $checkIdStmt->close();
+
+                if ($count > 0) {
+                    $suffix = str_pad(mt_rand(0, pow(10, $digitsToAdd) - 1), $digitsToAdd, '0', STR_PAD_LEFT);
+                    $itemID = $prefix . $suffix;
+                    $itemID = preg_replace('/[^a-zA-Z0-9]/', '', $itemID);
+                }
+            } while ($count > 0);
+        } else {
+            // Keep the current itemID if the name hasn't changed
+            $itemID = $current_itemID;
         }
-    } while ($count > 0);
+    }
 
     // Determine stock status based on quantity
     $status = $beginning > 0 ? 'in stock' : 'out of stock';
 
-    // Prepare the update query to include new fields
+    // Prepare the update query
     $query = "UPDATE daily_inventory SET name = ?, itemID = ?, beginning = ?, uom = ?, transfers_in = ?, deliveries = ?, transfers_out = ?, spoilage = ?, ending = ?, usage_count = ?, updated_by = ?, status = ? WHERE inventoryID = ?";
     if ($stmt = $conn->prepare($query)) {
         $stmt->bind_param('ssdsdddddsssi', $name, $itemID, $beginning, $uom, $transfers_in, $deliveries, $transfers_out, $spoilage, $ending, $usage, $updated_by, $status, $inventoryID);

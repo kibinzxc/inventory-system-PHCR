@@ -34,27 +34,53 @@ function getWeekRange($weekNumber, $firstMonday)
 $weekRange = getWeekRange($week, $firstMonday);
 
 // Fetch data from the records_inventory table based on the week
+// Fetch data from the records_inventory table based on the week
 $sql = "
     SELECT 
-        CONCAT('Week ', LEAST(FLOOR((DAY(inventory_date) - 1) / 7) + 1, 4)) AS week_of_month,
+        CONCAT('Week ', 
+            FLOOR((DATEDIFF(inventory_date, 
+                DATE_ADD(LAST_DAY(DATE_SUB(inventory_date, INTERVAL 1 MONTH)), 
+                    INTERVAL (9 - DAYOFWEEK(LAST_DAY(DATE_SUB(inventory_date, INTERVAL 1 MONTH)))) % 7 DAY)) 
+                ) / 7) + 1
+        ) AS week_of_month,
         name,
         itemID,
         uom,
-        MIN(beginning) AS beginning,
+        (
+            SELECT beginning 
+            FROM records_inventory ri_sub
+            WHERE ri_sub.inventory_date = MIN(ri.inventory_date)
+              AND ri_sub.name = ri.name
+              AND ri_sub.itemID = ri.itemID
+              AND ri_sub.uom = ri.uom
+        ) AS beginning, -- Beginning inventory of the first day of the week
         SUM(deliveries) AS deliveries,
         SUM(transfers_in) AS transfers_in,
         SUM(transfers_out) AS transfers_out,
         SUM(spoilage) AS spoilage,
-        MAX(ending) AS ending,
         (
-            MIN(beginning) + SUM(deliveries) + SUM(transfers_in) 
-            - MAX(ending) - SUM(transfers_out) - SUM(spoilage)
-        ) AS usage_count
-    FROM records_inventory
+            SELECT ending 
+            FROM records_inventory ri_sub
+            WHERE ri_sub.inventory_date = MAX(ri.inventory_date)
+              AND ri_sub.name = ri.name
+              AND ri_sub.itemID = ri.itemID
+              AND ri_sub.uom = ri.uom
+        ) AS ending, -- Ending inventory of the last day of the week
+        SUM(usage_count) AS usage_count
+    FROM records_inventory ri
     WHERE 
-        CONCAT('Week ', LEAST(FLOOR((DAY(inventory_date) - 1) / 7) + 1, 4)) = 'Week $week'
-    GROUP BY name, itemID, uom
-    ORDER BY name ASC";
+        CONCAT('Week ', 
+            FLOOR((DATEDIFF(inventory_date, 
+                DATE_ADD(LAST_DAY(DATE_SUB(inventory_date, INTERVAL 1 MONTH)), 
+                    INTERVAL (9 - DAYOFWEEK(LAST_DAY(DATE_SUB(inventory_date, INTERVAL 1 MONTH)))) % 7 DAY)) 
+                ) / 7) + 1
+        ) = 'Week $week'  -- Adjusted to match selected week
+GROUP BY name, itemID, uom
+ORDER BY name ASC;
+";
+
+
+
 $result = $conn->query($sql);
 
 // Initialize FPDF

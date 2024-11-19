@@ -1,7 +1,6 @@
 <?php
 include '../../connection/database.php';
 
-// Set timezone to Manila
 date_default_timezone_set('Asia/Manila');
 
 // Get current time
@@ -32,7 +31,7 @@ $recordExists = $row['recordCount'] > 0;
     <!-- Header Section -->
     <div class="container">
         <div class="header">
-            <h1>Daily Inventory</h1>
+            <h1>Daily I-loveyou twinny hehe</h1>
             <div class="btn-wrapper">
                 <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Inventory Overview</a>
                 <a href="#" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>

@@ -59,8 +59,8 @@ $result = $stmt->get_result();
             <th>Base Unit of Measurement</th>
             <th>Current Inventory</th>
             <th>Spoilage</th>
-            <th>Usage</th>
             <th>Ending Inventory</th>
+            <th>Usage</th>
             <th>Status</th>
         </tr>
     </thead>
@@ -107,8 +107,8 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($current_inventory) . "</td>";
 
                 echo "<td>" . htmlspecialchars($row["spoilage"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
                 echo "<td style='$ending_style'>" . htmlspecialchars($row["ending"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
 
                 // Display status with assigned class and style
                 echo "<td class='$status_class' style='$status_style'>" . strtoupper(htmlspecialchars($row["status"])) . "</td>";

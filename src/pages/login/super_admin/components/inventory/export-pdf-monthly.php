@@ -16,27 +16,56 @@ $month = isset($_GET['month']) ? (int)$_GET['month'] : (int)$currentDate->format
 $year = isset($_GET['year']) ? (int)$_GET['year'] : (int)$currentDate->format('Y');
 
 // Fetch data from the records_inventory table based on the month and year
+// Fetch data from the records_inventory table based on the month and year with the new query
 $sql = "
     SELECT 
+        CONCAT('Month ', MONTH(inventory_date)) AS month_of_year,
         name,
         itemID,
         uom,
-        MIN(beginning) AS beginning,
+        (
+            SELECT beginning
+            FROM records_inventory ri_sub
+            WHERE ri_sub.inventory_date = (
+                SELECT MIN(inventory_date)
+                FROM records_inventory ri_sub2
+                WHERE MONTH(ri_sub2.inventory_date) = MONTH(ri.inventory_date)
+                  AND YEAR(ri_sub2.inventory_date) = YEAR(ri.inventory_date)
+                  AND ri_sub2.name = ri.name 
+                  AND ri_sub2.itemID = ri.itemID
+                  AND ri_sub2.uom = ri.uom
+            )
+            AND ri_sub.name = ri.name
+            AND ri_sub.itemID = ri.itemID
+            AND ri_sub.uom = ri.uom
+        ) AS beginning,
         SUM(deliveries) AS deliveries,
         SUM(transfers_in) AS transfers_in,
         SUM(transfers_out) AS transfers_out,
         SUM(spoilage) AS spoilage,
-        MAX(ending) AS ending,
         (
-            MIN(beginning) + SUM(deliveries) + SUM(transfers_in) 
-            - MAX(ending) - SUM(transfers_out) - SUM(spoilage)
-        ) AS usage_count
-    FROM records_inventory
+            SELECT ending
+            FROM records_inventory ri_sub
+            WHERE ri_sub.inventory_date = (
+                SELECT MAX(inventory_date)
+                FROM records_inventory ri_sub2
+                WHERE MONTH(ri_sub2.inventory_date) = MONTH(ri.inventory_date)
+                  AND YEAR(ri_sub2.inventory_date) = YEAR(ri.inventory_date)
+                  AND ri_sub2.name = ri.name 
+                  AND ri_sub2.itemID = ri.itemID
+                  AND ri_sub2.uom = ri.uom
+            )
+            AND ri_sub.name = ri.name
+            AND ri_sub.itemID = ri.itemID
+            AND ri_sub.uom = ri.uom
+        ) AS ending,
+        SUM(usage_count) AS usage_count
+    FROM records_inventory ri
     WHERE 
-        MONTH(inventory_date) = $month 
-        AND YEAR(inventory_date) = $year
-    GROUP BY name, itemID, uom
-    ORDER BY name ASC";
+         MONTH(inventory_date) = '$month'
+    GROUP BY month_of_year, name, itemID, uom
+    ORDER BY name ASC;
+";
 $result = $conn->query($sql);
 
 // Initialize FPDF

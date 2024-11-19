@@ -89,8 +89,8 @@ $result = $stmt->get_result();
             <th>Transfers In</th>
             <th>Transfers Out</th>
             <th>Spoilage</th>
-            <th>Usage</th>
             <th>Ending Inv.</th>
+            <th>Usage</th>
             <th>Status</th>
             <th>Last Update</th>
             <th>Updated By</th>
@@ -137,9 +137,9 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($row["transfers_in"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_out"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["spoilage"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
 
                 echo "<td style='$ending_style'>" . htmlspecialchars($row["ending"]) . "</td>";
+                echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
 
                 // Display status with assigned class and style
                 echo "<td class='$status_class' style='$status_style'>" . strtoupper(htmlspecialchars($row["status"])) . "</td>";

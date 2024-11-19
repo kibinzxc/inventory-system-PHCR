@@ -22,16 +22,16 @@ function headerTable($pdf)
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->SetFillColor(200, 220, 255); // Light blue background for headers
     $pdf->Cell(10, 10, '#', 1, 0, 'C', true); // Add the "#" column
-    $pdf->Cell(85, 10, 'Name', 1, 0, 'L', true);
-    $pdf->Cell(50, 10, 'Unit of Measurement', 1, 0, 'C', true);
+    $pdf->Cell(80, 10, 'Name', 1, 0, 'L', true);
+    $pdf->Cell(40, 10, 'Unit of Measurement', 1, 0, 'C', true);
     $pdf->Cell(40, 10, 'Current Inventory', 1, 0, 'C', true); // Show current inventory instead of individual values
     $pdf->Cell(20, 10, 'Spoilage', 1, 0, 'C', true);
 
     $pdf->SetFillColor(255, 255, 153); // Highlight color for "Ending"
-    $pdf->Cell(25, 10, 'Ending', 1, 0, 'C', true);
+    $pdf->Cell(40, 10, 'Ending Inventory', 1, 0, 'C', true);
     $pdf->SetFillColor(200, 220, 255);
     $pdf->Cell(20, 10, 'Usage', 1, 0, 'C', true);
-    $pdf->Cell(30, 10, 'Status', 1, 1, 'C', true);
+    $pdf->Cell(25, 10, 'Status', 1, 1, 'C', true);
 }
 
 $pdf->AddPage();
@@ -71,12 +71,12 @@ if ($result->num_rows > 0) {
 
         // Capitalize and bold the name
         $pdf->SetFont('Arial', 'B', 10); // Set bold font for name
-        $pdf->Cell(85, 10, strtoupper($row['name']), 1, 0, 'L'); // Left-align and capitalize name
+        $pdf->Cell(80, 10, strtoupper($row['name']), 1, 0, 'L'); // Left-align and capitalize name
         $pdf->SetFont('Arial', '', 10); // Reset to normal font for other columns
 
         // Capitalize and bold 'uom' field
         $pdf->SetFont('Arial', 'B', 10); // Set bold font for 'uom'
-        $pdf->Cell(50, 10, strtoupper($row['uom']), 1, 0, 'C'); // Capitalized and bold 'uom', center-aligned
+        $pdf->Cell(40, 10, strtoupper($row['uom']), 1, 0, 'C'); // Capitalized and bold 'uom', center-aligned
         $pdf->SetFont('Arial', '', 10); // Reset font to normal for next fields
 
         $pdf->Cell(40, 10, $current_inventory, 1, 0, 'C'); // Display current inventory, formatted to 2 decimal places
@@ -93,7 +93,7 @@ if ($result->num_rows > 0) {
         $pdf->SetFont('Arial', 'B', 10); // Set bold font for name
 
         $pdf->SetFillColor(255, 255, 153); // Light yellow for Ending
-        $pdf->Cell(25, 10, $row['ending'], 1, 0, 'C', true);
+        $pdf->Cell(40, 10, $row['ending'], 1, 0, 'C', true);
         $pdf->SetFont('Arial', '', 10); // Set bold font for name
 
         $pdf->Cell(20, 10, $row['usage_count'], 1, 0, 'C');
@@ -109,7 +109,7 @@ if ($result->num_rows > 0) {
         }
 
         // Set the background color for the status cell and make the text color match
-        $pdf->Cell(30, 10, $row['status'], 1, 1, 'C', true);
+        $pdf->Cell(25, 10, $row['status'], 1, 1, 'C', true);
 
         // Reset the text color after the status row
         $pdf->SetTextColor(0, 0, 0);

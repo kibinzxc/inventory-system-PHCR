@@ -73,7 +73,7 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                             <div class="form-row" id="item-<?= $item['inventoryID'] ?>">
                                 <label><?= htmlspecialchars($item['name']) ?></label>
                                 <input type="number" name="deliveries[<?= $item['inventoryID'] ?>]"
-                                    value="<?= isset($item['deliveries']) ? htmlspecialchars($item['deliveries']) : 0 ?>"
+                                    value="0"
                                     placeholder="0">
                                 <p class="label-uom"><?= htmlspecialchars($fullUOM) ?></p> <!-- Display full UOM name -->
                             </div>

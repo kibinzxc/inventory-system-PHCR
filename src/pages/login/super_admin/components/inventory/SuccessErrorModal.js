@@ -110,6 +110,8 @@ document.addEventListener("DOMContentLoaded", function () {
             case 'qty_invalid':
                 errorMsg += message;
                 break;
+            case 'insufficient_stock':
+                errorMsg += message;
             default:
                 errorMsg += " Please try again.";
                 break;

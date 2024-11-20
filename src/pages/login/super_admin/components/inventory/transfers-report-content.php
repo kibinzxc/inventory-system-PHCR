@@ -88,12 +88,12 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
 
                                 <!-- Transfer In Input Field, prefilled with existing value if available -->
                                 <input type="number" name="transfers_in[<?= $item['inventoryID'] ?>]"
-                                    value="<?= isset($transfers[$item['inventoryID']]) ? $transfers[$item['inventoryID']]['transfers_in'] : 0 ?>"
+                                    value="0"
                                     placeholder="0">
 
                                 <!-- Transfer Out Input Field, prefilled with existing value if available -->
                                 <input type="number" name="transfers_out[<?= $item['inventoryID'] ?>]"
-                                    value="<?= isset($transfers[$item['inventoryID']]) ? $transfers[$item['inventoryID']]['transfers_out'] : 0 ?>"
+                                    value="0"
                                     placeholder="0">
 
                                 <p class="label-uom"><?= htmlspecialchars($fullUOM) ?></p>
@@ -110,7 +110,8 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
         </div>
     </div>
 </div>
-
+<?php include 'SuccessErrorModal.php'; ?>
+<script src="SuccessErrorModal.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const searchInput = document.getElementById("search");

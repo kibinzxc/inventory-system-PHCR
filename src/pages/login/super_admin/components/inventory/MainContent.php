@@ -34,7 +34,7 @@ $recordExists = $row['recordCount'] > 0;
             <h1>Daily Inventory </h1>
             <div class="btn-wrapper">
                 <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Inventory Overview</a>
-                <a href="#" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>
+                <a href="archive.php" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>
             </div>
         </div>
 
@@ -121,7 +121,8 @@ $recordExists = $row['recordCount'] > 0;
     <?php include 'add-items.php'; ?>
     <?php include 'submit-report.php'; ?>
     <?php include 'SuccessErrorModal.php'; ?>
-    <?php include 'confirm_submit.php'; ?>
     <script src="SuccessErrorModal.js"></script>
+    <?php include 'confirm_submit.php'; ?>
+
 </div>
 <script src="items.js"></script>

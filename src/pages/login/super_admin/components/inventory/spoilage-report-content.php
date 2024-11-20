@@ -73,7 +73,7 @@ $searchQuery = isset($_GET['search']) ? strtolower($_GET['search']) : '';
                     ?>
                             <div class="form-row" id="item-<?= $item['inventoryID'] ?>">
                                 <label><?= htmlspecialchars($item['name']) ?></label>
-                                <input type="number" name="spoilage[<?= $item['inventoryID'] ?>]" placeholder="0" min="0" value="<?= htmlspecialchars($item['spoilage']) ?>">
+                                <input type="number" name="spoilage[<?= $item['inventoryID'] ?>]" placeholder="0" min="0" value="0">
                                 <p class="label-uom"><?= htmlspecialchars($fullUOM) ?></p> <!-- Display full UOM name -->
                                 <input type="text" name="remarks[<?= $item['inventoryID'] ?>]" placeholder="Add remarks" class="remarks-input" value="<?= htmlspecialchars($item['remarks']) ?>">
                             </div>

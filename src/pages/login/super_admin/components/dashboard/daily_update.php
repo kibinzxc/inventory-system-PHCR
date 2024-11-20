@@ -5,47 +5,47 @@ error_reporting(0);
 // Set timezone to Manila
 date_default_timezone_set('Asia/Manila');
 
-// Fetch the current time from Google server
-function getGoogleServerTime()
-{
-    $url = "http://www.google.com"; // You can use other websites too
+// // Fetch the current time from Google server
+// function getGoogleServerTime()
+// {
+//     $url = "http://www.google.com"; // You can use other websites too
 
-    // Get the headers from the response
-    $headers = get_headers($url, 1);
+//     // Get the headers from the response
+//     $headers = get_headers($url, 1);
 
-    // Check if the Date header is available
-    if (isset($headers['Date'])) {
-        $dateHeader = $headers['Date'];  // The date header contains the time from the server
-        $googleTime = strtotime($dateHeader);  // Convert to Unix timestamp
+//     // Check if the Date header is available
+//     if (isset($headers['Date'])) {
+//         $dateHeader = $headers['Date'];  // The date header contains the time from the server
+//         $googleTime = strtotime($dateHeader);  // Convert to Unix timestamp
 
-        // Return formatted time and date
-        return date('Y-m-d H:i:s', $googleTime); // Example: '2024-11-18 05:19:00'
-    }
-    return false;
-}
+//         // Return formatted time and date
+//         return date('Y-m-d H:i:s', $googleTime); // Example: '2024-11-18 05:19:00'
+//     }
+//     return false;
+// }
 
-// Get the time from Google's server
-$googleServerTime = getGoogleServerTime();
+// // Get the time from Google's server
+// $googleServerTime = getGoogleServerTime();
 
-// If we successfully retrieved the time from Google
-if ($googleServerTime) {
-    $currentDateTime = new DateTime($googleServerTime);  // Create DateTime object from Google time
-    $currentTime = $currentDateTime->format('H:i');  // Get current time (HH:MM)
-    $currentDate = $currentDateTime->format('Y-m-d');  // Get current date (YYYY-MM-DD)
-} else {
-    // Fallback to the server's system time if the Google time couldn't be fetched
-    $currentDateTime = new DateTime();
-    $currentTime = $currentDateTime->format('H:i');
-    $currentDate = $currentDateTime->format('Y-m-d');
-}
+// // If we successfully retrieved the time from Google
+// if ($googleServerTime) {
+//     $currentDateTime = new DateTime($googleServerTime);  // Create DateTime object from Google time
+//     $currentTime = $currentDateTime->format('H:i');  // Get current time (HH:MM)
+//     $currentDate = $currentDateTime->format('Y-m-d');  // Get current date (YYYY-MM-DD)
+// } else {
+// Fallback to the server's system time if the Google time couldn't be fetched
+$currentDateTime = new DateTime();
+$currentTime = $currentDateTime->format('H:i');
+$currentDate = $currentDateTime->format('Y-m-d');
+// }
 
 // Get the current timezone
 $currentTimezone = date_default_timezone_get();
 
 // Display current time, date, and timezone
-echo "Current time: " . $currentTime . "<br>";
-echo "Current date: " . $currentDate . "<br>";
-echo "Current timezone: " . $currentTimezone . "<br>";
+// echo "Current time: " . $currentTime . "<br>";
+// echo "Current date: " . $currentDate . "<br>";
+// echo "Current timezone: " . $currentTimezone . "<br>";
 
 // Define the start time for checking updates (6:00 AM)
 $startOfDay = new DateTime('today 06:00 AM'); // 6:00 AM today
@@ -64,28 +64,15 @@ $lastUpdateResult = $conn->query($lastUpdateQuery);
 $lastUpdateRow = $lastUpdateResult->fetch_assoc();
 $lastUpdate = new DateTime($lastUpdateRow['last_update']);
 $lastUpdateTime = $lastUpdate->format('H:i'); // Extract time part
-$lastUpdateDate = $lastUpdate->format('Y-m-d'); // Extract date part
-
-// Echo the last_update details
-echo "Last update time: " . $lastUpdateTime . "<br>";
-echo "Last update date: " . $lastUpdateDate . "<br>";
 
 // Step 2: Determine which date to check based on last_update time
-if ($lastUpdateDate < $currentDate) {
-    // If last_update date is before the current date
-    if ($lastUpdateTime < '06:00') {
-        // If last_update was before 6:00 AM, use the day before yesterday
-        $yesterdayDate = $lastUpdate->modify('-1 day')->format('Y-m-d');
-    } else {
-        // Otherwise, use yesterday's date
-        $yesterdayDate = $lastUpdateDate;
-    }
+if ($lastUpdateTime < '06:00') {
+    // If the last update was before 6:00 AM today, we are working with yesterday's inventory
+    $yesterdayDate = $lastUpdate->modify('-1 day')->format('Y-m-d'); // Get yesterday's date (e.g., 2024-11-17)
 } else {
-    // If the last update is today
-    $yesterdayDate = $currentDate;
+    // If the last update is after 6:00 AM today, proceed with today's inventory
+    $yesterdayDate = $currentDate; // Use today (e.g., 2024-11-18)
 }
-
-echo "Determined date to check: " . $yesterdayDate . "<br>";
 
 // Step 3: Check if there are records for the determined date (yesterdayDate) in records_inventory
 $checkInventoryQuery = "
@@ -116,7 +103,7 @@ $updateCount = $updateRow['updateCount'];
 if ($updateCount == 0) {
     // No updates found in daily_inventory since 6:01 AM today
     if ($inventoryCount > 0) {
-        // If there are records for the previous day, proceed with flush
+        // If there are records for the previous day (Nov 17 or Nov 18), proceed with flush
         $flushQuery = "
             UPDATE daily_inventory
             SET 
@@ -140,17 +127,17 @@ if ($updateCount == 0) {
 
         // Execute the flush query
         if ($conn->query($flushQuery) === TRUE) {
-            echo "Inventory data for $yesterdayDate has been flushed successfully.";
+            // echo "Inventory data for $yesterdayDate has been flushed successfully.";
         } else {
-            echo "Error flushing inventory data: " . $conn->error;
+            // echo "Error flushing inventory data: " . $conn->error;
         }
     } else {
         // If no records for the previous day, do not flush
-        echo "No records for $yesterdayDate in records_inventory. Data will not be flushed.";
+        // echo "No records for $yesterdayDate in records_inventory. Data will not be flushed.";
     }
 } else {
     // If there were updates after 6:00 AM, do not flush
-    echo "There were updates after 6:00 AM today. Data will not be flushed.";
+    // echo "There were updates after 6:00 AM today. Data will not be flushed.";
 }
 
 $conn->close();  // Close the database connection

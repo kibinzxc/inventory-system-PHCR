@@ -24,7 +24,10 @@
 
             <!-- Utility Buttons and Sorting Options -->
             <div class="btns_container">
-                <a href="export-pdf.php" class="icon_btn"><img src="../../assets/save.svg" alt="Save"></a>
+                <a href="#" id="export-btn" class="icon_btn">
+                    <img src="../../assets/save.svg" alt="Save">
+                </a>
+
                 <input type="text" name="search" id="search" placeholder="Search" class="search_btn">
 
                 <!-- Sorting Options -->
@@ -74,3 +77,30 @@
     <script src="SuccessErrorModal.js"></script>
 </div>
 <script src="archive.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const exportBtn = document.getElementById('export-btn');
+        const dateInput = document.getElementById('inventory-date');
+
+        if (exportBtn && dateInput) {
+            // Update export button href when the date input changes
+            dateInput.addEventListener('change', function() {
+                const selectedDate = this.value; // Get the selected date
+                if (selectedDate) {
+                    exportBtn.href = `export-archive.php?date=${encodeURIComponent(selectedDate)}`;
+                } else {
+                    exportBtn.href = "#"; // Default behavior if no date is selected
+                }
+            });
+
+            // Set the export button's href on page load if a date is pre-selected
+            const currentUrl = new URL(window.location.href);
+            const initialDate = currentUrl.searchParams.get('date');
+            if (initialDate) {
+                dateInput.value = initialDate; // Set the date input value
+                exportBtn.href = `export-archive.php?date=${encodeURIComponent(initialDate)}`;
+            }
+        }
+    });
+</script>

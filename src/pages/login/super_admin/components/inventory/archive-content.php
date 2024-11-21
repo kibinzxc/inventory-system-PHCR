@@ -5,7 +5,7 @@
         <div class="header">
             <h1>Archive of Inventory Records</h1>
             <div class="btn-wrapper">
-                <a href="items.php" class="btn"><img src="../../assets/arrow-left.svg" alt=""> Back</a>
+                <a href="javascript:history.back()" class="btn"><img src="../../assets/arrow-left.svg" alt=""> Back</a>
             </div>
         </div>
 

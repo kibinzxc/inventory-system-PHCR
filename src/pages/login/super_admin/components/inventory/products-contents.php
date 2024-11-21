@@ -9,7 +9,9 @@
         <div class="header">
             <h1>Product List</h1>
             <div class="btn-wrapper">
-                <a href="#" class="btn" onclick="openCurrentWeekOverview()"><img src="../../assets/instagram.svg" alt=""> Products Preview</a>
+                <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Inventory Overview</a>
+                <a href="product-preview.php" class="btn"><img src="../../assets/instagram.svg" alt=""> Product Details</a>
+                <a href="archive.php" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>
             </div>
         </div>
 
@@ -37,7 +39,6 @@
         <div class="table_container">
             <!-- Utility Buttons and Sorting Options -->
             <div class="btns_container">
-                <a href="#" class="icon_btn"><img src="../../assets/printer.svg" alt="Print"></a>
                 <a href="#" class="icon_btn"><img src="../../assets/save.svg" alt="Save"></a>
                 <input type="text" name="search" id="search" placeholder="Search" class="search_btn">
 
@@ -47,7 +48,6 @@
                     <span class="sort-label">SORT BY:</span>
                     <select class="select" id="sort" onchange="updateSort()">
                         <option value="name" selected>Name</option>
-                        <option value="status">Status</option>
                     </select>
 
                     <span class="sort-label">ORDER:</span>

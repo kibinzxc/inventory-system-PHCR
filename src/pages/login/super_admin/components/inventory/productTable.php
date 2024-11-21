@@ -52,7 +52,7 @@ $result = $stmt->get_result();
                     foreach ($ingredients as $ingredient) {
                         // Check if keys exist and use default values if missing
                         $ingredient_name = isset($ingredient['ingredient_name']) ? $ingredient['ingredient_name'] : 'Unknown';
-                        $quantity = isset($ingredient['qty']) ? $ingredient['qty'] : 'N/A';
+                        $quantity = isset($ingredient['quantity']) ? $ingredient['quantity'] : 'N/A';
                         $measurement = isset($ingredient['measurement']) ? $ingredient['measurement'] : '';
 
                         $ingredient_list .= "<li>" . htmlspecialchars($ingredient_name) . ": " . htmlspecialchars($quantity) . " " . htmlspecialchars($measurement) . "</li>";

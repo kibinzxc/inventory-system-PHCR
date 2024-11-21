@@ -178,3 +178,51 @@
         transform: translateY(0);
     }
 }
+
+/* Adjusting font size for h1 on larger screens */
+@media screen and (max-width: 1280px) {
+    .LoginForm h1 {
+        font-size: 2.7rem;
+        margin: 1.2rem;
+    }
+
+    .LoginForm {
+        padding: 20px 20px;
+    }
+
+    .LoginForm_Contents_footer a {
+        color: #c3310d;
+        text-decoration: none;
+        margin: 0 10px;
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 1180px) {
+    .LoginForm h1 {
+        font-size: 2.5rem;
+        margin: 1.2rem;
+    }
+
+    .LoginForm {
+        padding: 20px 20px;
+    }
+
+    .LoginForm_Contents input {
+        width: 100%;
+        height: 2.8rem;
+        padding: 1rem;
+        border-radius: 5px;
+        border: none;
+        margin: 0;
+        font-size: 1rem;
+        background-color: #d9d9d9;
+    }
+
+    .LoginForm_Contents_footer a {
+        color: #c3310d;
+        text-decoration: none;
+        margin: 0 10px;
+        font-size: 0.8rem;
+    }
+}

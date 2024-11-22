@@ -102,6 +102,7 @@
     align-items: center;
 }
 
+.size-value,
 .price-value {
     flex-grow: 1;
     text-align: center;
@@ -154,6 +155,7 @@
     font-weight: bold;
     flex-grow: 1;
     cursor: default;
+    margin-top: 10px;
 }
 
 .btn-availability.gray {
@@ -193,4 +195,12 @@
 .crossed-out {
     text-decoration: line-through;
     color: red;
+}
+
+.bev {
+    display: none;
+}
+
+.bev2 {
+    padding-top: 10px;
 }

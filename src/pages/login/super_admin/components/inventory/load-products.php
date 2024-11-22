@@ -1,6 +1,6 @@
 <?php
 include '../../connection/database.php';
-
+error_reporting(0);
 $category = isset($_GET['category']) ? $_GET['category'] : 'pizza';
 
 $sql = "SELECT * FROM products WHERE category = ?";
@@ -21,6 +21,15 @@ if ($result->num_rows > 0) {
         $buttonText = 'Available';
         $outOfStockClass = '';
         $grayscaleClass = '';
+        $ingredientsClass = '';  // New variable for ingredients class
+        $descriptionClass = '';  // New variable for description class
+
+        // Check if the category is 'beverages'
+        if ($category == 'beverages') {
+            $ingredientsClass = 'bev';  // Add 'bev' to the class
+            $descriptionClass = 'bev';  // Add 'bev' to the class
+            $buttonClass2 .= ' bev2';  // Add 'bev' to the button class
+        }
 
         if ($row['status'] == 'not available') {
             $outOfStockClass = 'out-of-stock-overlay';
@@ -45,11 +54,12 @@ if ($result->num_rows > 0) {
 
         echo '<div class="product-details">';
         echo '<h3 class="product-name">' . htmlspecialchars($row['name']) . '</h3>';
-        echo '<p class="product-description">' . htmlspecialchars($row['slogan']) . '</p>';
+        // Add the 'bev' class to the product description paragraph
+        echo '<p class="product-description ' . $descriptionClass . '">' . htmlspecialchars($row['slogan']) . '</p>';
         echo '<div class="product-size"><strong>Size:</strong><span class="size-value">' . htmlspecialchars($row['size']) . '</span></div>';
         echo '<div class="product-price"><span><strong>Price:</strong></span> <span class="price-value">₱' . htmlspecialchars($row['price']) . '</span></div>';
 
-        echo '<div class="product-ingredients">';
+        echo '<div class="product-ingredients ' . $ingredientsClass . '">';  // Add the 'bev' class here
         echo '<h4>Ingredients:</h4>';
         $ingredients = json_decode($row['ingredients'], true);
 
@@ -82,11 +92,15 @@ if ($result->num_rows > 0) {
                     $availableStockInKg = floatval($inventoryRow['ending']);
                 } elseif ($inventoryMeasurement == 'pc') {
                     $availableStockInPieces = intval($inventoryRow['ending']);
+                } elseif ($inventoryMeasurement == 'bt') {
+                    $availableStockInBottle = intval($inventoryRow['ending']);
                 }
 
                 if ($ingredientMeasurement == 'pcs' && $availableStockInPieces >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
-                } elseif ($ingredientMeasurement != 'pcs' && $availableStockInKg >= ($ingredientQuantity / 1000)) {
+                } elseif ($ingredientMeasurement = 'grams' && $availableStockInKg >= ($ingredientQuantity / 1000)) {
+                    $isIngredientAvailable = true;
+                } elseif ($ingredientMeasurement = 'bottle' && $availableStockInBottle >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
                 }
             }
@@ -104,7 +118,7 @@ if ($result->num_rows > 0) {
         echo '</ul>';
         echo '</div>';
 
-        echo '<div class="product-availability">';
+        echo '<div class="product-availability ' . $buttonClass2 . '">';
         echo '<button class="' . $buttonClass . '">' . $buttonText . '</button>';
         echo '</div>';
         echo '</div>';

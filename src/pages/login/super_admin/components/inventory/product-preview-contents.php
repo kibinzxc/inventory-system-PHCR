@@ -12,7 +12,6 @@
             </div>
         </div>
 
-
         <div class="btncontents">
             <a href="#" class="active" data-category="pizza"><img src="../../assets/pizza.png" class="img-btn-link">Pizza</a>
             <a href="#" data-category="pasta"><img src="../../assets/spag.png" class="img-btn-link">Pasta</a>
@@ -59,10 +58,11 @@
 
                 // Load products for the default category
                 loadProducts(category);
+
                 setTimeout(() => {
                     productContainer.style.opacity = 0; // Fade out before reload
                     setTimeout(() => {
-                        window.location.reload();
+                        window.location.reload(); // Trigger reload
                     }, 300); // Smooth transition before reload
                 }, 100);
             } else {
@@ -95,9 +95,14 @@
                     const newUrl = new URL(window.location);
                     newUrl.searchParams.set('category', category);
                     window.history.pushState({}, '', newUrl);
+
+                    // Reload the page after loading products
+                    setTimeout(() => {
+                        window.location.reload(); // Trigger reload
+                    }, 200); // Delay reload after loading products
                 });
             });
         </script>
 
-
     </div>
+</div>

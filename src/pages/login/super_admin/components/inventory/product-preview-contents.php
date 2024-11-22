@@ -8,7 +8,7 @@
         <div class="header">
             <h1>Product Details</h1>
             <div class="btn-wrapper">
-                <a href="javascript:history.back()" class="btn"><img src="../../assets/arrow-left.svg" alt=""> Back</a>
+                <a href="items.php" class="btn"><img src="../../assets/arrow-left.svg" alt=""> Back</a>
             </div>
         </div>
 

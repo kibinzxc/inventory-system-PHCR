@@ -6,12 +6,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = strtolower(trim($_POST['name'])); // Convert the name to lowercase
     $uom = isset($_POST['uom']) ? $_POST['uom'] : ''; // Assign the value of uom (unit of measurement)
     $beginning = isset($_POST['beginning']) ? (float)$_POST['beginning'] : 0; // Get beginning stock from the form and set default to 0
-
+    $ending = $beginning;
     // Set status based on beginning stock
     if ($beginning == 0) {
         $status = 'pending';
     } else {
-        $status = 'pending'; // Default to in stock if beginning is greater than 0
+        $status = 'in stock'; // Default to in stock if beginning is greater than 0
     }
 
     // Input validation
@@ -90,9 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $userName = $userResult->fetch_assoc()['name'] ?? 'Unknown User'; // Fallback if user not found
 
     // Prepare SQL for inserting new item, including the uom and beginning stock
-    $sql = "INSERT INTO daily_inventory (itemID, name, uom, beginning, status, updated_by) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO daily_inventory (itemID, name, uom, beginning,ending, status, updated_by) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('sssdss', $itemID, $name, $uom, $beginning, $status, $userName);
+    $stmt->bind_param('sssddss', $itemID, $name, $uom, $beginning, $ending, $status, $userName);
 
     // Execute the insert operation
     if ($stmt->execute()) {

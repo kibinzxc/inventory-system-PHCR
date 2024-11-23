@@ -28,13 +28,12 @@ function headerTable($pdf)
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->SetFillColor(200, 220, 255); // Light blue background for headers
     $pdf->Cell(10, 10, '#', 1, 0, 'C', true); // Add the "#" column
-    $pdf->Cell(72, 10, 'Name', 1, 0, 'L', true);
-    $pdf->Cell(20, 10, 'Item ID', 1, 0, 'C', true);
+    $pdf->Cell(77, 10, 'Name', 1, 0, 'L', true);
     $pdf->Cell(15, 10, 'UOM', 1, 0, 'C', true);
     $pdf->Cell(25, 10, 'Beginning', 1, 0, 'C', true);
-    $pdf->Cell(20, 10, 'Deliveries', 1, 0, 'C', true);
-    $pdf->Cell(25, 10, 'Transfers In', 1, 0, 'C', true);
-    $pdf->Cell(25, 10, 'Transfers Out', 1, 0, 'C', true);
+    $pdf->Cell(25, 10, 'Deliveries', 1, 0, 'C', true);
+    $pdf->Cell(30, 10, 'Transfers In', 1, 0, 'C', true);
+    $pdf->Cell(30, 10, 'Transfers Out', 1, 0, 'C', true);
     $pdf->Cell(20, 10, 'Spoilage', 1, 0, 'C', true);
     $pdf->SetFillColor(255, 255, 153); // Highlight color for "Ending"
     $pdf->Cell(25, 10, 'Ending', 1, 0, 'C', true);
@@ -69,14 +68,13 @@ if ($result->num_rows > 0) {
         // Add data row
         $pdf->Cell(10, 10, $counter++, 1, 0, 'C'); // Increment and display row number
         $pdf->SetFont('Arial', 'B', 10); // Make the Name bold
-        $pdf->Cell(72, 10, strtoupper($row['name']), 1, 0, 'L'); // Left-align and capitalize name
+        $pdf->Cell(77, 10, strtoupper($row['name']), 1, 0, 'L'); // Left-align and capitalize name
         $pdf->SetFont('Arial', '', 10); // Revert to regular font for the rest of the row
-        $pdf->Cell(20, 10, $row['itemID'], 1, 0, 'C');
         $pdf->Cell(15, 10, strtoupper($row['uom']), 1, 0, 'C'); // Capitalize UOM
         $pdf->Cell(25, 10, $row['beginning'], 1, 0, 'C');
-        $pdf->Cell(20, 10, $row['deliveries'], 1, 0, 'C');
-        $pdf->Cell(25, 10, $row['transfers_in'], 1, 0, 'C');
-        $pdf->Cell(25, 10, $row['transfers_out'], 1, 0, 'C');
+        $pdf->Cell(25, 10, $row['deliveries'], 1, 0, 'C');
+        $pdf->Cell(30, 10, $row['transfers_in'], 1, 0, 'C');
+        $pdf->Cell(30, 10, $row['transfers_out'], 1, 0, 'C');
         $pdf->Cell(20, 10, $row['spoilage'], 1, 0, 'C');
 
         // Highlight "Ending" in yellow and make bold

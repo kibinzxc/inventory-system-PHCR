@@ -1,11 +1,24 @@
 <?php
 include '../../connection/database.php';
-error_reporting(0);
-$category = isset($_GET['category']) ? $_GET['category'] : 'pizza';
+error_reporting(1);
+$category = $_GET['category'] ?? 'pizza';
+$search = $_GET['search'] ?? '';
 
-$sql = "SELECT * FROM products WHERE category = ?";
+// Query to fetch products based on category and search
+$sql = "SELECT * FROM products WHERE category = ? AND STATUS = 'available'";
+
+if (!empty($search)) {
+    $sql .= " AND name LIKE ?";
+}
+
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $category);
+if (!empty($search)) {
+    $searchParam = '%' . $search . '%';
+    $stmt->bind_param("ss", $category, $searchParam);
+} else {
+    $stmt->bind_param("s", $category);
+}
+
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -16,9 +29,10 @@ if ($result->num_rows > 0) {
 
         echo '<div class="product-card">';
 
+
         $productImage = '../../assets/products/' . htmlspecialchars($row['img']);
         $buttonClass = 'btn-availability';
-        $buttonText = 'Available';
+        $buttonText = 'Add to Order';
         $outOfStockClass = '';
         $grayscaleClass = '';
         $ingredientsClass = '';  // New variable for ingredients class
@@ -102,6 +116,8 @@ if ($result->num_rows > 0) {
                     $isIngredientAvailable = true;
                 } elseif ($ingredientMeasurement = 'bottle' && $availableStockInBottle >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
+                } elseif ($ingredientMeasurement = 'pc' && $availableStockInPieces >= $ingredientQuantity) {
+                    $isIngredientAvailable = true;
                 }
             }
 
@@ -119,7 +135,12 @@ if ($result->num_rows > 0) {
         echo '</div>';
 
         echo '<div class="product-availability ' . $buttonClass2 . '">';
-        echo '<button class="' . $buttonClass . '">' . $buttonText . '</button>';
+        echo '<button class="add-to-order-btn ' . $buttonClass . '" 
+        data-name="' . htmlspecialchars($row['name']) . '" 
+        data-size="' . htmlspecialchars($row['size']) . '"
+        data-price="' . htmlspecialchars($row['price']) . '">';
+        echo $buttonText;
+        echo '</button>';
         echo '</div>';
         echo '</div>';
         echo '</div>';

@@ -3,7 +3,7 @@ include '../../connection/database.php';
 error_reporting(0);
 $category = isset($_GET['category']) ? $_GET['category'] : 'pizza';
 
-$sql = "SELECT * FROM products WHERE category = ?";
+$sql = "SELECT * FROM products WHERE category = ? ORDER BY name ASC";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $category);
 $stmt->execute();
@@ -101,6 +101,8 @@ if ($result->num_rows > 0) {
                 } elseif ($ingredientMeasurement = 'grams' && $availableStockInKg >= ($ingredientQuantity / 1000)) {
                     $isIngredientAvailable = true;
                 } elseif ($ingredientMeasurement = 'bottle' && $availableStockInBottle >= $ingredientQuantity) {
+                    $isIngredientAvailable = true;
+                } elseif ($ingredientMeasurement = 'pc' && $availableStockInPieces >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
                 }
             }

@@ -64,7 +64,6 @@ $sqlInsert = "
         transfers_out, 
         spoilage, 
         ending, 
-        remarks, 
         usage_count, 
         submitted_by,
         inventory_date
@@ -79,7 +78,6 @@ $sqlInsert = "
         transfers_out, 
         spoilage, 
         ending, 
-        remarks, 
         usage_count, 
         ? AS submitted_by,  -- Use the logged-in user's name for submitted_by
         '$inventoryDate' AS inventory_date

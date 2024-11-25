@@ -354,6 +354,9 @@ function sendDataToServer(data) {
                     if (arrowElement) {
                         arrowElement.style.display = 'inline'; // Show the arrow/image again
                     }
+                    const invID = response.invID; // This is the invID returned from PHP
+
+                    generateInvoicePDF(invID); // Generate the PDF with the received invID
 
                 } else {
                     const errorMessage = response.error || "Failed to save your data. Please try again.";
@@ -423,6 +426,23 @@ function sendDataToServer(data) {
         console.error("Request failed due to network issues.");
         showModal("error", "Network error. Please check your connection and try again.");
     };
+}
+
+function generateInvoicePDF(invID) {
+    var width = 100; // Width in mm (receipt size)
+    var height = 200; // Height in mm (receipt size)
+
+    // Convert to pixels (approximately)
+    var widthPx = width * 3.7795275591; // Convert mm to pixels (1mm = 3.7795275591px)
+    var heightPx = height * 3.7795275591;
+
+    // Open the window with the specified size
+    var newWindow = window.open('generate_invoice_pdf.php?invID=' + invID, '_blank', 'width=' + widthPx + ',height=' + heightPx);
+
+    // Focus on the new window
+    if (newWindow) {
+        newWindow.focus();
+    }
 }
 
 // Function to show a modal with a dynamic message

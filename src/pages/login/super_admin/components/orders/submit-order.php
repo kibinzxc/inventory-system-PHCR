@@ -157,7 +157,8 @@ try {
         echo json_encode([
             'success' => false,
             'error' => 'Insufficient ingredient stock for these products: <br>',
-            'ingredients' => $insufficientList
+            'ingredients' => $insufficientList,
+
         ]);
         $conn->rollback();
         exit;

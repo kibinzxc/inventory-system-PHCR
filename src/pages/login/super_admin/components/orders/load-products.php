@@ -29,7 +29,6 @@ if ($result->num_rows > 0) {
 
         echo '<div class="product-card">';
 
-
         $productImage = '../../assets/products/' . htmlspecialchars($row['img']);
         $buttonClass = 'btn-availability';
         $buttonText = 'Add to Order';

@@ -1,6 +1,7 @@
 <?php include 'cash-input.php'; ?>
 <link rel="stylesheet" href="MainContent.css" />
 <div id="main-content">
+
     <!-- Header Section -->
     <div class="container">
         <div class="header">
@@ -159,7 +160,7 @@
 
     loadProducts(category, searchQuery);
 </script>
-
 <script src="pos.js"></script>
+
 </div>
 </div>

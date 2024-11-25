@@ -3,7 +3,12 @@ document.addEventListener('click', function (e) {
         const name = e.target.dataset.name;
         const size = e.target.dataset.size;
         const price = parseFloat(e.target.dataset.price); // Retrieve price from the button's data attribute
+        const addToOrderDisabled = localStorage.getItem('addToOrderDisabled') === 'true';
 
+        if (addToOrderDisabled) {
+            // If the flag is true, prevent the addition to the order
+            return; // Exit early if adding to the order is disabled
+        }
         // Get existing orders from localStorage
         let orders = JSON.parse(localStorage.getItem('orders')) || [];
 
@@ -62,7 +67,7 @@ function renderPanel() {
                 <span class="panel-size">${order.size}</span>
             </div>
             <span class="panel-price">${(order.price * order.quantity).toFixed(2)}</span>
-            <button class="delete-btn" data-name="${order.name}" data-size="${order.size}" id ="delete-btn">X</button>
+        <button class="delete-btn" data-name="${order.name}" data-size="${order.size}">X</button>
         `;
         panelCardsContainer.appendChild(card);
     });
@@ -75,11 +80,9 @@ function renderPanel() {
     vatableContainer.textContent = `₱${vatableAmount.toFixed(2)}`;
     vatContainer.textContent = `₱${vatAmount.toFixed(2)}`;
     toggleButtonsBasedOnCash();
-    // Update the "Pay" button state based on the order count
     togglePayButton(orders);
 
     updateItemLabel(totalItems); // Pass the updated totalItems count to the function
-
 
 
 }
@@ -167,9 +170,8 @@ function closeModal() {
 }
 
 function toggleButtonsBasedOnCash() {
-    const addToOrderButton = document.querySelector(".add-to-order-btn"); // Get the "Add to Order" button
     const clearButton = document.querySelector("#clear-btn");
-    const deleteButton = document.querySelector("#delete-btn");
+    const deleteButtons = document.querySelectorAll(".delete-btn"); // Select all delete buttons
     const storedCash = localStorage.getItem("cash");
     const storedChange = localStorage.getItem("change");
     const cashContainer = document.getElementById("cash-container");
@@ -183,29 +185,18 @@ function toggleButtonsBasedOnCash() {
         if (cashContainer) cashContainer.style.removeProperty('display');
         if (changeContainer) changeContainer.style.removeProperty('display');
     }
-    if (storedCash && storedChange) {
-        if (addToOrderButton) {
-            addToOrderButton.classList.add('disabled'); // Add disabled class
-            addToOrderButton.disabled = true; // Optionally set the disabled property
-        }
-    } else {
-        // If no cash or change, remove the 'disabled' class and enable the button
-        if (addToOrderButton) {
-            addToOrderButton.classList.remove('disabled');
-            addToOrderButton.disabled = false;
-        }
-    }
 
-    // If cash is stored in localStorage, disable the clear and delete buttons
-    if (storedCash && storedCash.trim() !== "") {
-        if (clearButton) clearButton.classList.add('hidden');
-        if (deleteButton) deleteButton.classList.add('hidden');
-    } else {
-        // If no cash in localStorage, remove the 'disabled' class
-        if (clearButton) clearButton.classList.remove('hidden');
-        if (deleteButton) deleteButton.classList.remove('hidden');
-    }
+    deleteButtons.forEach(button => {
+        if (storedCash && storedCash.trim() !== "") {
+            button.classList.add('hidden');
+            if (clearButton) clearButton.classList.add('hidden');
+        } else {
+            button.classList.remove('hidden');
+            if (clearButton) clearButton.classList.remove('hidden');
+        }
+    });
 }
+
 
 function calculateChange() {
     const cashInput = parseFloat(document.getElementById("cash-input").value.replace('₱', '').replace(',', ''));
@@ -226,6 +217,8 @@ function calculateChange() {
 
     localStorage.setItem("cash", cashInput.toFixed(2));
     localStorage.setItem("change", change.toFixed(2));
+    localStorage.setItem('addToOrderDisabled', 'true');
+
 
     const paymentButton = document.querySelector(".panel-actions a span");
     const arrowElement = document.querySelector(".panel-actions a .arrow");
@@ -236,16 +229,16 @@ function calculateChange() {
     }
 
     closeModal();
-    toggleButtonsBasedOnCash(); // Update button visibility based on cash
+    toggleButtonsBasedOnCash();
 }
 
 // On page load, retrieve the cash and change values from localStorage
 document.addEventListener("DOMContentLoaded", function () {
-    renderPanel(); // Render the panel on page load
-    toggleButtonsBasedOnCash(); // Toggle buttons based on cash
+    renderPanel();
+    toggleButtonsBasedOnCash();
     const storedCash = localStorage.getItem("cash");
     const storedChange = localStorage.getItem("change");
-
+    const addToOrderDisabled = localStorage.getItem('addToOrderDisabled');
 
     // If the cash and change values exist in localStorage, update the UI
     if (storedCash && storedChange) {
@@ -262,6 +255,10 @@ document.addEventListener("DOMContentLoaded", function () {
             arrowElement.style.display = 'none';  // Hide the arrow/image
         }
     }
+
+
+    console.log('addToOrderDisabled:', addToOrderDisabled);
+
 });
 
 // Clear all orders and reset cash/change
@@ -288,6 +285,7 @@ document.getElementById("clear-btn").addEventListener("click", function () {
     if (arrowElement) {
         arrowElement.style.display = 'inline';  // Show the arrow/image again
     }
+    toggleButtonsBasedOnCash();
 });
 
 document.querySelector(".panel-actions a").addEventListener("click", function (e) {
@@ -344,9 +342,14 @@ function sendDataToServer(data) {
 
                     document.getElementById("cash").textContent = "₱0.00";
                     document.getElementById("change").textContent = "₱0.00";
-
+                    document.getElementById("cash-input").value = ""; // Clear the cash input field
                     const paymentButton = document.querySelector(".panel-actions a span");
                     const arrowElement = document.querySelector(".panel-actions a .arrow");
+                    const clearButton = document.querySelector("#clear-btn");
+                    clearButton.classList.remove('hidden');
+
+
+                    localStorage.setItem('addToOrderDisabled', 'false');
 
                     paymentButton.textContent = "Payment";
                     if (arrowElement) {
@@ -373,3 +376,4 @@ function sendDataToServer(data) {
         alert("Request failed. Please check your connection and try again.");
     };
 }
+

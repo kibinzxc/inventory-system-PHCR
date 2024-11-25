@@ -12,12 +12,4 @@ $sql = "UPDATE daily_inventory
 
 $stmt = $conn->prepare($sql);
 
-// Execute the query
-if ($stmt->execute()) {
-    echo "Inventory status updated successfully.";
-} else {
-    echo "Error updating inventory status: " . $stmt->error;
-}
-
-$stmt->close();
-$conn->close();
+$stmt->execute();

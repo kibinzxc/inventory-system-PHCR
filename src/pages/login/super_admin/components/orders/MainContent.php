@@ -1,4 +1,5 @@
-<?php include 'cash-input.php'; ?>
+<?php include 'cash-input.php';
+include 'noStock.php'; ?>
 <link rel="stylesheet" href="MainContent.css" />
 <div id="main-content">
 

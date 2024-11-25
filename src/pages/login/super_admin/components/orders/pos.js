@@ -170,7 +170,7 @@ function closeModal() {
 }
 
 function toggleButtonsBasedOnCash() {
-    const clearButton = document.querySelector("#clear-btn");
+    // const clearButton = document.querySelector("#clear-btn");
     const deleteButtons = document.querySelectorAll(".delete-btn"); // Select all delete buttons
     const storedCash = localStorage.getItem("cash");
     const storedChange = localStorage.getItem("change");
@@ -189,10 +189,10 @@ function toggleButtonsBasedOnCash() {
     deleteButtons.forEach(button => {
         if (storedCash && storedCash.trim() !== "") {
             button.classList.add('hidden');
-            if (clearButton) clearButton.classList.add('hidden');
+            // if (clearButton) clearButton.classList.add('hidden');
         } else {
             button.classList.remove('hidden');
-            if (clearButton) clearButton.classList.remove('hidden');
+            // if (clearButton) clearButton.classList.remove('hidden');
         }
     });
 }
@@ -269,7 +269,7 @@ document.getElementById("clear-btn").addEventListener("click", function () {
     // Clear cash and change from localStorage
     localStorage.removeItem("cash");
     localStorage.removeItem("change");
-
+    localStorage.setItem('addToOrderDisabled', 'false');
     // Re-render the panel
     renderPanel();
 
@@ -334,7 +334,7 @@ function sendDataToServer(data) {
                 const response = JSON.parse(xhr.responseText);
 
                 if (response.success) {
-                    alert("Data saved successfully!");
+                    showModal("success", "Order has been saved successfully.");
                     localStorage.removeItem("orders");
                     localStorage.removeItem("cash");
                     localStorage.removeItem("change");
@@ -348,7 +348,6 @@ function sendDataToServer(data) {
                     const clearButton = document.querySelector("#clear-btn");
                     clearButton.classList.remove('hidden');
 
-
                     localStorage.setItem('addToOrderDisabled', 'false');
 
                     paymentButton.textContent = "Payment";
@@ -357,23 +356,51 @@ function sendDataToServer(data) {
                     }
 
                 } else {
-                    alert("Failed to save data. Try again.");
+                    const errorMessage = response.error || "Failed to save your data. Please try again.";
+                    if (response.ingredients && response.ingredients.length > 0) {
+                        const ingredients = response.ingredients.map(ingredient => `• ${ingredient}`).join("<br>");
+                        showModal("error", `${errorMessage} <br> ${ingredients}`);
+                    } else {
+                        showModal("error", errorMessage);
+                    }
                 }
             } catch (e) {
                 console.error("Error parsing response JSON:", e);
-                alert("An error occurred while processing the response. Please try again.");
+                showModal("error", "An error occurred while processing the response. Please try again.");
             }
         } else {
             console.error("Server error:", xhr.status, xhr.statusText);
-            alert("There was a server error. Please try again.");
+            showModal("error", "There was a server error. Please try again.");
         }
     };
-
 
     // Add an error handler for network issues or server unavailability
     xhr.onerror = function () {
         console.error("Request failed due to network issues.");
-        alert("Request failed. Please check your connection and try again.");
+        showModal("error", "Network error. Please check your connection and try again.");
     };
 }
 
+// Function to show a modal with a dynamic message
+function showModal(type, message) {
+    const modal = document.getElementById(type + "Modal");
+    const modalTitle = modal.querySelector("h2");
+    const modalMessage = modal.querySelector("p");
+
+    // Update modal content based on type (success or error)
+    if (type === "success") {
+        modalTitle.textContent = "Success!";
+        modalMessage.innerHTML = message;
+        modal.style.display = "block";
+    } else {
+        modalTitle.textContent = "Error!";
+        modalMessage.innerHTML = message;
+        modal.style.display = "block";
+    }
+}
+
+// Function to close the modal
+function closeModal2(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.style.display = "none";
+}

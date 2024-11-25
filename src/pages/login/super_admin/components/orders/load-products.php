@@ -5,7 +5,7 @@ $category = $_GET['category'] ?? 'pizza';
 $search = $_GET['search'] ?? '';
 
 // Query to fetch products based on category and search
-$sql = "SELECT * FROM products WHERE category = ? AND STATUS = 'available'";
+$sql = "SELECT * FROM products WHERE category = ? AND STATUS = 'available' order by name ASC";
 
 if (!empty($search)) {
     $sql .= " AND name LIKE ?";
@@ -100,7 +100,7 @@ if ($result->num_rows > 0) {
                 $inventoryMeasurement = $inventoryRow['uom'];
 
                 if ($inventoryMeasurement == 'grams') {
-                    $availableStockInKg = floatval($inventoryRow['ending']) / 1000;
+                    $availableStockInKg = floatval($inventoryRow['ending']);
                 } elseif ($inventoryMeasurement == 'kg') {
                     $availableStockInKg = floatval($inventoryRow['ending']);
                 } elseif ($inventoryMeasurement == 'pc') {

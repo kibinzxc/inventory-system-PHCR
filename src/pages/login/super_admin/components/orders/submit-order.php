@@ -135,12 +135,107 @@ try {
         }
     }
 
-    // If there are insufficient stocks, return an error with the ingredient list
+    // Initialize an array to track insufficient stocks
+    $insufficientStocks = [];
+
+    // Process orders and update usage
+    foreach ($orders as $order) {
+        $itemName = $order['name'];
+        $orderQuantity = $order['quantity'];
+
+        // Get ingredients JSON for the item
+        $queryIngredients = "SELECT ingredients FROM products WHERE name = ?";
+        $stmtIngredients = $conn->prepare($queryIngredients);
+        $stmtIngredients->bind_param("s", $itemName);
+        $stmtIngredients->execute();
+        $resultIngredients = $stmtIngredients->get_result();
+
+        if ($resultIngredients->num_rows > 0) {
+            $row = $resultIngredients->fetch_assoc();
+            $ingredients = json_decode($row['ingredients'], true);
+
+            foreach ($ingredients as $ingredient) {
+                $ingredientName = $ingredient['ingredient_name'];
+                $ingredientQuantity = $ingredient['quantity'] * $orderQuantity; // Scale quantity
+                $ingredientMeasurement = $ingredient['measurement'];
+
+                // Get inventory measurement for this ingredient
+                $queryInventory = "SELECT uom, usage_count, ending FROM daily_inventory WHERE name = ?";
+                $stmtInventory = $conn->prepare($queryInventory);
+                $stmtInventory->bind_param("s", $ingredientName);
+                $stmtInventory->execute();
+                $resultInventory = $stmtInventory->get_result();
+
+                if ($resultInventory->num_rows > 0) {
+                    $rowInventory = $resultInventory->fetch_assoc();
+                    $inventoryMeasurement = $rowInventory['uom'];
+                    $currentEnding = $rowInventory['ending'];
+
+                    // Convert ingredient quantity to match inventory measurement
+                    if ($ingredientMeasurement === 'grams' && $inventoryMeasurement === 'kg') {
+                        $ingredientQuantity /= 1000; // Convert grams to kg
+                    } elseif ($ingredientMeasurement === 'kg' && $inventoryMeasurement === 'grams') {
+                        $ingredientQuantity *= 1000; // Convert kg to grams
+                    } elseif ($ingredientMeasurement === 'pcs' && $inventoryMeasurement === 'pc') {
+                        // Same measurement, no conversion needed
+                    } elseif ($ingredientMeasurement === 'pc' && $inventoryMeasurement === 'pc') {
+                        // Same measurement, no conversion needed
+                    } elseif ($ingredientMeasurement === 'bottle' && $inventoryMeasurement === 'bt') {
+                        // Same measurement, no conversion needed
+                    } else {
+                        throw new Exception("Measurement mismatch for ingredient: $ingredientName");
+                    }
+
+                    // Check if the ending will become negative
+                    if ($currentEnding - $ingredientQuantity < 0) {
+                        // Add to the insufficient stocks array
+                        $insufficientStocks[] = [
+                            'product' => $itemName,
+                            'ingredient' => $ingredientName
+                        ];
+                    } else {
+                        // Update usage and ending inventory if stock is sufficient
+                        $updateUsage = "UPDATE daily_inventory SET usage_count = usage_count + ? WHERE name = ?";
+                        $stmtUsage = $conn->prepare($updateUsage);
+                        $stmtUsage->bind_param("ds", $ingredientQuantity, $ingredientName);
+                        $stmtUsage->execute();
+
+                        // Update ending inventory
+                        $updateEnding = "UPDATE daily_inventory SET ending = ending - ? WHERE name = ?";
+                        $stmtEnding = $conn->prepare($updateEnding);
+                        $stmtEnding->bind_param("ds", $ingredientQuantity, $ingredientName);
+                        $stmtEnding->execute();
+                    }
+                }
+            }
+        }
+    }
+
     if (!empty($insufficientStocks)) {
+        $insufficientGrouped = [];
+
+        // Group ingredients by product
+        foreach ($insufficientStocks as $stock) {
+            // If the product is already in the array, add the ingredient to it
+            if (isset($insufficientGrouped[$stock['product']])) {
+                $insufficientGrouped[$stock['product']][] = $stock['ingredient'];
+            } else {
+                // If the product is not in the array, create a new entry
+                $insufficientGrouped[$stock['product']] = [$stock['ingredient']];
+            }
+        }
+
+        // Prepare the ingredients list
+        $insufficientList = [];
+        foreach ($insufficientGrouped as $product => $ingredients) {
+            $ingredientsList = implode(", ", $ingredients); // Join ingredients with commas
+            $insufficientList[] = "Product: {$product}, Ingredients: {$ingredientsList}";
+        }
+
         echo json_encode([
             'success' => false,
-            'error' => 'Insufficient stocks for the following ingredients:',
-            'ingredients' => $insufficientStocks
+            'error' => 'Insufficient ingredient stock for these products: <br>',
+            'ingredients' => $insufficientList
         ]);
         $conn->rollback();
         exit;

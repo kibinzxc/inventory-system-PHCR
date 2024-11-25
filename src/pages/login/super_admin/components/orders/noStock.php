@@ -18,7 +18,7 @@
 
     <div class="response-modal-content">
         <div class="response-modal-header">
-            <h2>Error!</h2>
+            <h2>Insufficient Stock</h2>
             <span class="response-close-btn" onclick="closeModal2('errorModal')">&times;</span>
         </div>
         <div class="response-modal-body">
@@ -51,7 +51,7 @@
 
     .response-modal-content {
         background-color: #f4f4f4;
-        margin: 15% auto;
+        margin: 10% auto;
         padding: 0;
         border-radius: 8px;
         width: 40%;
@@ -70,6 +70,8 @@
         text-align: center;
         font-size: 1.2rem;
         /* Adds space between form elements */
+        max-height: 50vh;
+        overflow-y: auto;
     }
 
 

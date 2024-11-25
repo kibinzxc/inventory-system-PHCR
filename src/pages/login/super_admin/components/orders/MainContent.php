@@ -9,7 +9,7 @@ include 'noStock.php'; ?>
             <h1>Orders</h1>
             <div class="btn-wrapper">
                 <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Online Orders</a>
-                <a href="archive.php" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Logs</a>
+                <a href="order-logs.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Logs</a>
             </div>
         </div>
         <br>

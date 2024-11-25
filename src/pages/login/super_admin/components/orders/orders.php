@@ -12,7 +12,7 @@ include '../dashboard/daily_update.php';
     <link rel="shortcut icon" href="../../assets/pizzahut-logo.png" type="image/x-icon">
     <link rel="icon" sizes="32x32" href="../../assets/pizzahut-logo.png" type="image/png">
     <link rel="icon" sizes="192x192" href="../../assets/pizzahut-logo.png" type="image/png">
-    <title>Inventory | Pizza Hut Chino Roces</title>
+    <title>Orders | Pizza Hut Chino Roces</title>
 
 </head>
 

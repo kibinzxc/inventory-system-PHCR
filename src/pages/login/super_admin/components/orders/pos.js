@@ -357,12 +357,56 @@ function sendDataToServer(data) {
 
                 } else {
                     const errorMessage = response.error || "Failed to save your data. Please try again.";
+
                     if (response.ingredients && response.ingredients.length > 0) {
-                        const ingredients = response.ingredients.map(ingredient => `• ${ingredient}`).join("<br>");
-                        showModal("error", `${errorMessage} <br> ${ingredients}`);
+                        let ingredientsMessage = '';
+                        let groupedIngredients = {};
+
+                        // Group ingredients by product
+                        response.ingredients.forEach(stock => {
+                            // Split the string by the first comma to separate the product and ingredients part
+                            const parts = stock.split(', Ingredients:');
+
+                            if (parts.length === 2) {
+                                const product = parts[0].replace("Product: ", "").trim(); // Extract product name
+                                const ingredients = parts[1].trim(); // Extract the ingredients part
+
+                                // Split the ingredients by commas and trim whitespace for each ingredient
+                                const ingredientList = ingredients.split(',').map(ingredient => ingredient.trim());
+
+                                // Group ingredients by product
+                                if (!groupedIngredients[product]) {
+                                    groupedIngredients[product] = [];
+                                }
+                                groupedIngredients[product] = groupedIngredients[product].concat(ingredientList);
+                            } else {
+                                // If the string doesn't have both product and ingredients
+                                console.error("Invalid format for stock:", stock);
+                            }
+                        });
+
+                        // Build the message for the modal
+                        Object.keys(groupedIngredients).forEach(product => {
+                            ingredientsMessage += `<strong>${product}</strong><br>`;
+                            groupedIngredients[product].forEach(ingredient => {
+                                ingredientsMessage += `• ${ingredient}<br>`;
+                            });
+                            ingredientsMessage += "<br>";
+                        });
+
+                        // Check if ingredientsMessage is still empty, meaning no valid products or ingredients were found
+                        if (ingredientsMessage === '') {
+                            showModal("error", "No valid ingredients to display.");
+                        } else {
+                            // Show modal with the grouped product and ingredient information
+                            showModal("error", `${errorMessage} <br> ${ingredientsMessage}`);
+                        }
                     } else {
                         showModal("error", errorMessage);
                     }
+
+
+
                 }
             } catch (e) {
                 console.error("Error parsing response JSON:", e);

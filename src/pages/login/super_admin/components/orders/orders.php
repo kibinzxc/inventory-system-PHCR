@@ -1,6 +1,6 @@
 <?php
 include '../../authentication/check_login_admin.php';
-include '../dashboard/daily_update.php';
+include 'auto-update.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

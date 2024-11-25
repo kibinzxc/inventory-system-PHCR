@@ -238,6 +238,7 @@ a.btn {
     max-height: calc(85vh - 20px);
     /* Matches the height of panel-container */
     /* Optional: ensure consistency with the panel */
+    justify-content: center;
 }
 
 .product-card {
@@ -670,4 +671,9 @@ a.btn {
     font-size: 20px;
     font-weight: bold;
     color: #333;
+}
+
+.no-animation * {
+    animation: none !important;
+    transition: none !important;
 }

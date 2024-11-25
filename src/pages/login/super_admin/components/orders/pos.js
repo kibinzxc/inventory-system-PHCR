@@ -447,4 +447,6 @@ function showModal(type, message) {
 function closeModal2(modalId) {
     const modal = document.getElementById(modalId);
     modal.style.display = "none";
+    window.location.reload(); // This will refresh the page
+
 }

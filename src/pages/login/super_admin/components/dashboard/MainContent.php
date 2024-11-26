@@ -438,16 +438,29 @@ if (isset($_SESSION['user_id'])) {
             </div>
         </div>
 
-        <div class="same-column">
-            <div class="table_container daily_sales">
-                <?php include 'daily_sales.php'; ?>
+        <div class="same-column-container">
+            <div class="same-column">
+                <div class="table_container daily_sales">
+                    <?php include 'daily_sales.php'; ?>
+                </div>
+                <div class="table_container recent_orders">
+                    <h3>Recent Orders</h3>
+                    <?php include 'recent_orders.php'; ?>
+                </div>
             </div>
-            <div class="table_container recent_orders">
-                <h3>Recent Orders</h3>
-                <?php include 'recent_orders.php'; ?>
+
+            <div class="same-column">
+                <div class="table_container daily_sales2">
+                    <h3 class="h3-header"> Recent Inventory Updates</h3>
+                    <?php include 'recent_updates.php'; ?>
+                </div>
+                <div class="table_container recent_orders2">
+                    <h3>Weekly Top Products</h3>
+                    <?php include 'top_products.php'; ?>
+                </div>
+
             </div>
         </div>
-
 
     </div>
 </div>

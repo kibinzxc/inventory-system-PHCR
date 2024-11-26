@@ -22,6 +22,7 @@ body {
 #main-content {
     transition: margin-left 0.5s;
     margin-left: 250px;
+    padding-bottom: 10px;
 }
 
 .collapsed #main-content {
@@ -453,7 +454,7 @@ h5 {
     font-size: 2rem;
     /* Slightly larger font for bold sales amount */
     font-weight: 600;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 .card-footer {
@@ -557,16 +558,26 @@ h5 {
     justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin: auto;
+    margin-bottom: 0;
 
+}
+
+.same-column-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: wrap;
 }
 
 .same-column {
     display: flex;
     flex-direction: row;
-    max-height: 45vh;
     gap: 10px;
     flex-wrap: wrap;
+}
+
+.h3-header {
+    margin-top: 0;
 }
 
 .daily_sales {
@@ -575,9 +586,23 @@ h5 {
     padding: 20px 30px 5px 30px;
 }
 
+.daily_sales2 {
+    flex-grow: 1;
+    width: 55%;
+    padding: 20px 30px 5px 30px;
+}
+
 .recent_orders {
     flex-grow: 1;
     max-width: 30%;
+    justify-content: column;
+    overflow-y: auto;
+
+}
+
+.recent_orders2 {
+    flex-grow: 1;
+    max-width: 29.5%;
     justify-content: column;
     overflow-y: auto;
 
@@ -649,6 +674,106 @@ h5 {
     transition: background-color 0.3s ease;
 }
 
+/* Container for horizontally aligned product cards */
+.usage-product-cards-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+
+/* Individual product card styling */
+.usage-product-card {
+    width: 100%;
+    /* Make the card take 100% of the container's width */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    /* Center vertically */
+    justify-content: space-between;
+
+    /* Add space between cards vertically */
+}
+
+.usage-product-card:hover {
+    transform: translateY(-5px);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.usage-product-card-link {
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    /* Ensure the link inherits the text color */
+}
+
+/* Product Image container */
+.usage-product-image-container {
+    flex: 0 0 auto;
+    /* Prevents image from growing/shrinking */
+    width: 50px;
+    /* Fixed size for the image */
+    height: 50px;
+    /* Fixed size for the image */
+    display: flex;
+    justify-content: center;
+    /* Centers the image */
+    align-items: center;
+    /* Centers the image vertically */
+}
+
+/* Product image styling */
+.usage-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* Product name and size container */
+.usage-product-name-size {
+    flex: 1;
+    /* Allow this div to take up the remaining space */
+    text-align: center;
+    padding-left: 10px;
+    /* Space between image and name/size */
+    display: flex;
+    flex-direction: column;
+    /* Stack name and size vertically */
+    justify-content: center;
+    /* Vertically center the content */
+}
+
+/* Styling for product name */
+.usage-product-name-size p {
+    margin: 0;
+    padding: 0;
+}
+
+/* Product size styling */
+.usage-product-size {
+    font-size: 0.9em;
+    color: #888;
+}
+
+/* Product orders container */
+.usage-product-orders {
+    flex: 0 0 auto;
+    /* Prevents orders count from growing/shrinking */
+    width: 80px;
+    /* Fixed width for the order count */
+    text-align: center;
+}
+
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .btns_container {
@@ -709,6 +834,16 @@ h5 {
         max-width: 100%;
         flex-grow: 1;
     }
+
+    .daily_sales2 {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+    .recent_orders2 {
+        max-width: 100%;
+        flex-grow: 1;
+    }
 }
 
 /* Adjust card size on smaller screens */
@@ -750,6 +885,16 @@ h5 {
     }
 
     .recent_orders {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+    .daily_sales2 {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+    .recent_orders2 {
         max-width: 100%;
         flex-grow: 1;
     }

@@ -416,6 +416,7 @@ a.btn2.disabled:hover {
     text-align: left;
     padding: 20px 30px 5px 30px;
     flex-grow: 1;
+    cursor: default;
 }
 
 .card:hover {
@@ -563,19 +564,89 @@ h5 {
 .same-column {
     display: flex;
     flex-direction: row;
-
+    max-height: 45vh;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .daily_sales {
     flex-grow: 1;
-    max-width: 65%;
+    max-width: 70%;
     padding: 20px 30px 5px 30px;
 }
 
 .recent_orders {
     flex-grow: 1;
-    max-width: 35%;
+    max-width: 30%;
+    justify-content: column;
+    overflow-y: auto;
+
+}
+
+.custom-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px;
+    margin: 0;
+}
+
+.custom-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    width: 100%;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+
+}
+
+.custom-card:hover {
+    transform: translateY(-10px);
+}
+
+.custom-card-body {
+    padding: 20px;
+}
+
+.custom-invoice-id p {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.custom-invoice-info p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.custom-invoice-action {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.custom-btn {
+    background-color: #006D6D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-btn-invoice img {
+    margin-left: 10px;
+    width: 12px;
+    height: 12px;
+}
+
+.custom-btn:hover {
+    background-color: #004d4d;
+    transition: background-color 0.3s ease;
 }
 
 /* Media Queries for Responsiveness */
@@ -628,6 +699,16 @@ h5 {
     .mobile-note {
         display: block;
     }
+
+    .daily_sales {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+    .recent_orders {
+        max-width: 100%;
+        flex-grow: 1;
+    }
 }
 
 /* Adjust card size on smaller screens */
@@ -662,4 +743,32 @@ h5 {
         font-size: 0.9rem;
         /* Adjust footer font size */
     }
+
+    .daily_sales {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+    .recent_orders {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+
+
+    .custom-card-body {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        text-align: center;
+        align-items: center;
+        flex-grow: 1;
+    }
+
+    .custom-invoice-info {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
 }

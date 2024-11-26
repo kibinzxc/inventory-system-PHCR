@@ -443,7 +443,8 @@ if (isset($_SESSION['user_id'])) {
                 <?php include 'daily_sales.php'; ?>
             </div>
             <div class="table_container recent_orders">
-                test
+                <h3>Recent Orders</h3>
+                <?php include 'recent_orders.php'; ?>
             </div>
         </div>
 

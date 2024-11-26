@@ -113,7 +113,6 @@ $conn->close();
         const targetDate = new Date(date);
         return targetDate > current;
     };
-
     // Chart.js configuration
     const ctx = document.getElementById('salesChart').getContext('2d');
 
@@ -132,19 +131,16 @@ $conn->close();
                         pointRadius: (context) => {
                             const sale = context.raw;
                             const date = dates[context.dataIndex];
-                            // Remove point if the sales value is 0 or if the date is in the future (current week only)
                             return (sale === 0 || isFutureDay(date)) ? 0 : 4;
                         },
                         pointBackgroundColor: (context) => {
                             const sale = context.raw;
                             const date = dates[context.dataIndex];
-                            // Remove point if the sales value is 0 or if the date is in the future (current week only)
                             return (sale === 0 || isFutureDay(date)) ? 'transparent' : (dates[context.dataIndex] === currentDate ? '#006363' : '#009797');
                         },
                         pointBorderColor: (context) => {
                             const sale = context.raw;
                             const date = dates[context.dataIndex];
-                            // Remove point if the sales value is 0 or if the date is in the future (current week only)
                             return (sale === 0 || isFutureDay(date)) ? 'transparent' : (dates[context.dataIndex] === currentDate ? '#006363' : '#009797');
                         },
                         spanGaps: true, // Prevent connecting lines across null values
@@ -170,6 +166,24 @@ $conn->close();
                     duration: 2000 // Slower animation
                 },
                 plugins: {
+                    tooltip: {
+                        enabled: true, // Make sure tooltips are enabled
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                let value = tooltipItem.raw; // Get the sales value from the hovered point
+
+                                // Ensure the value is a valid number before calling toFixed
+                                value = parseFloat(value);
+
+                                if (isNaN(value)) {
+                                    value = 0; // Fallback to 0 if value is not a number
+                                }
+
+                                return '₱' + value.toFixed(2); // Add peso sign and format to 2 decimal places
+                            }
+                        }
+
+                    },
                     legend: {
                         display: true,
                         position: 'top'
@@ -190,14 +204,15 @@ $conn->close();
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                // Add ".00" to sales values
-                                return value.toFixed(2);
+                                // Add peso sign and ".00" to the Y axis labels
+                                return '₱' + value.toFixed(2);
                             }
                         }
                     }
                 }
             }
         });
+
     } else {
         console.error("Canvas context not found.");
     }

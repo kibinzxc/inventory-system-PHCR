@@ -63,7 +63,7 @@ $result = $conn->query($sql);
                 echo "<tr onclick='window.location.href=\"../inventory/items.php\";'>"; // Make row clickable
                 echo "<td><strong>" . strtoupper(htmlspecialchars($row["name"])) . "</strong></td>";
                 echo "<td>" . htmlspecialchars($row["itemID"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["ending"]) . "</td>";
+                echo "<td><strong>" . (intval($row["ending"]) == $row["ending"] ? intval($row["ending"]) : number_format($row["ending"], 2)) . "</strong></td>";
                 echo "<td>" . strtoupper(htmlspecialchars($row["uom"])) . "</td>";
                 echo "<td class='$status_class' style='$status_style'>" . strtoupper(htmlspecialchars($row["status"])) . "</td>";
                 echo "<td>" . $lastUpdateFormatted . "</td>";

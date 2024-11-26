@@ -73,7 +73,7 @@ if ($result->num_rows === 0) {
 
         // Order Count
         echo '<div class="usage-product-orders">';
-        echo '<p> <strong>' . $orders . '</strong> Orders</p>';
+        echo '<p> <strong>' . $orders . '</strong> ' . ($orders == 1 ? 'Order' : 'Orders') . '</p>';
         echo '</div>';
         echo '</div>';
         echo '</a>';  // Close the link

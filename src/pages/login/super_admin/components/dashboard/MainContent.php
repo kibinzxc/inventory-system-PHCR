@@ -147,14 +147,20 @@ if (isset($_SESSION['user_id'])) {
                     <div>
                         <h5>Average Order Value</h5>
                         <?php
-                        // Fetch total sales and orders for the week
-                        $weekStart = date('Y-m-d', strtotime('monday this week')); // Start of the week (Monday)
-                        $today = date('Y-m-d');
+                        // Fetch total sales and orders for last week
+                        // Define the date range for last week (e.g., Nov 18, 2024 - Nov 24, 2024)
+                        $lastWeekStart = date('Y-m-d', strtotime('monday last week'));
+                        $lastWeekEnd = date('Y-m-d', strtotime('sunday last week'));
 
-                        // Query for invoices in the last 7 days
+                        // Correct the date for the week before last week
+                        // Subtract 2 weeks from the start of last week
+                        $weekBeforeLastStart = date('Y-m-d', strtotime($lastWeekStart . ' -1 week'));
+                        $weekBeforeLastEnd = date('Y-m-d', strtotime($lastWeekEnd . ' -1 week'));
+
+                        // Query for invoices for last week
                         $query = "SELECT orders, transaction_date FROM invoice WHERE DATE(transaction_date) BETWEEN ? AND ?";
                         $stmt = $conn->prepare($query);
-                        $stmt->bind_param('ss', $weekStart, $today);
+                        $stmt->bind_param('ss', $lastWeekStart, $lastWeekEnd);
                         $stmt->execute();
                         $result = $stmt->get_result();
 
@@ -174,19 +180,26 @@ if (isset($_SESSION['user_id'])) {
                             }
                         }
 
-                        // Calculate Average Order Value
-                        $averageOrderValue = ($totalOrders > 0) ? $totalSales / $totalOrders : 0; ?>
+                        // Calculate Average Order Value for last week
+                        $averageOrderValue = ($totalOrders > 0) ? $totalSales / $totalOrders : 0;
+                        ?>
                         <p class="sales-amount"><?php echo '₱' . number_format($averageOrderValue, 2); ?></p>
                     </div>
 
                     <?php
+                    // Define the date range for last week (e.g., Nov 18, 2024 - Nov 24, 2024)
                     $lastWeekStart = date('Y-m-d', strtotime('monday last week'));
                     $lastWeekEnd = date('Y-m-d', strtotime('sunday last week'));
 
-                    // Query to fetch total_amount directly
+                    // Correct the date for the week before last week
+                    // Subtract 2 weeks from the start of last week
+                    $weekBeforeLastStart = date('Y-m-d', strtotime($lastWeekStart . ' -1 week'));
+                    $weekBeforeLastEnd = date('Y-m-d', strtotime($lastWeekEnd . ' -1 week'));
+
+                    // Query to fetch total_amount directly for the week before last week
                     $prevQuery = "SELECT total_amount FROM invoice WHERE DATE(transaction_date) BETWEEN ? AND ?";
                     $prevStmt = $conn->prepare($prevQuery);
-                    $prevStmt->bind_param('ss', $lastWeekStart, $lastWeekEnd);
+                    $prevStmt->bind_param('ss', $weekBeforeLastStart, $weekBeforeLastEnd);
                     $prevStmt->execute();
                     $prevResult = $prevStmt->get_result();
 
@@ -194,15 +207,15 @@ if (isset($_SESSION['user_id'])) {
 
                     if ($prevResult->num_rows > 0) {
                         while ($row = $prevResult->fetch_assoc()) {
-                            // Sum up the total_amount for all invoices within the last week
+                            // Sum up the total_amount for all invoices within the week before last week
                             $prevTotalSales += $row['total_amount'];
                         }
                     }
 
-                    // Calculate Average Order Value for last week
+                    // Calculate Average Order Value for the week before last week
                     $prevAOV = $prevTotalSales > 0 ? $prevTotalSales / 1 : 0;  // No orders count needed as you're summing the total_amount directly
 
-                    // Calculate percentage change in AOV
+                    // Calculate percentage change in AOV between last week and the week before last week
                     $aovPercentageChange = 0;
                     if ($prevAOV > 0) {
                         $aovPercentageChange = (($averageOrderValue - $prevAOV) / $prevAOV) * 100;
@@ -230,48 +243,27 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </div>
+
                 <div class="card-footer">
                     <?php
-                    // Get the start of the current week (Monday) and the end of the current week (Sunday)
-                    $thisWeekStart = date('Y-m-d', strtotime('monday this week'));
-                    $thisWeekEnd = date('Y-m-d', strtotime('sunday this week'));
-
-                    // Format the dates for display (e.g., "November 26, 2024 - December 02, 2024")
-                    $this_week_sd = date("F d, Y", strtotime($thisWeekStart));  // Example: "November 26, 2024"
-                    $this_week_ed = date("F d, Y", strtotime($thisWeekEnd));    // Example: "December 02, 2024"
-
-                    // Display the date range
+                    // Get the start and end date for last week
+                    $this_week_sd = date("F d, Y", strtotime($lastWeekStart));  // Example: "November 26, 2024"
+                    $this_week_ed = date("F d, Y", strtotime($lastWeekEnd));    // Example: "December 02, 2024"
                     ?>
                     <p><?php echo 'From ' . $this_week_sd . ' - ' . $this_week_ed; ?></p>
-
                 </div>
             </div>
 
             <?php
 
-            // Define the date range for this week
-            $thisWeekStart = date('Y-m-d', strtotime('monday this week'));
-            $thisWeekEnd = date('Y-m-d', strtotime('sunday this week'));
-
-            // Query to get total sales (total_amount) for this week
-            $currentQuery = "SELECT total_amount FROM invoice WHERE DATE(transaction_date) BETWEEN ? AND ?";
-            $currentStmt = $conn->prepare($currentQuery);
-            $currentStmt->bind_param('ss', $thisWeekStart, $thisWeekEnd);
-            $currentStmt->execute();
-            $currentResult = $currentStmt->get_result();
-
-            $currentTotalSales = 0;
-
-            if ($currentResult->num_rows > 0) {
-                while ($row = $currentResult->fetch_assoc()) {
-                    // Sum up the total_amount for all invoices within this week
-                    $currentTotalSales += $row['total_amount'];
-                }
-            }
-
-            // Define the date range for last week
+            // Define the date range for last week (e.g., Nov 18, 2024 - Nov 24, 2024)
             $lastWeekStart = date('Y-m-d', strtotime('monday last week'));
             $lastWeekEnd = date('Y-m-d', strtotime('sunday last week'));
+
+            // Correct the date for the week before last week
+            // Subtract 2 weeks from the start of last week
+            $weekBeforeLastStart = date('Y-m-d', strtotime($lastWeekStart . ' -1 week'));
+            $weekBeforeLastEnd = date('Y-m-d', strtotime($lastWeekEnd . ' -1 week'));
 
             // Query to get total sales (total_amount) for last week
             $prevQuery = "SELECT total_amount FROM invoice WHERE DATE(transaction_date) BETWEEN ? AND ?";
@@ -289,38 +281,51 @@ if (isset($_SESSION['user_id'])) {
                 }
             }
 
-            // Calculate the percentage change in weekly revenue
-            $revenuePercentage = 0;
-            if ($prevTotalSales > 0) {
-                $revenuePercentage = (($currentTotalSales - $prevTotalSales) / $prevTotalSales) * 100;
+            // Query to get total sales (total_amount) for the week before last week
+            $prev2Query = "SELECT total_amount FROM invoice WHERE DATE(transaction_date) BETWEEN ? AND ?";
+            $prev2Stmt = $conn->prepare($prev2Query);
+            $prev2Stmt->bind_param('ss', $weekBeforeLastStart, $weekBeforeLastEnd);
+            $prev2Stmt->execute();
+            $prev2Result = $prev2Stmt->get_result();
+
+            $prev2TotalSales = 0;
+
+            if ($prev2Result->num_rows > 0) {
+                while ($row = $prev2Result->fetch_assoc()) {
+                    // Sum up the total_amount for all invoices within the week before last
+                    $prev2TotalSales += $row['total_amount'];
+                }
             }
 
+            // Calculate the percentage change in weekly revenue (comparing last week to the week before last week)
+            $revenuePercentage = 0;
+            if ($prev2TotalSales > 0) {
+                $revenuePercentage = (($prevTotalSales - $prev2TotalSales) / $prev2TotalSales) * 100;
+            }
 
             ?>
+
 
             <div class="card">
                 <div class="card-body">
                     <div>
                         <h5>Weekly Revenue</h5>
-                        <p class="sales-amount"><?php echo '₱' . number_format($currentTotalSales, 2); ?></p>
+                        <p class="sales-amount"><?php echo '₱' . number_format($prevTotalSales, 2); ?></p>
                     </div>
                     <div class="percentage-box">
                         <div class="percentage-body">
                             <?php if ($revenuePercentage > 0) { ?>
                                 <div class="up">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/trend" title="trend icons">Trend icons created by Amazona Adorada - Flaticon</a> -->
                                     <img src="../../assets/up.png" alt="" style="width:25px;margin-right:5px;">
                                     <p class="percentage-up">+<?php echo number_format($revenuePercentage, 2); ?>%</p>
                                 </div>
                             <?php } elseif ($revenuePercentage < 0) { ?>
                                 <div class="down">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/trend" title="trend icons">Trend icons created by Amazona Adorada - Flaticon</a> -->
                                     <img src="../../assets/down.png" alt="" style="width:25px; margin-right:5px;">
                                     <p class="percentage-down"><?php echo number_format($revenuePercentage, 2); ?>%</p>
                                 </div>
                             <?php } else { ?>
                                 <div class="neutral">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/trend" title="trend icons">Trend icons created by Amazona Adorada - Flaticon</a> -->
                                     <img src="../../assets/neutral.png" alt="" style="width:25px; margin-right:5px;">
                                     <p class="percentage-neutral"> 0.00%</p>
                                 </div>
@@ -330,20 +335,20 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <div class="card-footer">
                     <?php
-                    // Get the start of the current week (Monday) and the end of the current week (Sunday)
-                    $thisWeekStart = date('Y-m-d', strtotime('monday this week'));
-                    $thisWeekEnd = date('Y-m-d', strtotime('sunday this week'));
+                    // Get the start of last week and the end of last week for display
+                    $lastWeekStart = date('Y-m-d', strtotime('monday last week'));
+                    $lastWeekEnd = date('Y-m-d', strtotime('sunday last week'));
 
-                    // Format the dates for display (e.g., "November 26, 2024 - December 02, 2024")
-                    $this_week_sd = date("F d, Y", strtotime($thisWeekStart));  // Example: "November 26, 2024"
-                    $this_week_ed = date("F d, Y", strtotime($thisWeekEnd));    // Example: "December 02, 2024"
+                    // Format the dates for display (e.g., "November 19, 2024 - November 25, 2024")
+                    $last_week_sd = date("F d, Y", strtotime($lastWeekStart));
+                    $last_week_ed = date("F d, Y", strtotime($lastWeekEnd));
 
-                    // Display the date range
+                    // Display the date range for last week
                     ?>
-                    <p><?php echo 'From ' . $this_week_sd . ' - ' . $this_week_ed; ?></p>
-
+                    <p><?php echo 'From ' . $last_week_sd . ' - ' . $last_week_ed; ?></p>
                 </div>
             </div>
+
 
             <?php
             // Database connection

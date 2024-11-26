@@ -66,9 +66,19 @@ try {
     $insufficientStocks = [];
 
     // Process orders and update usage
+    // Process orders and update usage
     foreach ($orders as $order) {
         $itemName = $order['name'];
         $orderQuantity = $order['quantity'];
+        $itemPrice = $order['price'];
+        $itemSize = $order['size'];
+
+        // Insert product usage data into the usage_reports table
+        $insertUsageQuery = "INSERT INTO usage_reports (name, size, price, quantity, day_counted) 
+                         VALUES (?, ?, ?, ?, NOW())";
+        $stmtUsage = $conn->prepare($insertUsageQuery);
+        $stmtUsage->bind_param("ssdi", $itemName, $itemSize, $itemPrice, $orderQuantity);
+        $stmtUsage->execute();
 
         // Get ingredients JSON for the item
         $queryIngredients = "SELECT ingredients FROM products WHERE name = ?";
@@ -103,14 +113,6 @@ try {
                         $ingredientQuantity /= 1000; // Convert grams to kg
                     } elseif ($ingredientMeasurement === 'kg' && $inventoryMeasurement === 'grams') {
                         $ingredientQuantity *= 1000; // Convert kg to grams
-                    } elseif ($ingredientMeasurement === 'pc' && $inventoryMeasurement === 'pc') {
-                        // Same measurement, no conversion needed
-                    } elseif ($ingredientMeasurement === 'pcs' && $inventoryMeasurement === 'pc') {
-                        // Same measurement, no conversion needed
-                    } elseif ($ingredientMeasurement === 'bottle' && $inventoryMeasurement === 'bt') {
-                        // Same measurement, no conversion needed
-                    } else {
-                        throw new Exception("Measurement mismatch for ingredient: $ingredientName");
                     }
 
                     // Check if the ending will become negative
@@ -136,6 +138,7 @@ try {
             }
         }
     }
+
 
     if (!empty($insufficientStocks)) {
         $insufficientGrouped = [];

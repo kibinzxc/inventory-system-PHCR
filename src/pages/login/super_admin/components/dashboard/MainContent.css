@@ -16,12 +16,12 @@ body {
     margin: 0;
     height: 100vh;
     background-color: #E7E7E7;
+    padding: 0;
 }
 
 #main-content {
     transition: margin-left 0.5s;
     margin-left: 250px;
-    padding: 16px;
 }
 
 .collapsed #main-content {
@@ -60,10 +60,10 @@ body {
     /* Align items to the left */
 }
 
-.intro-header p {
+.sub-header {
     margin: 0;
     font-size: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 5px;
 }
 
 .colored {
@@ -142,7 +142,7 @@ a.btn {
 
 .table_container {
     z-index: 1;
-    margin: 25px 0;
+    margin: 5px 0;
     height: auto;
     flex-shrink: 0;
     border-radius: 10px;
@@ -408,13 +408,22 @@ a.btn2.disabled:hover {
 .card {
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
     margin: 10px 0;
     transition: all 0.3s ease;
     width: 23rem;
     height: auto;
     text-align: left;
     padding: 20px 30px 5px 30px;
+    flex-grow: 1;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+
+
 }
 
 
@@ -422,6 +431,13 @@ a.btn2.disabled:hover {
 h5 {
     margin: 0;
     font-size: 1rem;
+    color: #343434;
+}
+
+.headings {
+    font-size: 26px;
+    font-weight: 500;
+    margin-bottom: 10px;
     color: #343434;
 }
 
@@ -436,12 +452,12 @@ h5 {
     font-size: 2rem;
     /* Slightly larger font for bold sales amount */
     font-weight: 600;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .card-footer {
     font-size: 0.8rem;
-    color: #343434;
+    color: #868e96;
 }
 
 .card-footer p {
@@ -539,9 +555,27 @@ h5 {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 10px;
     margin: auto;
 
+}
+
+.same-column {
+    display: flex;
+    flex-direction: row;
+
+    gap: 10px;
+}
+
+.daily_sales {
+    flex-grow: 1;
+    max-width: 65%;
+    padding: 20px 30px 5px 30px;
+}
+
+.recent_orders {
+    flex-grow: 1;
+    max-width: 35%;
 }
 
 /* Media Queries for Responsiveness */
@@ -569,6 +603,7 @@ h5 {
         padding: 5px 10px;
         -webkit-overflow-scrolling: touch;
         max-width: 100%;
+
     }
 
     .header {

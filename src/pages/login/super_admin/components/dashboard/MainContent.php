@@ -93,8 +93,11 @@ if (isset($_SESSION['user_id'])) {
     <div class="container">
         <div class="header">
             <div class="intro-header">
-                <h1><?php echo $greeting . ' ' . $userName; ?> <img src="../../assets/wave.png" alt="" style="width: 30px;"></h1>
-                <p>You have<span class="colored"> 2 unread </span> notifications.</p>
+                <p class="headings">
+                    <?php echo $greeting . '<span style="font-weight:bold;"> ' . $userName . '</span>'; ?>
+                    <img src="../../assets/wave.png" alt="" style="width: 30px;">
+                </p>
+                <p class="sub-header">You have<span class="colored"> 2 unread </span> notifications.</p>
             </div>
             <!-- <div class="btn-wrapper">
                 <a href="product-preview.php" class="btn"><img src="../../assets/instagram.svg" alt=""> Product Details</a>
@@ -433,9 +436,17 @@ if (isset($_SESSION['user_id'])) {
                     <p>From <?php echo date('F d, Y', strtotime($startOfWeek)) . ' - ' . date('F d, Y', strtotime($endOfWeek)); ?></p>
                 </div>
             </div>
-
-
         </div>
+
+        <div class="same-column">
+            <div class="table_container daily_sales">
+                <?php include 'daily_sales.php'; ?>
+            </div>
+            <div class="table_container recent_orders">
+                test
+            </div>
+        </div>
+
 
     </div>
 </div>

@@ -447,6 +447,7 @@ h5 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: #343434;
 
 }
 
@@ -578,6 +579,12 @@ h5 {
 
 .h3-header {
     margin-top: 0;
+    color: #343434;
+
+}
+
+h3 {
+    color: #343434;
 }
 
 .daily_sales {
@@ -624,6 +631,7 @@ h5 {
     overflow: hidden;
     transition: transform 0.3s ease;
     cursor: pointer;
+    color: #343434;
 
 }
 

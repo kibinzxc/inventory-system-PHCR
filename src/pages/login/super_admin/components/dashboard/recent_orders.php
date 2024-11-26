@@ -45,7 +45,7 @@ if ($result->num_rows === 0) {
         echo '<div class="custom-card">';  // Updated class name
         echo '<div class="custom-card-body">';  // Updated class name
         echo '<div class="custom-invoice-id">';  // Updated class name
-        echo '<p><strong>Invoice #</strong> ' . $invID . '</p>';
+        echo '<p>Invoice #' . $invID . '</p>';
         echo '</div>';
 
         echo '<div class="custom-invoice-info">';  // Updated class name

@@ -99,12 +99,20 @@ $conn->close();
     // Identify the index of the current date
     const currentDateIndex = dates.indexOf(currentDate);
 
-    // Format sales data to ensure values are numeric and fixed to 2 decimal places
+    // Format sales data to ensure values are numeric, fixed to 2 decimal places, and includes thousands separators
     const formatSalesData = (salesData) => {
         return salesData.map(sale => {
             const numericSale = parseFloat(sale);
-            return isNaN(numericSale) ? 0 : numericSale.toFixed(2); // Default to 0 if NaN
+            if (isNaN(numericSale)) return 0; // Default to 0 if NaN
+            return numericSale.toFixed(2); // Return formatted value to two decimal places
         });
+    };
+
+    // Function to format numbers with commas for thousands
+    const formatNumberWithCommas = (number) => {
+        const parts = number.toString().split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Add commas to the integer part
+        return parts.join(".");
     };
 
     // Check if the day is in the future
@@ -113,6 +121,7 @@ $conn->close();
         const targetDate = new Date(date);
         return targetDate > current;
     };
+
     // Chart.js configuration
     const ctx = document.getElementById('salesChart').getContext('2d');
 
@@ -179,10 +188,9 @@ $conn->close();
                                     value = 0; // Fallback to 0 if value is not a number
                                 }
 
-                                return '₱' + value.toFixed(2); // Add peso sign and format to 2 decimal places
+                                return '₱' + formatNumberWithCommas(value.toFixed(2)); // Add peso sign and formatted number
                             }
                         }
-
                     },
                     legend: {
                         display: true,
@@ -204,15 +212,14 @@ $conn->close();
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                // Add peso sign and ".00" to the Y axis labels
-                                return '₱' + value.toFixed(2);
+                                // Add peso sign and format the Y axis labels with commas for thousands
+                                return '₱' + formatNumberWithCommas(value.toFixed(2));
                             }
                         }
                     }
                 }
             }
         });
-
     } else {
         console.error("Canvas context not found.");
     }

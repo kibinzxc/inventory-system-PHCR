@@ -8,6 +8,7 @@ table {
     border: 1px solid #ddd;
     margin-bottom: 15px;
     min-width: 600px;
+    color: #343434;
 }
 
 table td,

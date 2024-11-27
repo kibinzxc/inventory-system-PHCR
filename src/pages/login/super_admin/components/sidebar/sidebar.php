@@ -15,6 +15,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
     <!-- Sidebar Links -->
     <div class="bglinks">
         <a href="../dashboard/dashboard.php" data-tooltip="Dashboard" class="<?= ($currentPage == 'dashboard.php') ? 'active' : '' ?>"><img src="../../assets/home.svg" alt=""><span class="links">Dashboard</span></a>
+        <a href="../reports/reports.php" data-tooltip="Reports" class="<?= ($currentPage == 'reports.php') ? 'active' : '' ?>"><img src="../../assets/bar-chart-2.svg" alt=""><span class="links">Reports</span></a>
         <hr class="hr_style" />
         <a href="../inventory/items.php" data-tooltip="Inventory" class="<?= ($currentPage == 'product-preview.php' || $currentPage == 'archive.php' || $currentPage == 'items.php' || $currentPage == 'daily-summary.php' || $currentPage == 'products.php' || $currentPage == 'spoilage-report.php' || $currentPage == 'transfers-report.php' || $currentPage == 'deliveries-report.php') ? 'active' : '' ?>"><img src="../../assets/package.svg" alt=""><span class="links">Inventory</span></a>
         <a href="../orders/orders.php" data-tooltip="Inventory" class="<?= ($currentPage == 'order-logs.php' || $currentPage == 'orders.php') ? 'active' : '' ?>"><img src="../../assets/file-plus.svg" alt=""><span class="links">Orders</span></a>

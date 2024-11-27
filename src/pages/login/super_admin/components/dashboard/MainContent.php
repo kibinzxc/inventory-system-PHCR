@@ -146,19 +146,14 @@ if (isset($_SESSION['user_id'])) {
                 <div class="card-body">
                     <div>
                         <h5>Average Order Value</h5>
+
                         <?php
                         // Fetch total sales and orders for last week
-                        // Define the date range for last week (e.g., Nov 18, 2024 - Nov 24, 2024)
                         $lastWeekStart = date('Y-m-d', strtotime('monday last week'));
                         $lastWeekEnd = date('Y-m-d', strtotime('sunday last week'));
 
-                        // Correct the date for the week before last week
-                        // Subtract 2 weeks from the start of last week
-                        $weekBeforeLastStart = date('Y-m-d', strtotime($lastWeekStart . ' -1 week'));
-                        $weekBeforeLastEnd = date('Y-m-d', strtotime($lastWeekEnd . ' -1 week'));
-
                         // Query for invoices for last week
-                        $query = "SELECT orders, transaction_date FROM invoice WHERE DATE(transaction_date) BETWEEN ? AND ?";
+                        $query = "SELECT total_amount FROM invoice WHERE DATE(transaction_date) BETWEEN ? AND ?";
                         $stmt = $conn->prepare($query);
                         $stmt->bind_param('ss', $lastWeekStart, $lastWeekEnd);
                         $stmt->execute();
@@ -169,22 +164,24 @@ if (isset($_SESSION['user_id'])) {
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                $orders = json_decode($row['orders'], true);
-
-                                if (is_array($orders)) {
-                                    foreach ($orders as $order) {
-                                        $totalSales += $order['price'] * $order['quantity'];
-                                        $totalOrders++;
-                                    }
-                                }
+                                // Sum up total sales
+                                $totalSales += $row['total_amount'];
+                                // Count total invoices (orders)
+                                $totalOrders++;
                             }
                         }
 
                         // Calculate Average Order Value for last week
-                        $averageOrderValue = ($totalOrders > 0) ? $totalSales / $totalOrders : 0;
+                        $averageOrderValue = $totalOrders > 0 ? $totalSales / $totalOrders : 0;
+
+                        // echo "Total Sales: $totalSales<br>";
+                        // echo "Total Orders: $totalOrders<br>";
+                        // echo "Average Order Value: $averageOrderValue<br>";
                         ?>
+
                         <p class="sales-amount"><?php echo '₱' . number_format($averageOrderValue, 2); ?></p>
                     </div>
+
 
                     <?php
                     // Define the date range for last week (e.g., Nov 18, 2024 - Nov 24, 2024)
@@ -192,11 +189,10 @@ if (isset($_SESSION['user_id'])) {
                     $lastWeekEnd = date('Y-m-d', strtotime('sunday last week'));
 
                     // Correct the date for the week before last week
-                    // Subtract 2 weeks from the start of last week
                     $weekBeforeLastStart = date('Y-m-d', strtotime($lastWeekStart . ' -1 week'));
                     $weekBeforeLastEnd = date('Y-m-d', strtotime($lastWeekEnd . ' -1 week'));
 
-                    // Query to fetch total_amount directly for the week before last week
+                    // Query for total sales and order count for the week before last week
                     $prevQuery = "SELECT total_amount FROM invoice WHERE DATE(transaction_date) BETWEEN ? AND ?";
                     $prevStmt = $conn->prepare($prevQuery);
                     $prevStmt->bind_param('ss', $weekBeforeLastStart, $weekBeforeLastEnd);
@@ -204,23 +200,53 @@ if (isset($_SESSION['user_id'])) {
                     $prevResult = $prevStmt->get_result();
 
                     $prevTotalSales = 0;
+                    $prevTotalOrders = 0;
 
                     if ($prevResult->num_rows > 0) {
                         while ($row = $prevResult->fetch_assoc()) {
-                            // Sum up the total_amount for all invoices within the week before last week
+                            // Sum up the total_amount and count the invoices as orders
                             $prevTotalSales += $row['total_amount'];
+                            $prevTotalOrders++;
                         }
                     }
 
-                    // Calculate Average Order Value for the week before last week
-                    $prevAOV = $prevTotalSales > 0 ? $prevTotalSales / 1 : 0;  // No orders count needed as you're summing the total_amount directly
+                    // Calculate Average Order Value (AOV) for the week before last week
+                    $prevAOV = $prevTotalOrders > 0 ? $prevTotalSales / $prevTotalOrders : 0;
+
+                    // Query for total sales and order count for last week
+                    $lastWeekQuery = "SELECT total_amount FROM invoice WHERE DATE(transaction_date) BETWEEN ? AND ?";
+                    $lastWeekStmt = $conn->prepare($lastWeekQuery);
+                    $lastWeekStmt->bind_param('ss', $lastWeekStart, $lastWeekEnd);
+                    $lastWeekStmt->execute();
+                    $lastWeekResult = $lastWeekStmt->get_result();
+
+                    $lastWeekTotalSales = 0;
+                    $lastWeekTotalOrders = 0;
+
+                    if ($lastWeekResult->num_rows > 0) {
+                        while ($row = $lastWeekResult->fetch_assoc()) {
+                            // Sum up the total_amount and count the invoices as orders
+                            $lastWeekTotalSales += $row['total_amount'];
+                            $lastWeekTotalOrders++;
+                        }
+                    }
+
+                    // Calculate Average Order Value (AOV) for last week
+                    $lastWeekAOV = $lastWeekTotalOrders > 0 ? $lastWeekTotalSales / $lastWeekTotalOrders : 0;
 
                     // Calculate percentage change in AOV between last week and the week before last week
-                    $aovPercentageChange = 0;
-                    if ($prevAOV > 0) {
-                        $aovPercentageChange = (($averageOrderValue - $prevAOV) / $prevAOV) * 100;
-                    }
+                    $aovPercentageChange = ($prevAOV > 0) ? (($lastWeekAOV - $prevAOV) / $prevAOV) * 100 : 0;
+
+                    // Output the results
+                    // echo "Total Sales Week Before Last: $prevTotalSales<br>";
+                    // echo "Total Orders Week Before Last: $prevTotalOrders<br>";
+                    // echo "AOV Week Before Last: $prevAOV<br>";
+                    // echo "Total Sales Last Week: $lastWeekTotalSales<br>";
+                    // echo "Total Orders Last Week: $lastWeekTotalOrders<br>";
+                    // echo "AOV Last Week: $lastWeekAOV<br>";
+                    // echo "Percentage Change in AOV: $aovPercentageChange%<br>";
                     ?>
+
 
                     <div class="percentage-box">
                         <div class="percentage-body">
@@ -460,7 +486,7 @@ if (isset($_SESSION['user_id'])) {
                     <?php include 'recent_updates.php'; ?>
                 </div>
                 <div class="table_container recent_orders2">
-                    <h3>Weekly Top Products</h3>
+                    <h3>Current Week Top Products</h3>
                     <?php include 'top_products.php'; ?>
                 </div>
 

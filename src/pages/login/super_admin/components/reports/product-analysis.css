@@ -1,0 +1,51 @@
+/* Style for the container */
+.select-container {
+    display: flex;
+    align-items: center;
+    /* Vertically center the label and select */
+    gap: 10px;
+    /* Add space between the label and select */
+}
+
+/* Style for the label */
+label {
+    font-size: 1rem;
+    color: #343434;
+    font-weight: 600;
+    margin-top: 15px;
+    /* Space above the label */
+}
+
+/* Style for the select dropdown */
+select {
+    width: 300px;
+    /* Adjust width as needed */
+    padding: 10px 15px;
+    font-size: 1rem;
+    color: #495057;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+/* Style when the select is focused */
+select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+
+/* Style for option elements */
+option {
+    font-size: 1rem;
+    color: #343434;
+}
+
+/* Optional: style for the "No products available" message */
+option:empty {
+    color: #888;
+}

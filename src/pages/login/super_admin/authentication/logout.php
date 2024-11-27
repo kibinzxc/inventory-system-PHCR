@@ -7,6 +7,14 @@ $_SESSION = [];
 // Destroy the session
 session_destroy();
 
-// Redirect to the login page
-header("Location: ../../../login.php");
+// Set a flag to indicate that we want to clear localStorage and sessionStorage
+echo "<script>
+    // Clear both sessionStorage and localStorage
+    sessionStorage.clear();  // Clear sessionStorage
+    localStorage.clear();    // Clear localStorage
+
+    // Redirect to the login page
+    window.location.href = '../../../login.php';
+</script>";
+
 exit();

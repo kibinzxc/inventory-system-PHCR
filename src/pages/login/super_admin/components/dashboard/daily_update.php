@@ -1,6 +1,6 @@
 <?php
 include '../../connection/database.php';
-error_reporting(0);
+error_reporting(1);
 
 // Set timezone to Manila
 date_default_timezone_set('Asia/Manila');
@@ -104,7 +104,6 @@ if ($lastUpdate >= $startOfYesterday && $lastUpdate < $endOfYesterday) {
                 transfers_in = 0,
                 transfers_out = 0,
                 spoilage = 0,
-                remarks = NULL,
                 usage_count = 0,
                 status = CASE
                     WHEN beginning = 0 THEN 'out of stock'  

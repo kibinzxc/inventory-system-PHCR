@@ -1,7 +1,7 @@
 <?php
 require('../fpdf186/fpdf.php'); // Include the FPDF library
 include '../../connection/database.php';
-error_reporting(0);
+error_reporting(1);
 
 // Function to calculate the average orders per day for the last week
 function getAverageOrdersPerDay($conn, $productName)

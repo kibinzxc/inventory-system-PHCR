@@ -2,6 +2,14 @@
 include '../../connection/database.php';
 error_reporting(1);
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require '../../../phpmailer/src/Exception.php';
+require '../../../phpmailer/src/PHPMailer.php';
+require '../../../phpmailer/src/SMTP.php';
+
+
 // Function to calculate the average orders per day for the last week
 function getAverageOrdersPerDay($conn, $productName)
 {
@@ -23,6 +31,37 @@ function getAverageOrdersPerDay($conn, $productName)
     $totalOrdersLastWeek = $row['total_quantity'] ?? 0;
 
     return ($totalOrdersLastWeek > 0) ? round($totalOrdersLastWeek / 7) : 0;
+}
+
+function getUsersByType($userType)
+{
+    global $conn;
+    $sql = "SELECT email, name, uid FROM accounts WHERE userType = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $userType);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $users = [];
+    while ($row = $result->fetch_assoc()) {
+        $users[] = $row;
+    }
+    $stmt->close();
+
+    return $users;
+}
+
+// Function to check if the user has already been notified today
+function hasBeenNotifiedToday($conn, $uid)
+{
+    $currentDate = date('Y-m-d'); // Get current date
+    $sql = "SELECT COUNT(*) AS count FROM notify_user WHERE uid = ? AND DATE(date_notified) = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("is", $uid, $currentDate);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    return $row['count'] > 0;
 }
 
 // Get all products
@@ -120,8 +159,78 @@ foreach ($ingredientThresholds as $ingredientName => $data) {
     $fetchStatusStmt->close();
 }
 
+// Check if we have low stock or out of stock ingredients and send emails
+if (count($lowStockIngredients) > 0 || count($outOfStockIngredients) > 0) {
+    // Define user types
+    $userTypes = ['admin', 'stockman', 'super_admin'];
+
+    // Loop through each user type and send an email
+    foreach ($userTypes as $userType) {
+        $users = getUsersByType($userType);
+
+        foreach ($users as $user) {
+            $email = $user['email'];
+            $name = $user['name'];
+            $uid = $user['uid'];
+
+            // Check if this user has already been notified today
+            if (!hasBeenNotifiedToday($conn, $uid)) {
+                // Send email
+                $mail = new PHPMailer(true);
+                try {
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'phcr.inventory@gmail.com';
+                    $mail->Password = 'qumsybajaxdmuyqv'; // Use a secure app password
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                    $mail->Port = 465;
+
+                    $mail->setFrom('phcr.inventory@gmail.com', 'PHCR Notifications');
+                    $mail->addAddress($email);
+
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Stock Notification';
+
+                    $message = 'Dear ' . $name . ',<br><br>';
+                    $message .= 'There are some stock issues:<br>';
+
+                    if (count($lowStockIngredients) > 0) {
+                        $message .= 'Low stock ingredients: ' . implode(', ', array_column($lowStockIngredients, 'ingredient')) . '<br>';
+                    }
+
+                    if (count($outOfStockIngredients) > 0) {
+                        $message .= 'Out of stock ingredients: ' . implode(', ', array_column($outOfStockIngredients, 'ingredient')) . '<br>';
+                    }
+                    $message .= '<br>Kindly Check the inventory system for more details.<br> www.pizzahut-chinoroces.com<br>';
+                    $message .= 'Please take appropriate action.<br><br>Best Regards,<br>PHCR Inventory System';
+
+                    $mail->Body = $message;
+
+                    $mail->send();
+                    // echo 'Email sent to ' . $email . '<br>';
+
+                    // Insert the user UID and today's date into the notify_user table
+                    $insertSql = "INSERT INTO notify_user (uid) VALUES (?)";
+                    $insertStmt = $conn->prepare($insertSql);
+                    $insertStmt->bind_param("i", $uid);
+                    $insertStmt->execute();
+                    $insertStmt->close();
+                } catch (Exception $e) {
+                    // echo "Error sending email: " . $mail->ErrorInfo . '<br>';
+                }
+            } else {
+                // echo 'User ' . $name . ' has already been notified today.<br>';
+            }
+        }
+    }
+} else {
+    echo '<p>No ingredients with low stock or out of stock.</p>';
+}
+
 $conn->close();
 ?>
+
 
 <style>
     /* Modal background */

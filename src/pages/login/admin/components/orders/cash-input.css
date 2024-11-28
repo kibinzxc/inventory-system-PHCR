@@ -1,0 +1,205 @@
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 5;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #f4f4f4;
+    margin: 5% auto;
+    padding: 0;
+    border-radius: 8px;
+    width: 40%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* Modal Header */
+.modal-header {
+    background-color: #343434;
+    padding: 15px;
+    color: #fff;
+    text-align: left;
+    font-size: 15px;
+    position: relative;
+    padding: 15px 25px;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+/* Close button in header */
+.modal-header .close1 {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    /* Make the 'X' bold */
+    cursor: pointer;
+    color: #fff;
+    /* Keep the color white */
+    padding: 5px 10px;
+    /* Add some padding for a clickable area */
+    line-height: 1;
+    /* Ensure the text aligns nicely */
+    border-radius: 50%;
+}
+
+.modal-header .close1:hover {
+    background-color: rgba(242, 242, 242, 0.2);
+    /* 50% opacity */
+}
+
+/* Modal Body (Content Area) */
+.modal-body {
+    background-color: #fff;
+    /* White */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* Adds space between form elements */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    color: black;
+    /* Default text color for the select */
+    font-size: 1rem;
+}
+
+/* Ensure options have a default color */
+.form-group select option {
+    color: black;
+    /* Default text color for all options */
+}
+
+
+/* Modal Footer (Button Area) */
+.modal-footer2 {
+    background-color: #f1f1f1;
+    /* Customizable color */
+    padding: 20px;
+    text-align: right;
+}
+
+/* Buttons */
+.custom_btn {
+    padding: 10px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+/* Cancel Button */
+.cancel-btn {
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.cancel-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Save Changes Button */
+.save-btn {
+    background-color: #006D6D;
+    color: #fff;
+    padding: 11px 16px;
+    font-weight: 500;
+}
+
+.save-btn:hover {
+    background-color: #005B5B;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 80%;
+    }
+}
+
+/* Style for the input wrapper to place the peso sign */
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#cash-input {
+    padding-left: 30px;
+    /* Space for the peso sign */
+    padding-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 1rem;
+    box-sizing: border-box;
+    text-align: center;
+    /* Align the number to the right */
+}
+
+.peso-sign {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #333;
+}
+
+#error-message {
+    font-size: 14px;
+    margin-top: 10px;
+    color: red;
+}
+
+.panel-actions a.disabled {
+    pointer-events: none;
+    /* Disable any clicks */
+    opacity: 0.5;
+    /* Make the button look inactive */
+}
+
+.disabled {
+    pointer-events: none;
+    /* Disable any clicks */
+    opacity: 0.5;
+    /* Make the button look inactive */
+
+}

@@ -1,0 +1,679 @@
+/* Main content styling */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.header h1 {
+    color: #343434;
+}
+
+body {
+    margin: 0;
+    background-color: #E7E7E7;
+}
+
+#main-content {
+    transition: margin-left 0.5s;
+    margin-left: 250px;
+    padding: 16px;
+
+}
+
+/* Main container styles */
+.container {
+    margin: 0 35px;
+    font-family: 'Inter', sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    width: auto;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #006D6D;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+.header a:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+.btn-wrapper2 {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-wrapper2 a:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+.btn2 {
+    width: auto;
+    height: 35px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #006D6D;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0 30px;
+}
+
+a.btn2 {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.btn2 img {
+    margin-right: 5px;
+}
+
+.btn img {
+    margin-right: 5px;
+}
+
+a.btn {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.table_container {
+    z-index: 1;
+    height: auto;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #FFF;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    padding: 5px 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.btns_container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 20px 5px;
+    gap: 10px;
+}
+
+.icon_btn {
+    width: 4%;
+    height: 38px;
+    flex-shrink: 0;
+    border: 1px solid #DBDBDB;
+    background: #FFF;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 5px;
+    margin-left: auto;
+}
+
+.icon_btn:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+.search_btn {
+    width: 40%;
+    height: 38px;
+    flex-shrink: 0;
+    border: 1px solid #DBDBDB;
+    background: #FFF url('../../assets/search.svg') no-repeat left 10px center;
+    padding: 0 40px;
+    font-size: 15px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.sort-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #DBDBDB;
+    border-radius: 5px;
+    padding: 0 0 0 10px;
+    flex-grow: 1;
+    min-width: 100px;
+    height: 38px;
+    background-color: white;
+    font-weight: 600;
+}
+
+.sort-label {
+    margin-right: 5px;
+    font-size: 15px;
+    color: #000;
+}
+
+.select,
+.select2 {
+    flex-grow: 1;
+    height: 100%;
+    padding: 0 0 0 10px;
+    appearance: none;
+    border: none;
+    background: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.sort-icon {
+    margin-left: 5px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Wrapper for table and panel */
+.content-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    /* Adjust spacing as needed */
+    align-items: stretch;
+    /* Ensures all children stretch to the same height */
+}
+
+.table-product-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex-grow: 1;
+    height: 85vh;
+    /* Ensures consistent height between table-product-container and panel-container */
+}
+
+
+.panel-container {
+    width: 30%;
+    background-color: #FFF;
+    border-radius: 10px;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    padding: 20px;
+    height: 85vh;
+    /* Ensure the height is fixed */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on mobile */
+}
+
+
+.product_container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    overflow-y: auto;
+    /* Enables vertical scrolling */
+    max-height: calc(85vh - 20px);
+    /* Matches the height of panel-container */
+    /* Optional: ensure consistency with the panel */
+    justify-content: center;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    height: auto;
+    /* Keep the height auto to adjust based on the content */
+    max-height: 350px;
+    /* Ensure the card doesn't grow too tall */
+    overflow: hidden;
+    /* Prevent overflow of content */
+    position: relative;
+}
+
+
+.hidden {
+    display: none;
+}
+
+.product-image-container {
+    position: relative;
+    width: 100%;
+    height: 150px;
+}
+
+/* Product image styles */
+.product-image img {
+    max-width: 100%;
+    height: auto;
+    /* Ensure image maintains its aspect ratio */
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+}
+
+/* Out of stock image overlay */
+.out-of-stock-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.out-of-stock-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* Product details section */
+.product-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* Allow product details to grow and take available space */
+    padding: 0 10px;
+    height: 100%
+}
+
+
+.product-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.product-description {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+    text-align: justify;
+    display: none;
+}
+
+.product-size {
+    font-size: 16px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.product-price {
+    font-size: 16px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.size-value,
+.price-value {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.product-status {
+    font-size: 14px;
+    color: #27ae60;
+}
+
+.product-ingredients {
+    font-size: 14px;
+    margin-top: 10px;
+    visibility: hidden;
+    display: none;
+}
+
+.product-ingredients h4 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    visibility: hidden;
+    display: none;
+}
+
+.product-ingredients ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 0;
+    text-align: center;
+    visibility: hidden;
+    display: none;
+}
+
+.product-ingredients li {
+    font-size: 14px;
+    margin-bottom: 5px;
+    visibility: hidden;
+    display: none;
+}
+
+.product-availability {
+    margin-top: auto;
+    /* Push the button to the bottom */
+    display: flex;
+    justify-content: center;
+}
+
+/* Button styles for availability */
+.btn-availability {
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color: #006D6D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: bold;
+    flex-grow: 1;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-availability:hover {
+    background-color: #005757;
+}
+
+.btn-availability.gray {
+    background-color: #ccc;
+    color: #fff;
+    cursor: default;
+}
+
+/* Grayscale effect */
+.grayscale {
+    filter: grayscale(100%);
+}
+
+/* Ingredient unavailable style */
+.product-ingredients .ingredient-unavailable {
+    text-decoration: line-through;
+    color: #751c1c;
+}
+
+.product-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Tooltip styling (if necessary for later use) */
+.tooltip {
+    position: absolute;
+    background-color: #222;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    visibility: hidden;
+    z-index: 10;
+}
+
+.crossed-out {
+    text-decoration: line-through;
+    color: red;
+}
+
+.bev {
+    display: none;
+}
+
+.bev2 {
+    padding-top: 10px;
+}
+
+
+.panel-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 60vh;
+    overflow-y: auto;
+}
+
+
+.panel-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+}
+
+/* Quantity input */
+.quantity-input {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    text-align: center;
+    height: 50px;
+    font-size: 1.2rem;
+    padding-left: 15px;
+}
+
+.name-sizepanel {
+    display: flex;
+    flex-direction: column;
+    flex: 2;
+    width: 60%;
+}
+
+
+/* Panel name */
+.panel-name {
+    flex-grow: 1;
+    font-size: 16px;
+    color: #333;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.panel-size {
+    font-size: 14px;
+    color: #555;
+    text-align: left;
+
+}
+
+.panel-price {
+    font-size: 16px;
+    color: #555;
+    text-align: right;
+    margin-right: 10px;
+    font-weight: bold;
+    flex: 1;
+    white-space: nowrap;
+}
+
+.panel-price::before {
+    content: "₱";
+    margin-right: 5px;
+}
+
+
+/* Delete button */
+.delete-btn {
+    background-color: #cc3333;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.delete-btn:hover {
+    background-color: #a62727;
+}
+
+.panel-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.left-side {
+    display: flex;
+    font-size: 16px;
+}
+
+.left-side span {
+    margin-right: 5px;
+}
+
+.right-side {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: right;
+
+}
+
+.marginspan {
+    margin-right: 70px;
+    font-size: 0.9rem;
+}
+
+.total-container {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+}
+
+.space {
+    margin-top: 10px;
+}
+
+
+#total-items,
+#subtotal,
+#vat,
+#total-price {
+    font-weight: bold;
+    color: #333;
+}
+
+.panel-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.action-btn {
+    padding: 10px 15px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1rem;
+    border: 1px solid #343434;
+    background-color: #fff;
+}
+
+.action-btn:hover {
+    background-color: #cc3333a8;
+    /* A nice blue */
+    color: #fff;
+    border-color: #343434;
+    /* Darker border for contrast */
+}
+
+.btn {
+    width: auto;
+    height: 50px;
+    flex-grow: 1;
+    border-radius: 5px;
+    background: #006D6D;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+
+}
+
+.btn span {
+    font-size: 1.1rem;
+    text-align: center;
+    flex-grow: 1;
+    margin-left: 15px;
+}
+
+.btn img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Adjust the button style on hover */
+.btn:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+
+#total-price,
+#total-price-label {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.no-animation * {
+    animation: none !important;
+    transition: none !important;
+}

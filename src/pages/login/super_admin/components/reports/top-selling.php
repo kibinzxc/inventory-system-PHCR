@@ -245,6 +245,7 @@ $conn->close();
 
     // Button actions
     function handleReorderNow() {
+        sessionStorage.setItem('clickLater2', 'true');
         window.location.href = '../inventory/items.php'; // Redirect to items.php
         hideModal();
     }

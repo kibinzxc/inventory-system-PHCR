@@ -1,6 +1,9 @@
 <?php
 include '../../connection/database.php';
 error_reporting(1);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -33,7 +36,7 @@ function getAverageOrdersPerDay($conn, $productName)
     return ($totalOrdersLastWeek > 0) ? round($totalOrdersLastWeek / 7) : 0;
 }
 
-function getUsersByType($userType)
+function getUsersByType2($userType)
 {
     global $conn;
     $sql = "SELECT email, name, uid FROM accounts WHERE userType = ?";
@@ -52,7 +55,7 @@ function getUsersByType($userType)
 }
 
 // Function to check if the user has already been notified today
-function hasBeenNotifiedToday($conn, $uid)
+function hasBeenNotifiedToday2($conn, $uid)
 {
     $currentDate = date('Y-m-d'); // Get current date
     $sql = "SELECT COUNT(*) AS count FROM notify_user WHERE uid = ? AND DATE(date_notified) = ?";
@@ -166,7 +169,7 @@ if (count($lowStockIngredients) > 0 || count($outOfStockIngredients) > 0) {
 
     // Loop through each user type and send an email
     foreach ($userTypes as $userType) {
-        $users = getUsersByType($userType);
+        $users = getUsersByType2($userType);
 
         foreach ($users as $user) {
             $email = $user['email'];
@@ -174,7 +177,7 @@ if (count($lowStockIngredients) > 0 || count($outOfStockIngredients) > 0) {
             $uid = $user['uid'];
 
             // Check if this user has already been notified today
-            if (!hasBeenNotifiedToday($conn, $uid)) {
+            if (!hasBeenNotifiedToday2($conn, $uid)) {
                 // Send email
                 $mail = new PHPMailer(true);
                 try {

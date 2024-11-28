@@ -127,17 +127,20 @@ $result = $stmt->get_result();
                     $ending_style = " color: #006D6D; font-weight: 700;";
                 }
 
+                // Define the styles for the "Deliveries" and "Transfers In" columns if status is "out of stock"
+                $deliveries_style = ($status == "out of stock" || $status == "low stock") ? "background-color: #FFF9C4;" : "";
+                $transfers_in_style = ($status == "out of stock" || $status == "low stock") ? "background-color: #FFF9C4" : "";
+
                 echo "<tr>";
                 echo "<td>" . $count++ . "</td>";
                 echo "<td><strong>" . strtoupper(htmlspecialchars($row["name"])) . "</strong></td>";
                 echo "<td>" . htmlspecialchars($row["itemID"]) . "</td>";
                 echo "<td>" . strtoupper(htmlspecialchars($row["uom"])) . "</td>";
                 echo "<td>" . htmlspecialchars($row["beginning"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["deliveries"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["transfers_in"]) . "</td>";
+                echo "<td style='$deliveries_style'>" . htmlspecialchars($row["deliveries"]) . "</td>";
+                echo "<td style='$transfers_in_style'>" . htmlspecialchars($row["transfers_in"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["transfers_out"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["spoilage"]) . "</td>";
-
                 echo "<td style='$ending_style'>" . htmlspecialchars($row["ending"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
 

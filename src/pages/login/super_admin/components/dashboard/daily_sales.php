@@ -1,6 +1,9 @@
 <?php
 include '../../connection/database.php';
 
+//show all error reporting
+error_reporting(1);
+
 // Get the start and end of the current week
 $startOfWeek = date('Y-m-d', strtotime('monday this week'));
 $endOfWeek = date('Y-m-d', strtotime('sunday this week'));

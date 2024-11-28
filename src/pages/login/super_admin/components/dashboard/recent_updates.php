@@ -1,6 +1,7 @@
 <?php
 include '../../connection/database.php';
 include 'functions.php';  // Ensure the timeAgo function is included
+error_reporting(1);
 
 // Set timezone to Manila
 date_default_timezone_set('Asia/Manila');

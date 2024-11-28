@@ -1,8 +1,13 @@
 <?php
 include '../../authentication/check_login_admin.php';
+include '../../connection/database.php';
+if (!$conn) {
+    die("Database connection failed: " . mysqli_connect_error());
+}
+
 include 'daily_update.php';
 include 'auto-update.php';
-error_reporting(1);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

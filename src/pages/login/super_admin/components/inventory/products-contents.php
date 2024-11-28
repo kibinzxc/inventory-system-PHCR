@@ -18,7 +18,9 @@
         <!-- Action Buttons Section -->
         <br>
         <div class="btn-wrapper2">
-            <a href="#" class="btn2" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add New Product</a>
+            <a href="add-product.php" class="btn2" onclick="window.open('add-product.php', '_blank', 'width=700px,height=500px'); return false;">
+                <img src="../../assets/plus-circle.svg" alt=""> Add New Product
+            </a>
         </div>
 
         <div class="table_container">
@@ -31,7 +33,7 @@
             <!-- <a href="https://www.flaticon.com/free-icons/summary" title="summary icons">Summary icons created by Flat Icons - Flaticon</a> -->
             <a href="daily-summary.php"><img src="../../assets/text-file.png" class="img-btn-link">Daily Summary</a>
             <!-- <a href="https://www.flaticon.com/free-icons/restaurant" title="restaurant icons">Restaurant icons created by Freepik - Flaticon</a> -->
-            <a href="ingredients.php"><img src="../../assets/packaging.png" class="img-btn-link">Ingredients</a>
+            <a href="ingredients.php"><img src="../../assets/packaging.png" class="img-btn-link">Items</a>
             <a href="products.php" class="active"><img src="../../assets/cutlery.png" class="img-btn-link">Product List</a>
         </div>
 

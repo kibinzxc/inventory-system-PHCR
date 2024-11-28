@@ -852,6 +852,12 @@ h3 {
         max-width: 100%;
         flex-grow: 1;
     }
+
+    #main-content {
+        margin-left: 50px;
+        width: auto;
+        margin-right: 10px;
+    }
 }
 
 /* Adjust card size on smaller screens */

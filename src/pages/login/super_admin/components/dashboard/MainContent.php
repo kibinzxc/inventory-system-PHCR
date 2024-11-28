@@ -1,6 +1,4 @@
 <?php
-session_start();
-Error_reporting(1);
 include 'warning-modal.php';
 // Set the timezone to Asia/Manila
 date_default_timezone_set('Asia/Manila');
@@ -376,8 +374,6 @@ if (isset($_SESSION['user_id'])) {
 
 
             <?php
-            // Database connection
-            include("db_connection.php"); // Include your DB connection
 
             // Get current date
             $currentDate = date('Y-m-d');

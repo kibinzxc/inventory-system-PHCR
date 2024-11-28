@@ -958,6 +958,10 @@ h5 {
 
 /* Media query for mobile devices */
 @media (max-width: 768px) {
+    #main-content {
+        margin-left: 20px;
+        padding: 16px;
+    }
 
     .daily_sales,
     .daily_sales2 {
@@ -969,4 +973,6 @@ h5 {
     .inventory-cards {
         margin-bottom: 10px;
     }
+
+
 }

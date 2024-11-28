@@ -612,6 +612,18 @@ a.btn2.disabled:hover {
     color: #006D6D;
 }
 
+.btn-done {
+    color: #006D6D;
+    color: white;
+    font-weight: bold;
+    border: none;
+}
+
+.btn-done:hover {
+    background-color: #004F4F;
+    cursor: pointer;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

@@ -386,10 +386,17 @@ a.btn2.disabled:hover {
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
+    #main-content {
+        margin-left: 50px;
+        padding: 16px;
+
+    }
+
     .btns_container {
         display: none;
     }
 
+    .btn-wrapper2,
     .btn-wrapper {
         display: none;
     }
@@ -433,4 +440,6 @@ a.btn2.disabled:hover {
     .mobile-note {
         display: block;
     }
+
+
 }

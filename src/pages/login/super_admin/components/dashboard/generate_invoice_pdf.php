@@ -1,5 +1,6 @@
 <?php
 require('../fpdf186/fpdf.php'); // Include the FPDF library
+error_reporting(1);
 
 if (isset($_GET['invID'])) {
     $invID = $_GET['invID'];

@@ -35,6 +35,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: stockman/components/Stockman/dashboard.php");
             } elseif ($userType === 'rider') {
                 header("Location: delivery-rider/components/dashboard/Dashboard.php");
+            } elseif ($userType === 'cashier') {
+                header("Location: cashier/components/orders/orders.php");
             } else {
                 header("Location: pages/login.php?error=Unauthorized%20access");
             }

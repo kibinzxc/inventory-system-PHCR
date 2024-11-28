@@ -1,0 +1,54 @@
+.item-container {
+    display: grid;
+    /* Use grid instead of flexbox for easy control over rows and columns */
+    grid-template-columns: repeat(3, 1fr);
+    /* 2 columns */
+    gap: 20px;
+    /* Space between grid items */
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    padding: 15px;
+    color: black;
+    box-sizing: border-box;
+}
+
+/* Style for the item icon */
+.item-icon {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+}
+
+/* Style for the item details */
+.item-details {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Count label style */
+.item-count {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Item label style */
+.item-label {
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* Optional: Add responsive behavior for smaller screens */
+@media (max-width: 768px) {
+    .item-container {
+        grid-template-columns: 1fr;
+        /* Stack items in a single column on smaller screens */
+    }
+}

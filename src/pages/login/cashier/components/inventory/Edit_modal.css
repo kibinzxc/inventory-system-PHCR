@@ -1,0 +1,156 @@
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content2 {
+    background-color: #f4f4f4;
+    margin: 1.5% auto;
+    padding: 0;
+    border-radius: 8px;
+    width: 40%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.modal-header {
+    background-color: #343434;
+    padding: 15px;
+    color: #fff;
+    text-align: left;
+    font-size: 15px;
+    position: relative;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.modal-header .close,
+.close2 {
+    position: absolute;
+    /* Absolute positioning */
+    right: 15px;
+    /* Align right */
+    top: 15px;
+    /* Align top */
+    font-size: 24px;
+    /* Font size for close button */
+    font-weight: bold;
+    /* Bold text */
+    cursor: pointer;
+    /* Pointer cursor */
+    color: #fff;
+    /* White color */
+    padding: 5px 10px;
+    /* Padding for clickable area */
+    line-height: 1;
+    /* Line height */
+    border-radius: 50%;
+    /* Rounded close button */
+}
+
+.modal-header .close:hover {
+    background-color: rgba(242, 242, 242, 0.2);
+}
+
+.modal-body {
+    background-color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Row Styling */
+.form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.transfers-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-direction: row;
+    /* Ensures that the two input fields are aligned side by side */
+}
+
+.half {
+    width: 48%;
+    /* Ensures the inputs are side by side */
+}
+
+.form-row label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-row input,
+.form-row select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1.1rem;
+
+}
+
+/* Modal Footer (Button Area) */
+.modal-footer {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: right;
+}
+
+/* Buttons */
+.custom_btn {
+    padding: 10px 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.cancel-btn {
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.cancel-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.save-btn {
+    background-color: #006D6D;
+    color: #fff;
+}
+
+.save-btn:hover {
+    background-color: #005B5B;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 80%;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-row .half {
+        width: 100%;
+        margin-right: 0;
+    }
+}

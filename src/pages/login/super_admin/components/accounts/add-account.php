@@ -27,6 +27,10 @@
                         <option value="" disabled selected hidden>Select user type</option>
                         <option value="admin" <?php echo (isset($_GET['userType']) && $_GET['userType'] === 'admin') ? 'selected' : ''; ?>>Admin</option>
                         <option value="stockman" <?php echo (isset($_GET['userType']) && $_GET['userType'] === 'stockman') ? 'selected' : ''; ?>>Stockman</option>
+                        <option value="cashier" <?php echo (isset($_GET['userType']) && $_GET['userType'] === 'stockman') ? 'selected' : ''; ?>>Cashier</option>
+                        <option value="cashier" <?php echo (isset($_GET['userType']) && $_GET['userType'] === 'stockman') ? 'selected' : ''; ?>>Rider</option>
+
+
                     </select>
                 </div>
                 <div class="form-group">

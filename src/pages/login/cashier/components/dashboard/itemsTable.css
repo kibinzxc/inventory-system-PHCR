@@ -1,0 +1,164 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /* Change to collapse to combine borders */
+
+    text-align: center;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    min-width: 600px;
+    color: #343434;
+}
+
+table td,
+table th {
+    padding: 8px;
+    border-right: 1px solid #c4c4c4;
+    /* Add vertical borders */
+}
+
+table th {
+    height: 45px;
+    background: #343434;
+    color: white;
+}
+
+/* Remove the last vertical border in the last column */
+table th:last-child,
+table td:last-child {
+    border-right: none;
+}
+
+/* Alternate row colors */
+table tr:nth-child(odd) td {
+    background-color: #f9f9f9;
+}
+
+table tr:nth-child(even) td {
+    background-color: #ffffff;
+}
+
+/* Hover effect for table rows */
+table tr:hover td,
+table th {
+    background-color: #009797;
+    cursor: pointer;
+}
+
+table .instock {
+    background-color: rgba(0, 151, 151, 0.15);
+}
+
+table .out-of-stock {
+    background-color: rgba(242, 0, 0, 0.15)
+}
+
+table .low-stock {
+    background-color: rgba(255, 156, 7, 0.15);
+}
+
+table tr:last-child td {
+    border-bottom: none;
+}
+
+table th {
+    height: 45px;
+    background: #343434;
+    color: white;
+}
+
+td.ending {
+    font-weight: 600;
+    /* Ensures the ending column stands out */
+}
+
+.settings_icon {
+    filter: invert(27%) sepia(47%) saturate(746%) hue-rotate(153deg) brightness(95%) contrast(90%);
+    fill: #254E5A;
+}
+
+.actions_icon a {
+    text-decoration: none;
+
+}
+
+.actions_icon {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 0 10px;
+}
+
+.remove_icon {
+    filter: invert(28%) sepia(77%) saturate(355%) hue-rotate(320deg) brightness(90%) contrast(90%);
+}
+
+/* Ensure measurement and status are capitalized */
+td.measurement,
+td.status {
+    text-transform: uppercase;
+}
+
+/* Disable button style */
+a.btn2.disabled {
+    pointer-events: none;
+    /* Disable clicking */
+    opacity: 0.5;
+    /* Make the button look inactive */
+    cursor: not-allowed;
+    /* Change the cursor to indicate it's disabled */
+}
+
+/* Remove hover effect on disabled button */
+a.btn2.disabled:hover {
+    background: none;
+    /* Remove any hover effect */
+    color: inherit;
+    /* Retain original text color */
+}
+
+/* Tooltip container */
+[data-icon-tooltip] {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+[data-icon-tooltip]::after {
+    content: attr(data-icon-tooltip);
+    visibility: hidden;
+    width: auto;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 105%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Show tooltip on hover */
+[data-icon-tooltip]:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+@media (max-width: 768px) {
+    table {
+        width: 100%;
+        margin: 0;
+    }
+
+    /* Hide Actions column */
+    table th:last-child,
+    table td:last-child {
+        display: none;
+    }
+}

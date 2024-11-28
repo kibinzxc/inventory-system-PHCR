@@ -246,7 +246,7 @@ $conn->close();
     // Button actions
     function handleReorderNow() {
         sessionStorage.setItem('clickLater2', 'true');
-        window.location.href = '../inventory/items.php'; // Redirect to items.php
+        window.location.href = 'https://my305028.s4hana.ondemand.com/ui?sap-language=EN&help-mixedLanguages=false&help-autoStartTour=PR_A8DA8C2F83492685#PurchaseRequisition-process&/?sap-iapp-state--history=TASXGJYIADHA21QZX0GGYQ5LYKJSIV3T2N87KL25Z'; // Redirect to items.php
         hideModal();
     }
 

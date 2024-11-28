@@ -38,7 +38,6 @@ $result = $stmt->get_result();
             <th>Slogan</th>
             <th>Size</th>
             <th>Price</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -72,17 +71,7 @@ $result = $stmt->get_result();
                 echo "<td>" . $row["slogan"] . "</td>";
                 echo "<td>" . $row["size"] . "</td>";
                 echo "<td><strong>₱" . number_format($row["price"], 2) . "</strong></td>";
-                echo "<td>
-                <div class='actions_icon'>";
 
-                echo "<a href='#' onclick=\"openEditModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "', '" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['deliveries']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['spoilage']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['usage_count']) . "', '" . addslashes($row['status']) . "', event); return false;\" data-icon-tooltip='Edit'>
-                            <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'>
-                          </a>
-                          <a href='#' onclick=\"openConfirmModal('" . $row['inventoryID'] . "', '" . addslashes($row['itemID']) . "', event)\" data-icon-tooltip='Delete'>
-                            <img src='../../assets/trash-2.svg' alt='Remove' class='remove_icon'>
-                  </a>";
-
-                echo "</div></td>";
                 echo "</tr>";
             }
         } else {

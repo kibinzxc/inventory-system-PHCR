@@ -40,7 +40,7 @@ if ($result->num_rows === 0) {
         $formattedTransactionDate = $transactionDateTime->format('F d, Y g:i A');
 
         // Echo the card HTML with dynamic data
-        echo '<link rel="stylesheet" href="MainCOntent.css">';
+        echo '<link rel="stylesheet" href="MainContent.css">';
         echo '<div class="custom-card-container" onclick="generateInvoicePDF(' . $invID . ')">';  // Set the onclick on the outer div
         echo '<div class="custom-card">';  // Updated class name
         echo '<div class="custom-card-body">';  // Updated class name

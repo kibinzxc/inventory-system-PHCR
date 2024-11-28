@@ -95,10 +95,15 @@ $lowStockThreshold = $averageOrderCountLastWeek * 3; // Minimum stock to last fo
 <select name="product_name" id="product_name" onchange="updateURL(event)">
     <option value="" disabled selected>Select a product</option> <!-- Disabled and cannot be selected -->
     <?php
+    $productNames = [];
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $selected = ($row['name'] === $selectedProduct) ? 'selected' : '';
-            echo "<option value='" . htmlspecialchars($row['name']) . "' $selected>" . htmlspecialchars($row['name']) . "</option>";
+            $productNames[] = $row['name'];
+        }
+        sort($productNames);
+        foreach ($productNames as $productName) {
+            $selected = ($productName === $selectedProduct) ? 'selected' : '';
+            echo "<option value='" . htmlspecialchars($productName) . "' $selected>" . htmlspecialchars($productName) . "</option>";
         }
     } else {
         echo "<option value=''>No products available</option>";

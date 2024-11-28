@@ -1,7 +1,7 @@
 <?php
 session_start();
 Error_reporting(1);
-
+include 'warning-modal.php';
 // Set the timezone to Asia/Manila
 date_default_timezone_set('Asia/Manila');
 
@@ -97,7 +97,6 @@ if (isset($_SESSION['user_id'])) {
                     <?php echo $greeting . '<span style="font-weight:bold;"> ' . $userName . '</span>'; ?>
                     <img src="../../assets/wave.png" alt="" style="width: 30px;">
                 </p>
-                <p class="sub-header">You have<span class="colored"> 2 unread </span> notifications.</p>
             </div>
             <!-- <div class="btn-wrapper">
                 <a href="product-preview.php" class="btn"><img src="../../assets/instagram.svg" alt=""> Product Details</a>

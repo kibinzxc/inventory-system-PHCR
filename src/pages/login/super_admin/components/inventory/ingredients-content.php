@@ -30,7 +30,7 @@ $recordExists = $row['recordCount'] > 0;
     <!-- Header Section -->
     <div class="container">
         <div class="header">
-            <h1>Daily Summary</h1>
+            <h1>Ingredients Data</h1>
             <div class="btn-wrapper">
                 <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Inventory Overview</a>
                 <a href="product-preview.php" class="btn"><img src="../../assets/instagram.svg" alt=""> Product Details</a>
@@ -58,9 +58,9 @@ $recordExists = $row['recordCount'] > 0;
             <!-- <a href="https://www.flaticon.com/free-icons/inventory" title="inventory icons">Inventory icons created by Nhor Phai - Flaticon</a> -->
             <a href="items.php"><img src="../../assets/inventory.png" class="img-btn-link">Daily Inventory</a>
             <!-- <a href="https://www.flaticon.com/free-icons/summary" title="summary icons">Summary icons created by Flat Icons - Flaticon</a> -->
-            <a href="daily-summary.php" class="active"><img src="../../assets/text-file.png" class="img-btn-link">Daily Summary</a>
+            <a href="daily-summary.php"><img src="../../assets/text-file.png" class="img-btn-link">Daily Summary</a>
             <!-- <a href="https://www.flaticon.com/free-icons/restaurant" title="restaurant icons">Restaurant icons created by Freepik - Flaticon</a> -->
-            <a href="ingredients.php"><img src="../../assets/packaging.png" class="img-btn-link">Ingredients</a>
+            <a href="ingredients.php" class="active"><img src="../../assets/packaging.png" class="img-btn-link">Ingredients</a>
             <a href="products.php"><img src="../../assets/cutlery.png" class="img-btn-link">Product List</a>
         </div>
 
@@ -69,7 +69,7 @@ $recordExists = $row['recordCount'] > 0;
         <div class="table_container">
             <!-- Utility Buttons and Sorting Options -->
             <div class="btns_container">
-                <a href="export-pdf-summary.php" class="icon_btn"><img src="../../assets/save.svg" alt="Save"></a>
+                <a href="export-ingredients.php" class="icon_btn"><img src="../../assets/save.svg" alt="Save"></a>
                 <input type="text" name="search" id="search" placeholder="Search" class="search_btn">
 
                 <!-- Sorting Options -->
@@ -77,14 +77,7 @@ $recordExists = $row['recordCount'] > 0;
                     <img src="../../assets/filter.svg" alt="Filter" class="filter_icon">
                     <span class="sort-label">SORT BY:</span>
                     <select class="select" id="sort" onchange="updateSort()">
-                        <option value="name" selected>Name</option>
-                        <option value="itemID">Code</option>
-                        <option value="uom">Unit of Measurement</option>
-                        <option value="current_inventory">Current Inventory</option>
-                        <option value="spoilage">Spoilage</option>
-                        <option value="ending">Ending Inventory</option>
-                        <option value="usage">Usage</option>
-                        <option value="status">Status</option>
+                        <option value="ingredient_name" selected>Name</option>
                     </select>
 
                     <span class="sort-label">ORDER:</span>
@@ -105,8 +98,8 @@ $recordExists = $row['recordCount'] > 0;
 
             <!-- Table Loader and Content -->
             <div class="loader" id="loader" style="display:none;"></div>
-            <div class="table" id="summary-table">
-                <?php include 'summaryTable.php'; ?>
+            <div class="table" id="ingredient-table">
+                <?php include 'ingredients-table.php'; ?>
             </div>
         </div>
 
@@ -122,4 +115,4 @@ $recordExists = $row['recordCount'] > 0;
     <?php include 'SuccessErrorModal.php'; ?>
     <script src="SuccessErrorModal.js"></script>
 </div>
-<script src="summaryTable.js"></script>
+<script src="ingredients-data.js"></script>

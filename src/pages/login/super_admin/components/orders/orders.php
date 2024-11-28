@@ -1,6 +1,8 @@
 <?php
 include '../../authentication/check_login_admin.php';
 include 'auto-update.php';
+include 'auto-lowstock.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

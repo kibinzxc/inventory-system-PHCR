@@ -1,4 +1,5 @@
 <?php
+Error_reporting(1);
 // Get the raw POST data (JSON format)
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -65,8 +66,6 @@ try {
     // Initialize an array to track insufficient stocks
     $insufficientStocks = [];
 
-    // Process orders and update usage
-    // Process orders and update usage
     foreach ($orders as $order) {
         $itemName = $order['name'];
         $orderQuantity = $order['quantity'];
@@ -74,10 +73,10 @@ try {
         $itemSize = $order['size'];
 
         // Insert product usage data into the usage_reports table
-        $insertUsageQuery = "INSERT INTO usage_reports (name, size, price, quantity, day_counted) 
-                         VALUES (?, ?, ?, ?, NOW())";
+        $insertUsageQuery = "INSERT INTO usage_reports (invID, name, size, price, quantity, day_counted) 
+                         VALUES (?, ?, ?, ?, ?, NOW())";
         $stmtUsage = $conn->prepare($insertUsageQuery);
-        $stmtUsage->bind_param("ssdi", $itemName, $itemSize, $itemPrice, $orderQuantity);
+        $stmtUsage->bind_param("sssdi", $invID, $itemName, $itemSize, $itemPrice, $orderQuantity);
         $stmtUsage->execute();
 
         // Get ingredients JSON for the item

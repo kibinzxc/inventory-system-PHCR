@@ -31,6 +31,7 @@
             <!-- <a href="https://www.flaticon.com/free-icons/summary" title="summary icons">Summary icons created by Flat Icons - Flaticon</a> -->
             <a href="daily-summary.php"><img src="../../assets/text-file.png" class="img-btn-link">Daily Summary</a>
             <!-- <a href="https://www.flaticon.com/free-icons/restaurant" title="restaurant icons">Restaurant icons created by Freepik - Flaticon</a> -->
+            <a href="ingredients.php"><img src="../../assets/packaging.png" class="img-btn-link">Ingredients</a>
             <a href="products.php" class="active"><img src="../../assets/cutlery.png" class="img-btn-link">Product List</a>
         </div>
 

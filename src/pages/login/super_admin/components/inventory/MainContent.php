@@ -56,8 +56,9 @@ $recordExists = $row['recordCount'] > 0;
         </div>
 
         <div class="btncontents">
-            <a href="#" class="active"><img src="../../assets/inventory.png" class="img-btn-link">Daily Inventory</a>
+            <a href="items.php" class="active"><img src="../../assets/inventory.png" class="img-btn-link">Daily Inventory</a>
             <a href="daily-summary.php"><img src="../../assets/text-file.png" class="img-btn-link">Daily Summary</a>
+            <a href="ingredients.php"><img src="../../assets/packaging.png" class="img-btn-link">Items</a>
             <a href="products.php"><img src="../../assets/cutlery.png" class="img-btn-link">Product List</a>
         </div>
 

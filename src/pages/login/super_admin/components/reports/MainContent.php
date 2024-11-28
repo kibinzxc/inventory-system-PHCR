@@ -37,13 +37,12 @@ $conn->close();
             <h1>Product Reports & Analytics</h1>
             <div class="btn-wrapper">
                 <!-- <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Online Orders</a>-->
-                <a href="order-logs.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Download</a>
+                <a href="export-product-summary.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Download</a>
             </div>
         </div>
         <div class="btncontents">
             <!-- <a href="https://www.flaticon.com/free-icons/increase" title="increase icons">Increase icons created by pojok d - Flaticon</a> -->
             <a href="#" class="active"><img src="../../assets/cutlery.png" class="img-btn-link">Products</a>
-            <a href="ingredients.php"><img src="../../assets/text-file.png" class="img-btn-link">Ingredients</a>
             <a href="sales.php"><img src="../../assets/graph.png" class="img-btn-link">Sales</a>
         </div>
         <br>
@@ -120,7 +119,7 @@ $conn->close();
             </div>
             <div class="table_container paddington">
                 <div class="header">
-                    <h3>Product Analysis</h3>
+                    <h3>Product Analytics</h3>
                     <div class="btn-wrapper">
                         <?php
                         // Check if the 'product' parameter exists in the URL

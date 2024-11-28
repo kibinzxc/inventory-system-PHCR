@@ -7,9 +7,8 @@
     <title>Login</title>
     <link rel="stylesheet" href="index.css">
 </head>
-//direct to login.php
 <?php
-header("Location: src/pages/login.php");
+header("Location: src/pages/login/login.php");
 ?>
 
 <body>

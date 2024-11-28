@@ -88,7 +88,7 @@ $conn->close();
         <span class="warning-icon">&#9888;</span> <!-- Warning Icon -->
         <div class="warning-message">
             <p>There are <strong id="unavailable-count"><?php echo $unavailableCount; ?></strong> unavailable fast-moving products.</p>
-            <ul id="unavailable-products-list" style="text-align:left; margin-left:50px;"></ul> <!-- List for unavailable products -->
+            <ul id="unavailable-products-list" style="text-align:center;"></ul> <!-- List for unavailable products -->
             <div class="warning-modal-buttons">
                 <button class="btn-click-later" onclick="handleClickLater()">Remind Me Later</button>
                 <button class="btn-reorder-now" onclick="handleReorderNow()">Reorder Now</button>
@@ -235,7 +235,7 @@ $conn->close();
                 productListElement.appendChild(listItem);
             });
 
-            if (sessionStorage.getItem('clickLater')) {
+            if (sessionStorage.getItem('clickLater2')) {
                 hideModal();
             } else {
                 showModal();
@@ -250,7 +250,7 @@ $conn->close();
     }
 
     function handleClickLater() {
-        sessionStorage.setItem('clickLater', 'true');
+        sessionStorage.setItem('clickLater2', 'true');
         hideModal();
     }
 </script>

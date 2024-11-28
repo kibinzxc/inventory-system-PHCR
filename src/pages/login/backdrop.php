@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <link rel="stylesheet" href="../../src/pages/Login/Backdrop.css">
-    <link rel="stylesheet" href="../../index.css">
+    <link rel="stylesheet" href="backdrop.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 
 

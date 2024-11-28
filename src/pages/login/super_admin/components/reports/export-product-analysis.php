@@ -160,12 +160,22 @@ $slowMovingProducts = [];
 while ($row = $resultSlowMoving->fetch_assoc()) {
     $slowMovingProducts[] = $row['name'];
 }
+class PDF extends FPDF
+{
+    function Footer()
+    {
+        $this->SetY(-15);
+        $this->SetFont('Arial', 'I', 8);
+        $this->SetTextColor(0, 0, 0); // Ensure text color is reset to black
+        $this->Cell(0, 10, 'Page ' . $this->PageNo() . '/{nb}', 0, 0, 'C');
+    }
+}
 
-// Create PDF
-$pdf = new FPDF();
+// Create PDF instance
+$pdf = new PDF();
+$pdf->AliasNbPages(); // Required for total page count
 $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 16);
-
 // Add Pizza Hut logo
 $pdf->Image('../../assets/logo-black.png', 75, 10, 50); // Adjust the path and size as needed
 // Add "Date Generated" text
@@ -183,7 +193,7 @@ if ($productDetails && !empty($productDetails['img'])) {
 
 // Product Name
 $pdf->SetFont('Arial', 'B', 16);
-$pdf->Cell(0, 10, 'Product Name: ' . $selectedProduct, 0, 1);
+$pdf->Cell(0, 10, $selectedProduct, 0, 1);
 
 // Product Details
 $pdf->SetFont('Arial', '', 12);
@@ -268,18 +278,61 @@ $pdf->AddPage();
 
 // Add "Orders and Analysis" text
 $pdf->SetFont('Arial', 'B', 16);
-$pdf->Cell(0, 10, 'Orders and Analysis', 0, 1, 'C');
+$pdf->Cell(0, 10, 'Orders and Analytics', 0, 1, 'C');
 
 // Product Details
 $pdf->SetFont('Arial', '', 12);
-$pdf->Cell(0, 5, 'Product Name: ' . $selectedProduct, 0, 1, 'C');
+$pdf->Cell(0, 5, $selectedProduct, 0, 1, 'C');
 
 $pdf->Cell(0, 5, 'Size: ' . $productDetails['size'], 0, 1, 'C');
 $pdf->Cell(0, 5, 'Price: PHP ' . number_format($productDetails['price'], 2), 0, 1, 'C');
 $pdf->Ln(5);
 // Orders and Analysis
-$pdf->Cell(0, 10, 'Total Orders Last Week: ' . number_format($totalOrdersLastWeek), 0, 1);
-$pdf->Cell(0, 10, 'Total Orders 2 Weeks Ago: ' . number_format($totalOrdersWeekBeforeLast), 0, 1);
+
+//show total orders today 
+// Query to get the total quantity of orders for the selected product for today
+$today = date('Y-m-d');
+$sqlOrdersToday = "
+    SELECT SUM(quantity) AS total_quantity
+    FROM usage_reports
+    WHERE name = ? AND day_counted = ?
+";
+$stmtOrdersToday = $conn->prepare($sqlOrdersToday);
+$stmtOrdersToday->bind_param("ss", $selectedProduct, $today);
+$stmtOrdersToday->execute();
+$resultOrdersToday = $stmtOrdersToday->get_result();
+$rowToday = $resultOrdersToday->fetch_assoc();
+$totalOrdersToday = $rowToday['total_quantity'] ?? 0;
+
+
+// Query to get the total quantity of orders for the selected product for this week
+$startOfThisWeek = date('Y-m-d H:i', strtotime('monday this week 00:00'));
+$endOfThisWeek = date('Y-m-d H:i', strtotime('sunday this week 23:59'));
+
+$sqlOrdersThisWeek = "
+    SELECT SUM(quantity) AS total_quantity
+    FROM usage_reports
+    WHERE name = ? AND day_counted >= ? AND day_counted <= ?
+";
+$stmtOrdersThisWeek = $conn->prepare($sqlOrdersThisWeek);
+$stmtOrdersThisWeek->bind_param("sss", $selectedProduct, $startOfThisWeek, $endOfThisWeek);
+$stmtOrdersThisWeek->execute();
+$resultOrdersThisWeek = $stmtOrdersThisWeek->get_result();
+$rowThisWeek = $resultOrdersThisWeek->fetch_assoc();
+$totalOrdersThisWeek = $rowThisWeek['total_quantity'] ?? 0;
+
+$pdf->SetFont('Arial', '', 12);
+
+// Column 1 (left side)
+$pdf->Cell(95, 10, 'Total Orders Today: ' . number_format($totalOrdersToday), 0, 1, 'L');
+$pdf->Cell(95, 10, 'Total Orders Last Week: ' . number_format($totalOrdersLastWeek), 0, 1, 'L');
+
+// Column 2 (right side)
+$pdf->SetXY(105, $pdf->GetY() - 20);  // Adjust y position for the second column
+$pdf->Cell(95, 10, 'Total Orders This Week: ' . number_format($totalOrdersThisWeek), 0, 1, 'L');
+
+$pdf->SetXY(105, $pdf->GetY()); // Adjust y position for the next line
+$pdf->Cell(95, 10, 'Total Orders 2 Weeks Ago: ' . number_format($totalOrdersWeekBeforeLast), 0, 1, 'L');
 
 // Comparison
 if ($percentageChange > 0) {
@@ -343,13 +396,15 @@ if ($ingredients) {
 // Note on fast-moving or slow-moving
 $pdf->Ln(10); // Add a line break
 if (in_array($selectedProduct, $fastMovingProducts)) {
-    $pdf->SetTextColor(0, 128, 0); // Green color
     $pdf->Cell(0, 10, 'Note: This product is one of the fast-moving products from last week.', 0, 1, 'C');
+    $pdf->SetTextColor(0, 0, 0);
 } elseif (in_array($selectedProduct, $slowMovingProducts)) {
-    $pdf->SetTextColor(255, 165, 0); // Orange color
     $pdf->Cell(0, 10, 'Note: This product is one of the slow-moving products from last week.', 0, 1, 'C');
+    $pdf->SetTextColor(0, 0, 0);
 } else {
     $pdf->SetTextColor(0, 0, 0); // Black color
     $pdf->Cell(0, 10, 'Note: This product is neither fast-moving nor slow-moving.', 0, 1, 'C');
 }
-$pdf->Output();
+$pdf->SetTextColor(0, 0, 0);
+
+$pdf->Output('D', date('Y-m-d') . '-' . $selectedProduct . '-Analytics.pdf');

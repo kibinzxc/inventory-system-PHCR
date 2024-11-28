@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../connection/database.php';
+include 'super_admin/connection/database.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -28,23 +28,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Redirect based on userType
             if ($userType === 'admin') {
-                header("Location: ../../components/dashboard/dashboard.php");
+                header("Location: admin/components/dashboard/Dashboard.php");
             } elseif ($userType === 'super_admin') {
-                header("Location: super_admin/components/Dashboard/Dashboard.php");
+                header("Location: super_admin/components/dashboard/Dashboard.php");
             } elseif ($userType === 'stockman') {
-                header("Location: ../../components/Stockman/Dashboard.php");
+                header("Location: stockman/components/Stockman/dashboard.php");
             } else {
-                header("Location: ../../pages/login.php?error=Unauthorized%20access");
+                header("Location: pages/login.php?error=Unauthorized%20access");
             }
             exit();
         } else {
             // Invalid password
-            header("Location: ../../pages/login.php?error=Invalid%20email%20or%20password");
+            header("Location: login.php?error=Invalid%20email%20or%20password");
             exit();
         }
     } else {
         // User does not exist
-        header("Location: ../../pages/login.php?error=Account%20does%20not%20exist");
+        header("Location: login.php?error=Account%20does%20not%20exist");
         exit();
     }
 

@@ -14,7 +14,7 @@ echo "<script>
     localStorage.clear();    // Clear localStorage
 
     // Redirect to the login page
-    window.location.href = '../../../login.php';
+    window.location.href = '../../login.php';
 </script>";
 
 exit();

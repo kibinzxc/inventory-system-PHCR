@@ -228,7 +228,7 @@ if (count($lowStockIngredients) > 0 || count($outOfStockIngredients) > 0) {
         }
     }
 } else {
-    echo '<p>No ingredients with low stock or out of stock.</p>';
+    // echo '<p>No ingredients with low stock or out of stock.</p>';
 }
 
 $conn->close();

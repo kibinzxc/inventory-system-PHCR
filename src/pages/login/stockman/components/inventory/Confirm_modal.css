@@ -1,0 +1,172 @@
+/* Base styles for the modal */
+.confirmation-modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1000;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black background with opacity */
+}
+
+/* Modal content */
+.confirmation-modal-content1 {
+    background-color: #f4f4f4;
+    /* Light gray background */
+    margin: 5% auto;
+    /* Center the modal */
+    padding: 0;
+    /* Remove padding */
+    border-radius: 8px;
+    /* Rounded corners */
+    width: 40%;
+    /* Set width */
+    max-width: 500px;
+    /* Maximum width */
+    max-height: 80vh;
+    /* Limit the height */
+    overflow-y: auto;
+    /* Scrollable if content exceeds height */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    /* Shadow effect */
+    height: fit-content;
+}
+
+/* Modal Header */
+.confirmation-modal-header {
+    background-color: #343434;
+    /* Dark background for header */
+    padding: 15px 25px;
+    /* Padding for header */
+    color: #fff;
+    /* White text */
+    text-align: left;
+    /* Align text left */
+    font-size: 15px;
+    /* Font size */
+    position: relative;
+    /* Position relative for absolute elements */
+}
+
+/* Header title */
+.confirmation-modal-header h2 {
+    margin: 0;
+    /* Remove margin */
+}
+
+/* Close button in header */
+.confirmation-modal-header .confirmation-close {
+    position: absolute;
+    /* Absolute positioning */
+    right: 15px;
+    /* Align right */
+    top: 15px;
+    /* Align top */
+    font-size: 24px;
+    /* Font size for close button */
+    font-weight: bold;
+    /* Bold text */
+    cursor: pointer;
+    /* Pointer cursor */
+    color: #fff;
+    /* White color */
+    padding: 5px 10px;
+    /* Padding for clickable area */
+    line-height: 1;
+    /* Line height */
+    border-radius: 50%;
+    /* Rounded close button */
+}
+
+/* Close button hover effect */
+.confirmation-modal-header .confirmation-close:hover {
+    background-color: rgba(242, 242, 242, 0.2);
+    /* Background change on hover */
+}
+
+/* Modal Body */
+.confirmation-modal-body {
+    background-color: #fff;
+    /* White background */
+    padding: 20px;
+    /* Padding */
+    display: flex;
+    /* Flexbox layout */
+    flex-direction: column;
+    /* Vertical layout */
+    gap: 15px;
+    /* Space between elements */
+}
+
+/* Modal Footer */
+.confirmation-modal-footer {
+    background-color: #f1f1f1;
+    /* Footer background color */
+    padding: 15px;
+    /* Padding for footer */
+    text-align: right;
+    /* Align text right */
+}
+
+/* Buttons */
+.custom_btn1 {
+    padding: 10px 16px;
+    /* Button padding */
+    cursor: pointer;
+    /* Pointer cursor */
+    border-radius: 4px;
+    /* Rounded corners */
+    margin-left: 10px;
+    /* Space between buttons */
+}
+
+/* Cancel Button */
+.confirmation-cancel-btn {
+    background-color: #f1f1f1;
+    /* Light gray */
+    color: #333;
+    /* Dark text */
+    border: 1px solid #ccc;
+    /* Gray border */
+
+}
+
+/* Cancel Button hover effect */
+.confirmation-cancel-btn:hover {
+    background-color: #e0e0e0;
+    /* Darker gray on hover */
+}
+
+/* Confirm Button */
+.confirmation-confirm-btn {
+    background-color: #006D6D;
+    /* Dark teal */
+    color: #fff;
+    /* White text */
+    padding: 11px 16px;
+    /* Button padding */
+    font-weight: 500;
+    /* Medium font weight */
+    border: none;
+}
+
+/* Confirm Button hover effect */
+.confirmation-confirm-btn:hover {
+    background-color: #005B5B;
+    /* Darker teal on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .confirmation-modal-content {
+        width: 90%;
+        /* Wider on smaller screens */
+    }
+}

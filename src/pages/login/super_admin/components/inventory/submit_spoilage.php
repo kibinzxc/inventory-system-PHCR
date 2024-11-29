@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Redirect based on whether any changes were made
             if ($changesMade) {
+
                 header("Location: items.php?action=success&message=Spoilage+and+remarks+updated+successfully.");
             } else {
                 header("Location: items.php?action=error&reason=no_changes&message=No+changes+were+made.");

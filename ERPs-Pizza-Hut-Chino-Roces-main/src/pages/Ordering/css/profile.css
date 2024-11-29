@@ -1,0 +1,386 @@
+@font-face {
+  font-family: "Outfit";
+  src: url("../../../assets/fonts/Outfit-Regular.otf") format('truetype')
+}
+.logo {
+    width: 100%;
+    pointer-events: auto;
+    margin: 10px 0 0 0;
+    /* top | right | bottom | left */
+}
+
+.sidebar {
+    height: auto;
+
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.sidebar .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 15px 5px 15px 5px;
+    /* top | right | bottom | left */
+}
+
+.sidebar .item-last {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: 15px 5px 250px 5px;
+  /* top | right | bottom | left */
+}
+
+.sidebar .item-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 55px 5px -45px 5px;
+    /* top | right | bottom | left */
+}
+
+.sidebar .item-last:not(.active):hover {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.sidebar .item-login:not(.active):hover {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.sidebar .item:not(.active):hover {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.sidebar .item.active {
+    background: #ddd;
+    border-right: 5px solid red;
+    margin-left: -2px;
+    margin-right: -2px;
+}
+
+.sidebar .item-last.active {
+    background: #ddd;
+    border-right: 5px solid red;
+    margin-left: -2px;
+    margin-right: -2px;
+}
+
+.custom-width {
+    width: 105px !important;
+    padding: 0 !important;
+    /* Remove padding */
+    background: #efefef;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.sidebar .item i {
+    font-size: 1.3em;
+    /* Adjust this value as needed */
+}
+
+.sidebar .item-last i {
+    font-size: 1.3em;
+    /* Adjust this value as needed */
+}
+
+.sidebar .item-login i {
+    font-size: 1.3em;
+    /* Adjust this value as needed */
+}
+
+.sidebar .item1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: 10px 0 10px 0;
+    /* top | right | bottom | left */
+    pointer-events: none;
+}
+
+
+.col-sm-2 {
+    flex-grow: 1;
+}
+
+.col-sm-9 {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    /* Adjust this value as needed */
+    margin-left: 5px;
+}
+
+body {
+    scrollbar-width: thin;
+    scrollbar-color: #ff9999 #333;
+    /* Matte red: #ff9999, Matte black: #333 */
+}
+
+/* WebKit (Chrome, Safari) and Blink (Opera) */
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: #333;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #ff9999;
+    /* Matte red: #ff9999 */
+    border-radius: 10px;
+    border: 2px solid #333;
+    /* Matte black: #333 */
+}
+
+/*
+  Search Bar
+  */
+.search-container {
+    position: relative;
+    margin: 30px 10px 10px 10px;
+}
+
+input[type="text"] {
+    padding: 10px 30px 10px 10px;
+    /* Adjust padding to accommodate the icon */
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-color: #ddd;
+}
+
+input[type="text1"] {
+    padding: 10px 30px 10px 10px;
+    /* Adjust padding to accommodate the icon */
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+
+input[type="password"] {
+    padding: 10px 30px 10px 10px;
+    /* Adjust padding to accommodate the icon */
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-color: #ddd;
+}
+
+input[type="password1"] {
+    padding: 10px 30px 10px 10px;
+    /* Adjust padding to accommodate the icon */
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+li:hover {
+    background-color: #f0f0f0;
+}
+
+input[type="text"]:focus {
+    background-color: white;
+}
+
+/* End of Search Bar */
+
+.notification-container {
+    font-size: 30px;
+    margin: 30px 0 0 35px;
+    /* top | right | bottom | left */
+}
+
+.notification-container a {
+    text-decoration: none;
+    color: black;
+}
+
+.notification-container a:hover {
+    color: #C23415;
+}
+
+@media (max-width: 1800px) {
+  .sidebar .item-last {
+    margin: 15px 5px 280px 5px;
+  }
+
+  .sidebar .item-login {
+    margin: -40px 5px 0 5px;
+  }
+}
+
+@media (max-width: 1700px) {
+  .sidebar .item-last {
+    margin: 15px 5px 200px 5px;
+    font-size: 0.99em;
+  }
+
+  .sidebar .item i {
+    font-size: 0.99em;
+  }
+
+  .sidebar .item-last i {
+    font-size: 0.99em;
+  }
+
+  .sidebar .item-login {
+    margin: -40px 5px 0 5px;
+  }
+}
+
+.wrapper{
+width:100%;
+height:97vh;
+background: #FFF;
+  box-shadow: 2px 2px 4px 5px rgba(0, 0, 0, 0.10);
+padding:35px 40px 20px 40px;
+font-family: 'Outfit';
+font-weight: bold;
+border-radius:15px;
+}
+
+.wrap{
+flex-grow: 1;
+margin:0;
+padding:0;
+}
+
+.btn-primary{
+  background-color: #C23415;
+  border-color: #C23415;
+  color: white;
+}
+
+.btn-primary:hover{
+  background-color: #a12c12;
+  border-color: #a12c12;
+  color: white;
+}
+
+.edit{
+display: flex;
+gap:10px;
+}
+.error {
+
+	color: #a94442; 
+	background: #f2dede; 
+	width: 20%; 
+	margin: 0px auto; 
+	padding: 5px; 
+	border-radius: 25px; 
+	text-align: left;
+  text-align: center;
+  position:absolute;
+  font-family: "Outfit";
+  bottom:150px;
+  left:100px;
+  right:100px;
+  animation:flyIn 0.5s ease-in-out;
+    
+}
+
+.success {
+	color: #3c763d; 
+	width: 20%; 
+	margin: 0px auto; 
+	padding: 5px; 
+	border: 1px solid #3c763d; 
+	background: #dff0d8; 
+	border-radius: 25px; 
+	text-align: left;
+  text-align: center;
+  position:absolute;
+  font-family: "Outfit";
+  bottom:150px;
+  left:100px;
+  right:100px;
+  animation:flyIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes flyIn {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+#orderLink.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+
+}
+.notification-count {
+  background-color: #c23415;
+  color: white;
+  border-radius: 50%;
+  padding: 1px 5px;
+  font-size: 10px;
+  position: absolute;
+  top: 450px;
+  left:55px;
+  font-weight: bold;
+}

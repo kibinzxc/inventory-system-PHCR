@@ -1,0 +1,360 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: #E7E7E7;
+}
+
+#main-content {
+    transition: margin-left 0.5s;
+    margin-left: 250px;
+    padding: 16px;
+}
+
+/* Main container styles */
+.container {
+    margin: 0 35px;
+    font-family: 'Inter', sans-serif;
+    height: 95vh;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    width: auto;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #006D6D;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
+}
+
+a.btn {
+    text-decoration: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.header a:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
+
+/* Table Container */
+.table_container {
+    z-index: 1;
+    margin: 20px 200px;
+    height: auto;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #FFF;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    padding: 40px 50px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Search container styling */
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: flex-start;
+    /* Align to the start */
+}
+
+/* Styling for the search input */
+.search_btn {
+    width: 300px;
+    /* You can adjust this width */
+    height: 38px;
+    border: 1px solid #DBDBDB;
+    background: #FFF url('../../assets/search.svg') no-repeat left 10px center;
+    padding: 0 40px;
+    font-size: 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+/* Styling for the dropdown */
+#dropdown {
+    display: none;
+    position: absolute;
+    top: 120px;
+    /* Adjust based on the position of the search input */
+    width: 300px;
+    /* Align dropdown width with search input */
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown items */
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Container for the filter text and clear button */
+.filter-clear-btn {
+    display: flex;
+    align-items: center;
+    background: #343434c5;
+    justify-content: flex-start;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* Style for the text inside the <p> tag */
+.filter-clear-btn p {
+    margin: 0;
+    font-size: 14px;
+    padding-right: 8px;
+    color: #e4e4e4;
+}
+
+/* Style for the X button */
+.filter-clear-btn button {
+    background: none;
+    border: none;
+    font-size: 25px;
+    cursor: pointer;
+    padding: 0;
+    color: #e4e4e4;
+}
+
+.filter-clear-btn button:hover {
+    background: #505050ea;
+    border-radius: 5px;
+}
+
+/* Transfer form styling */
+.transfer-form {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.scroll {
+    overflow-y: auto;
+    max-height: 50vh;
+    /* Adjust this value depending on your layout */
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    /* Ensure the items stack vertically */
+    transition: max-height 0.3s ease-in-out;
+    /* Add transition for smoother scroll experience */
+}
+
+.horizontal-border {
+    border-bottom: 2px solid #555;
+    margin-top: 20px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #DBDBDB;
+}
+
+.form-row span {
+    display: inline-block;
+    margin-left: -10px;
+    /* Shift the span to the left */
+    padding-left: 5px;
+    /* Optional: add padding if you need extra spacing from the label */
+}
+
+
+.form-row:last-child {
+    border-bottom: none;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #555;
+    margin-bottom: 20px;
+    text-align: center;
+
+}
+
+.header-row .dv {
+    margin-right: 250px;
+}
+
+.header-row span {
+    width: 30%;
+    text-align: center;
+}
+
+.form-row label {
+    width: 30%;
+    text-align: left;
+    /* Align to the left for item name */
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+
+.header-row span:last-child {
+    text-align: center;
+    width: 15%;
+}
+
+.header-row span:first-child,
+.form-row label:first-child {
+    text-align: right;
+    text-transform: capitalize;
+    font-weight: 700;
+    /* Specifically left-align the first column */
+}
+
+.form-row input[type="number"] {
+    width: 30%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #DBDBDB;
+    text-align: center;
+    font-size: 18px;
+}
+
+.form-row p.label-uom {
+    width: 10%;
+    text-align: center;
+    /* Center UOM label */
+    margin: 0;
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+
+.submit-btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    /* Optional: Adjust for spacing */
+    gap: 10px;
+}
+
+.cancelBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.submit-btn-container a {
+    text-decoration: none;
+}
+
+.cancelBtn:hover {
+    background-color: #e0e0e0;
+}
+
+button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #006D6D;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+button[type="submit"]:hover {
+    background: #004D4D;
+}
+
+#searchBtn {
+    padding: 10px 15px;
+    background-color: #3a3a3a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#searchBtn:hover {
+    background-color: #1a1a1a;
+}
+
+#dropdown {
+    display: none;
+    position: absolute;
+    top: 200px;
+    /* Adjust based on the position of the search input */
+    width: 300px;
+    /* Align dropdown width with search input */
+    background-color: white;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+#show-all-btn {
+    padding: 10px 15px;
+    background-color: #3a3a3a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#show-all-btn:hover {
+    background-color: #1a1a1a;
+}

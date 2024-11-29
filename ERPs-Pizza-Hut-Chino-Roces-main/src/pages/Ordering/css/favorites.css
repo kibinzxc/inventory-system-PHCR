@@ -1,0 +1,413 @@
+.logo {
+    width: 100%;
+    pointer-events: auto;
+    margin: 10px 0 0 0;
+    /* top | right | bottom | left */
+}
+
+.sidebar {
+    height: auto;
+
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.sidebar .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 15px 5px 15px 5px;
+    /* top | right | bottom | left */
+}
+
+.sidebar .item-last {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 15px 5px 250px 5px;
+    /* top | right | bottom | left */
+}
+
+.sidebar .item-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 55px 5px -45px 5px;
+    /* top | right | bottom | left */
+}
+
+.sidebar .item-last:not(.active):hover {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.sidebar .item-login:not(.active):hover {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.sidebar .item:not(.active):hover {
+    background: #ddd;
+    border-radius: 5px;
+}
+
+.sidebar .item.active {
+    background: #ddd;
+    border-right: 5px solid red;
+    margin-left: -2px;
+    margin-right: -2px;
+}
+
+.custom-width {
+    width: 105px !important;
+    padding: 0 !important;
+    /* Remove padding */
+    background: #efefef;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.sidebar .item i {
+    font-size: 1.3em;
+    /* Adjust this value as needed */
+}
+
+.sidebar .item-last i {
+    font-size: 1.3em;
+    /* Adjust this value as needed */
+}
+
+.sidebar .item-login i {
+    font-size: 1.3em;
+    /* Adjust this value as needed */
+}
+
+.sidebar .item1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: 10px 0 10px 0;
+    /* top | right | bottom | left */
+    pointer-events: none;
+}
+
+
+.col-sm-2 {
+    flex-grow: 1;
+
+}
+
+.col-sm-9 {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    /* Adjust this value as needed */
+    margin-left: 5px;
+}
+
+body {
+    scrollbar-width: thin;
+    scrollbar-color: #ff9999 #333;
+    /* Matte red: #ff9999, Matte black: #333 */
+}
+
+/* WebKit (Chrome, Safari) and Blink (Opera) */
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+    background-color: #333;
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #ff9999;
+    /* Matte red: #ff9999 */
+    border-radius: 10px;
+    border: 2px solid #333;
+    /* Matte black: #333 */
+}
+
+/*
+  Search Bar
+  */
+.search-container {
+    position: relative;
+    margin: 30px 10px 10px 10px;
+}
+
+input[type="text"] {
+    padding: 10px 30px 10px 0;
+    /* Adjust padding to accommodate the icon */
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.35rem;
+    outline: none;
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-color: #efefef;
+}
+
+input[type="text1"] {
+    padding: 10px 30px 10px 10px;
+    /* Adjust padding to accommodate the icon */
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23676767" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-color: #ddd;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+
+li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+li:hover {
+    background-color: #f0f0f0;
+}
+
+input[type="text"]:focus {
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+input[type="text1"]:focus {
+    background-color: white;
+
+}
+
+/* End of Search Bar */
+
+.notification-container {
+    font-size: 30px;
+    margin: 30px 0 0 50px;
+    /* top | right | bottom | left */
+}
+
+.notification-container a {
+    text-decoration: none;
+    color: black;
+}
+
+.notification-container a:hover {
+    color: #C23415;
+}
+
+@media (max-width: 1800px) {
+    .sidebar .item-last {
+        margin: 15px 5px 180px 5px;
+    }
+
+    .sidebar .item-login {
+        margin: -40px 5px 0 5px;
+    }
+}
+
+@media (max-width: 1700px) {
+    .sidebar .item-last {
+        margin: 15px 5px 100px 5px;
+        font-size: 0.99em;
+    }
+
+    .sidebar .item i {
+        font-size: 0.99em;
+    }
+
+    .sidebar .item-last i {
+        font-size: 0.99em;
+    }
+    .sidebar .item-login {
+        margin: -40px 5px 0 5px;
+    }
+}
+
+.cart {
+    scrollbar-width: thin;
+    scrollbar-color: #ff9999 #333;
+    /* Matte red: #ff9999, Matte black: #333 */
+}
+
+/* WebKit (Chrome, Safari) and Blink (Opera) */
+.cart::-webkit-scrollbar {
+    width: 7px;
+}
+
+.cart::-webkit-scrollbar-track {}
+
+.cart::-webkit-scrollbar-thumb {
+    background-color: gray;
+    /* Matte red: #ff9999 */
+    border-radius: 10px;
+    /* Matte black: #333 */
+}
+
+.image {
+    width: 100%;
+
+}
+
+.caption {
+    margin-left: 35px;
+    font-weight: 500;
+    color: #333;
+}
+
+
+textarea {
+    /* Adjust padding to accommodate the icon */
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    font-weight: 600;
+    background-repeat: no-repeat;
+    resize: none;
+    /* Add this line */
+    width: 100%;
+    /* Add this line */
+    background: none;
+    height: auto;
+}
+
+.price p {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-left: -5px;
+}
+
+.quantity1 {
+    margin-top: -5px;
+    margin-left: -8px;
+}
+
+.box {
+    position: relative;
+}
+
+.remove-btn {
+    position: absolute;
+    display: none;
+    top: 25px;
+    right: 5px;
+    font-size: 3px;
+    border: none;
+    outline: none;
+    text-decoration: none;
+    color: gray;
+}
+
+.remove-btn:hover {
+    color: #a12c12;
+}
+
+.box:hover {
+    background-color: white;
+    border-radius: 5px;
+}
+
+.box:hover .remove-btn {
+    display: block;
+
+}
+
+
+.checkout {
+    text-decoration: none;
+    height: 5vh;
+    padding: 10px;
+    font-size: 1.2rem;
+    font-weight: 550;
+    color: white;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    background-color: #C23415;
+    margin: 0 0 30px 0;
+}
+
+.checkout:hover {
+    background-color: #a12c12;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+button.active {
+    color: black;
+    /* Default color for active button */
+}
+
+button:not(.active) {
+    color: gray;
+    /* Color for inactive button */
+}
+
+/* Add this CSS to style the disabled button */
+.checkout:disabled {
+    background-color: #ccc;
+    /* You can change the color to fit your design */
+    cursor: not-allowed;
+}
+
+/* Add this CSS to your existing styles or create a new CSS file */
+.notification-container a[disabled] {
+    /* Define styles for the disabled state */
+    color: gray;
+    /* Adjust the color to your preference */
+    cursor: not-allowed;
+    pointer-events: none;
+    /* Optionally, you can add additional styles for the disabled state */
+    /* For example, you might want to change the background color or opacity */
+    opacity: 0.7;
+}
+
+/* Add any other styles you need for the notification button in its normal state */
+.notification-container a {
+    /* Define styles for the normal state */
+    color: #333;
+    /* Adjust the color to your preference */
+    text-decoration: none;
+    /* Add any other styles you need for the normal state */
+}
+
+/* Add hover styles if desired */
+.notification-container a:hover {
+    /* Define styles for the hover state */
+    text-decoration: underline;
+    /* Add any other styles you need for the hover state */
+}

@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } elseif ($userType === 'super_admin') {
                 header("Location: super_admin/components/dashboard/Dashboard.php");
             } elseif ($userType === 'stockman') {
-                header("Location: stockman/components/Stockman/dashboard.php");
+                header("Location: stockman/components/dashboard/Dashboard.php");
             } elseif ($userType === 'rider') {
                 header("Location: delivery-rider/components/dashboard/Dashboard.php");
             } elseif ($userType === 'cashier') {

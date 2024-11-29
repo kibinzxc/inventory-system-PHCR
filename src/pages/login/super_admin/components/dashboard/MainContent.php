@@ -1,5 +1,7 @@
 <?php
 include 'warning-modal.php';
+error_reporting(0);
+
 // Set the timezone to Asia/Manila
 date_default_timezone_set('Asia/Manila');
 
@@ -373,120 +375,31 @@ if (isset($_SESSION['user_id'])) {
             </div>
 
 
-            <?php
 
-            // Get current date
-            $currentDate = date('Y-m-d');
 
-            // Get the start of the week (Monday)
-            $startOfWeek = date('Y-m-d', strtotime('last monday', strtotime($currentDate)));
-
-            // Query to count the number of spoilage reports for the current week
-            $query = "SELECT COUNT(*) AS total_reports FROM spoilage_reports WHERE date_reported BETWEEN '$startOfWeek' AND '$currentDate'";
-            $result = mysqli_query($conn, $query);
-            $row = mysqli_fetch_assoc($result);
-
-            $totalReports = $row['total_reports'] ? $row['total_reports'] : 0; // Default to 0 if no data is found
-
-            // Optional: Query for percentage change if required
-            // This can be adjusted based on how you calculate the percentage change
-            ?>
-            <?php
-
-            $currentDate = date('Y-m-d');
-
-            // Get the start and end of the current week (Monday to Sunday)
-            $startOfWeek = date('Y-m-d', strtotime('last monday', strtotime($currentDate)));
-            $endOfWeek = date('Y-m-d', strtotime('next sunday', strtotime($currentDate)));
-
-            // Get the start and end of last week (Monday to Sunday)
-            $startOfLastWeek = date('Y-m-d', strtotime('last monday', strtotime('-1 week', strtotime($currentDate))));
-            $endOfLastWeek = date('Y-m-d', strtotime('next sunday', strtotime('-1 week', strtotime($currentDate))));
-
-            // Query to get the total number of spoilage reports for this week
-            $queryThisWeek = "SELECT COUNT(*) AS total_reports FROM spoilage_reports WHERE date_reported BETWEEN '$startOfWeek' AND '$endOfWeek'";
-            $resultThisWeek = mysqli_query($conn, $queryThisWeek);
-            $rowThisWeek = mysqli_fetch_assoc($resultThisWeek);
-            $totalReportsThisWeek = $rowThisWeek['total_reports'] ? $rowThisWeek['total_reports'] : 0;
-
-            // Query to get the total number of spoilage reports for last week
-            $queryLastWeek = "SELECT COUNT(*) AS total_reports FROM spoilage_reports WHERE date_reported BETWEEN '$startOfLastWeek' AND '$endOfLastWeek'";
-            $resultLastWeek = mysqli_query($conn, $queryLastWeek);
-            $rowLastWeek = mysqli_fetch_assoc($resultLastWeek);
-            $totalReportsLastWeek = $rowLastWeek['total_reports'] ? $rowLastWeek['total_reports'] : 0;
-
-            // Calculate percentage change
-            if ($totalReportsLastWeek > 0) {
-                $spoilagepercentageChange = (($totalReportsLastWeek - $totalReportsThisWeek) / $totalReportsLastWeek) * 100;
-            } else {
-                $spoilagepercentageChange = 0;
-            }
-
-            $spoilageRate = $totalReportsThisWeek;
-            ?>
-
-            <div class="card">
-                <div class="card-body">
-                    <div>
-                        <h5>Spoilage Rate</h5>
-                        <p class="sales-amount"><?php echo number_format($spoilageRate) . ' ' . ($spoilageRate == 1 ? 'Report' : 'Reports'); ?></p>
+            <div class="same-column-container">
+                <div class="same-column">
+                    <div class="table_container daily_sales">
+                        <?php include 'daily_sales.php'; ?>
                     </div>
-                    <div class="percentage-box">
-                        <div class="percentage-body">
-                            <?php if ($spoilagepercentageChange < 0) { // Spoilage rate is down, good sign 
-                            ?>
-                                <div class="up-spoilage">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/trend" title="trend icons">Trend icons created by Amazona Adorada - Flaticon</a> -->
-                                    <img src="../../assets/neutral.png" alt="" style="width:25px;margin-right:5px;">
-                                    <p class="percentage-up-spoilage">+<?php echo number_format(abs($percentageChange), 2); ?>%</p>
-                                </div>
-                            <?php } elseif ($spoilagepercentageChange > 0) { // Spoilage rate is up, bad sign 
-                            ?>
-                                <div class="down-spoilage">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/trend" title="trend icons">Trend icons created by Amazona Adorada - Flaticon</a> -->
-                                    <img src="../../assets/trend.png" alt="" style="width:25px; margin-right:5px;">
-                                    <p class="percentage-down-spoilage">-<?php echo number_format($spoilagepercentageChange, 2); ?>%</p>
-                                </div>
-                            <?php } else { // No change 
-                            ?>
-                                <div class="down-spoilage">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/trend" title="trend icons">Trend icons created by Amazona Adorada - Flaticon</a> -->
-                                    <img src="../../assets/trend.png" alt="" style="width:25px; margin-right:5px;">
-                                    <p class="percentage-down-spoilage">0.00%</p>
-                                </div>
-                            <?php } ?>
-                        </div>
+                    <div class="table_container recent_orders">
+                        <h3>Recent Orders</h3>
+                        <?php include 'recent_orders.php'; ?>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <p>From <?php echo date('F d, Y', strtotime($startOfWeek)) . ' - ' . date('F d, Y', strtotime($endOfWeek)); ?></p>
+
+                <div class="same-column">
+                    <div class="table_container daily_sales2">
+                        <h3 class="h3-header"> Recent Inventory Updates</h3>
+                        <?php include 'recent_updates.php'; ?>
+                    </div>
+                    <div class="table_container recent_orders2">
+                        <h3>Current Week Top Products</h3>
+                        <?php include 'top_products.php'; ?>
+                    </div>
+
                 </div>
             </div>
+
         </div>
-
-        <div class="same-column-container">
-            <div class="same-column">
-                <div class="table_container daily_sales">
-                    <?php include 'daily_sales.php'; ?>
-                </div>
-                <div class="table_container recent_orders">
-                    <h3>Recent Orders</h3>
-                    <?php include 'recent_orders.php'; ?>
-                </div>
-            </div>
-
-            <div class="same-column">
-                <div class="table_container daily_sales2">
-                    <h3 class="h3-header"> Recent Inventory Updates</h3>
-                    <?php include 'recent_updates.php'; ?>
-                </div>
-                <div class="table_container recent_orders2">
-                    <h3>Current Week Top Products</h3>
-                    <?php include 'top_products.php'; ?>
-                </div>
-
-            </div>
-        </div>
-
     </div>
-</div>

@@ -5,13 +5,124 @@ error_reporting(1);
 // Set timezone to Manila
 date_default_timezone_set('Asia/Manila');
 
-// Query to fetch order data
+// Fetch orders with 'delivery' status
 $query = "SELECT orderID, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status FROM orders WHERE status = 'delivery' ORDER BY orderPlaced DESC";
-
-// Prepare and execute the query
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $result = $stmt->get_result();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_delivered'])) {
+    $orderID = $_POST['orderID'];
+
+    $conn->begin_transaction();
+    try {
+        // Update order status to "delivered"
+        $updateOrderSql = "UPDATE orders SET status = 'delivered' WHERE orderID = ? AND status = 'delivery'";
+        $stmtUpdateOrder = $conn->prepare($updateOrderSql);
+        $stmtUpdateOrder->bind_param("i", $orderID);
+        $stmtUpdateOrder->execute();
+
+        if ($stmtUpdateOrder->affected_rows === 0) {
+            throw new Exception('Order not found or already delivered.');
+        }
+
+        // Fetch order details
+        $fetchOrderSql = "SELECT items, totalPrice FROM orders WHERE orderID = ?";
+        $stmtFetchOrder = $conn->prepare($fetchOrderSql);
+        $stmtFetchOrder->bind_param("i", $orderID);
+        $stmtFetchOrder->execute();
+        $resultOrder = $stmtFetchOrder->get_result();
+
+        if ($resultOrder->num_rows === 0) {
+            throw new Exception('Order details not found.');
+        }
+
+        $order = $resultOrder->fetch_assoc();
+        $items = json_decode($order['items'], true);
+
+        // Process ingredients and check stock
+        $insufficientStocks = [];
+        foreach ($items as $item) {
+            $productName = $item['name'];
+            $orderQty = $item['qty'];
+
+            $ingredientsSql = "SELECT ingredients FROM products WHERE name = ?";
+            $stmtIngredients = $conn->prepare($ingredientsSql);
+            $stmtIngredients->bind_param("s", $productName);
+            $stmtIngredients->execute();
+            $resultIngredients = $stmtIngredients->get_result();
+
+            if ($resultIngredients->num_rows > 0) {
+                $rowIngredients = $resultIngredients->fetch_assoc();
+                $ingredients = json_decode($rowIngredients['ingredients'], true);
+
+                foreach ($ingredients as $ingredient) {
+                    $ingredientName = $ingredient['ingredient_name'];
+                    $requiredQty = $ingredient['quantity'] * $orderQty;
+
+                    $stockSql = "SELECT ending, uom FROM daily_inventory WHERE name = ?";
+                    $stmtStock = $conn->prepare($stockSql);
+                    $stmtStock->bind_param("s", $ingredientName);
+                    $stmtStock->execute();
+                    $resultStock = $stmtStock->get_result();
+
+                    if ($resultStock->num_rows > 0) {
+                        $stock = $resultStock->fetch_assoc();
+                        $availableQty = $stock['ending'];
+
+                        if ($stock['uom'] === 'kg') {
+                            $requiredQty /= 1000; // Convert grams to kilograms
+                        }
+
+                        if ($availableQty < $requiredQty) {
+                            $insufficientStocks[] = $ingredientName;
+                        } else {
+                            $updateStockSql = "UPDATE daily_inventory SET usage_count = usage_count + ?, ending = ending - ? WHERE name = ?";
+                            $stmtUpdateStock = $conn->prepare($updateStockSql);
+                            $stmtUpdateStock->bind_param("dds", $requiredQty, $requiredQty, $ingredientName);
+                            $stmtUpdateStock->execute();
+                            if ($stmtUpdateStock->execute()) {
+                                error_log("Stock updated for $ingredientName: -$requiredQty from ending, +$requiredQty to usage.");
+                            } else {
+                                error_log("Failed to update stock for $ingredientName.");
+                            }
+                        }
+                    } else {
+                        $insufficientStocks[] = $ingredientName;
+                    }
+                }
+            }
+        }
+
+        if (!empty($insufficientStocks)) {
+            $conn->rollback();
+            echo '<p>Insufficient stock for: ' . implode(', ', $insufficientStocks) . '</p>';
+            exit;
+        }
+
+        // Generate invoice
+        $invID = date('mdY') . str_pad(mt_rand(1, 999), 3, '0', STR_PAD_LEFT);
+        $totalPrice = $order['totalPrice'];
+
+        $insertInvoiceSql = "INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) 
+                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmtInvoice = $conn->prepare($insertInvoiceSql);
+        $orderItems = json_encode($items);
+        $cashier = 'Delivery Rider';
+        $orderType = 'delivery';
+        $mop = 'cod';
+        $amountChange = 0; // Use a variable for the constant value
+        $stmtInvoice->bind_param("ssddssss", $invID, $orderItems, $totalPrice, $totalPrice, $amountChange, $orderType, $mop, $cashier);
+        $stmtInvoice->execute();
+
+        $conn->commit();
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit;
+    } catch (Exception $e) {
+        $conn->rollback();
+        echo '<p>Error: ' . htmlspecialchars($e->getMessage()) . '</p>';
+    }
+}
 
 while ($row = $result->fetch_assoc()) {
     $orderID = $row['orderID'];
@@ -19,10 +130,7 @@ while ($row = $result->fetch_assoc()) {
     $address = $row['address'];
     $items = json_decode($row['items'], true);
     $totalPrice = $row['totalPrice'];
-    $payment = $row['payment'];
-    $del_instruct = $row['del_instruct'];
     $orderPlaced = $row['orderPlaced'];
-    $status = $row['status'];
 
     echo '<div class="order-card">';
     echo '<div class="order-header">';
@@ -46,225 +154,120 @@ while ($row = $result->fetch_assoc()) {
         echo '</div>';
     }
 
-    echo '<div class="order-actions">';
-    echo '<button type="button" class="btn btn-done" data-order-id="' . $orderID . '">Delivered</button>';
-    echo '</div>';
+    echo '<form method="POST" class="order-actions">';
+    echo '<input type="hidden" name="orderID" value="' . htmlspecialchars($orderID) . '">';
+    echo '<button type="submit" name="mark_delivered" class="btn btn-done">Mark as Delivered</button>';
+    echo '</form>';
 
-    echo '</div>';
+    echo '</div><style>/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-// Close statement and connection
+/* Body and Background */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+
+/* Order Card */
+.order-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-align:center;
+}
+
+.order-card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Header of Order Card */
+.order-header {
+    background-color: #007bff;
+    color: white;
+    padding: 20px;
+}
+
+.order-header h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.order-header p {
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+/* Order Body */
+.order-body {
+    padding: 20px;
+    background-color: #fafafa;
+}
+
+.order-body p {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+/* Order Items */
+.order-items {
+    margin-top: 20px;
+    padding:10px;
+}
+
+.order-items ul {
+    list-style: none;
+}
+
+.order-items li {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom:50px;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Form for Actions */
+.order-actions {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* Insufficient Stock Message */
+.insufficient-stock {
+    color: #ff0000;
+    font-weight: bold;
+    margin-top: 20px;
+}
+</style>';
+}
+
 $stmt->close();
 $conn->close();
-?>
-
-<div id="deliveryModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Attach Delivery Image</h2>
-        <form id="deliveryForm" enctype="multipart/form-data">
-            <input type="hidden" name="orderID" id="modalOrderID">
-
-            <div class="form-group">
-                <label for="deliveryImage">Attach Image:</label>
-                <input type="file" name="deliveryImage" id="deliveryImage" accept="image/*" required>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn cancel-btn" id="cancelButton">Cancel</button>
-                <button type="submit" class="btn submit-btn">Submit</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<style>
-    /* General Modern Style */
-    body {
-        font-family: 'Roboto', sans-serif;
-        margin: 0;
-        background-color: #f4f4f9;
-        color: #333;
-    }
-
-    /* Order Card */
-    .order-card {
-        background-color: #fff;
-        border: 1px solid #e0e0e0;
-        border-radius: 15px;
-        padding: 20px;
-        margin: 20px auto;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        max-width: 600px;
-    }
-
-    .order-header h2 {
-        font-size: 1.6rem;
-        margin: 0;
-        color: #222;
-    }
-
-    .order-body p {
-        margin: 8px 0;
-        line-height: 1.5;
-    }
-
-    .btn-done {
-        background-color: #4CAF50;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .btn-done:hover {
-        background-color: #45A049;
-    }
-
-    /* Modal */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 9999;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-    }
-
-    .modal-content {
-        background: #fff;
-        margin: 10% auto;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        max-width: 400px;
-        text-align: center;
-    }
-
-    .close {
-        color: #bbb;
-        font-size: 28px;
-        font-weight: bold;
-        position: absolute;
-        right: 20px;
-        top: 15px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .close:hover {
-        color: #333;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-size: 1rem;
-        font-weight: 500;
-    }
-
-    .form-group input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 1rem;
-        margin-bottom: 20px;
-    }
-
-    .modal-footer {
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .cancel-btn {
-        background: #e0e0e0;
-        color: #555;
-    }
-
-    .cancel-btn:hover {
-        background: #d6d6d6;
-    }
-
-    .submit-btn {
-        background: #007BFF;
-        color: #fff;
-        border: none;
-    }
-
-    .submit-btn:hover {
-        background: #0056b3;
-    }
-</style>
-
-<script>
-    // Get the modal
-    var modal = document.getElementById("deliveryModal");
-
-    // Get the button that opens the modal
-    var buttons = document.getElementsByClassName("btn-done");
-
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-
-    // Get the cancel button
-    var cancelButton = document.getElementById("cancelButton");
-
-    // When the user clicks the button, open the modal
-    for (var i = 0; i < buttons.length; i++) {
-        buttons[i].onclick = function() {
-            var orderID = this.getAttribute("data-order-id");
-            document.getElementById("modalOrderID").value = orderID;
-            modal.style.display = "block";
-        }
-    }
-
-    // When the user clicks on <span> (x) or cancel button, close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    cancelButton.onclick = function() {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-
-    // Handle form submission
-    document.getElementById("deliveryForm").onsubmit = function(event) {
-        event.preventDefault();
-
-        var formData = new FormData(this);
-
-        fetch('delivered.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                alert(data);
-                modal.style.display = "none";
-                location.reload(); // Reload the page to reflect changes
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-</script>

@@ -24,7 +24,6 @@ include 'auto-update.php';
 
     <?php include 'sales-content.php'; ?>
 
-    <script src="../Sidebar/Sidebar.js"></script>
 
 </body>
 

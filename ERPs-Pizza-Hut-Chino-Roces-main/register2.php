@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
         $uid = $row['uid'];
 
-        $sql2 = "INSERT INTO customerinfo (uid, name, email, contactNum, address) VALUES ('$uid', '$fullName','$email',  '$contactNum' ,'$fullAddress')";
+        $sql2 = "INSERT INTO customerInfo (uid, name, email, contactNum, address) VALUES ('$uid', '$fullName','$email',  '$contactNum' ,'$fullAddress')";
         $result2 = $conn->query($sql2);
         //message for success
         $_SESSION['update'] = "You have successfully registered!";

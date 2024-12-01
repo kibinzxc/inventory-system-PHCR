@@ -1,7 +1,27 @@
 <?php
 include '../../connection/database.php';
 
-// Fetch all historical data for seasonality calculation (across all data, not just last week)
+// Fetch all raw data grouped by day of the week
+$sql = "
+    SELECT transaction_date, total_amount, DAYOFWEEK(transaction_date) AS weekday
+    FROM invoice
+    ORDER BY transaction_date
+";
+$result = $conn->query($sql);
+
+$rawData = [];
+while ($row = $result->fetch_assoc()) {
+    $rawData[] = $row; // Collect raw data
+}
+
+// Debug: Output raw data
+echo "<pre>Raw Data:\n";
+foreach ($rawData as $data) {
+    echo "Date: " . $data['transaction_date'] . ", Weekday: " . $data['weekday'] . ", Amount: ₱" . number_format($data['total_amount'], 2) . "\n";
+}
+echo "</pre>";
+
+// Calculate average sales for each weekday
 $sql = "
     SELECT DAYOFWEEK(transaction_date) AS weekday, AVG(total_amount) AS avg_sales
     FROM invoice
@@ -11,12 +31,11 @@ $result = $conn->query($sql);
 
 $seasonality = [];
 while ($row = $result->fetch_assoc()) {
-    // Store the average sales for each weekday (1=Monday, 7=Sunday)
     $seasonality[$row['weekday']] = $row['avg_sales'];
 }
 
 // Debug: Output the seasonality array
-echo "<pre>Seasonality Data:\n";
+echo "<pre>Seasonality Data (Averages):\n";
 print_r($seasonality);
 echo "</pre>";
 

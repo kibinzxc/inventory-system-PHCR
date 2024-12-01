@@ -3,7 +3,7 @@ session_start();
 include 'connection/database-conn.php';
 include 'connection/database-db.php';
 // Check if user is logged in
-if (isset($_SESSION['uid'])) {
+if (isset($_SESSION['user_id'])) {
     $loggedIn = true;
     $currentUserId = $_SESSION['uid'];
     // Database connection details

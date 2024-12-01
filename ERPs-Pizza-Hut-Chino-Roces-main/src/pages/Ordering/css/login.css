@@ -187,34 +187,34 @@ body {
 
 .error {
 
-	color: #d32903; 
-	width: 70%; 
-	margin: 0px auto; 
-	padding: 5px; 
-	border-radius: 25px; 
-	text-align: left;
-  text-align: center;
-  position:absolute;
-  font-family: "Outfit";
-  bottom:190px;
-  left:90px;
-  right:100px;
-  animation:flyIn 0.5s ease-in-out;
-    
+    color: #d32903;
+    width: 70%;
+    margin: 0px auto;
+    padding: 5px;
+    border-radius: 25px;
+    text-align: left;
+    text-align: center;
+    position: absolute;
+    font-family: "Outfit";
+    bottom: 150px;
+    left: 90px;
+    right: 100px;
+    animation: flyIn 0.5s ease-in-out;
+
 }
 
 .success {
-	color: #3c763d; 
-	width: 70%; 
-	margin: 0px auto; 
-	padding: 5px; 
-	border-radius: 25px; 
-	text-align: left;
-  text-align: center;
-  position:absolute;
-  font-family: "Outfit";
-  bottom:190px;
-  left:90px;
-  right:100px;
-  animation:flyIn 0.5s ease-in-out;
+    color: #59d85b;
+    width: 70%;
+    margin: 0px auto;
+    padding: 5px;
+    border-radius: 25px;
+    text-align: left;
+    text-align: center;
+    position: absolute;
+    font-family: "Outfit";
+    bottom: 150px;
+    left: 90px;
+    right: 100px;
+    animation: flyIn 0.5s ease-in-out;
 }

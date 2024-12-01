@@ -1,5 +1,8 @@
 <?php
 $currentPage = basename($_SERVER['PHP_SELF']);
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 ?>
 
 <link rel="stylesheet" href="Sidebar.css">

@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="src/bootstrap/js/bootstrap.min.js"></script>
     <script src="src/bootstrap/js/bootstrap.js"></script>
     <script src="https://kit.fontawesome.com/0d118bca32.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="src/pages/ordering/css/login.css">
+    <link rel="stylesheet" href="pages/ordering/css/login.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 
 </head>

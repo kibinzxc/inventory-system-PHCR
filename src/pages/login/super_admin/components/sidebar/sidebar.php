@@ -2,7 +2,7 @@
 $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 
-<link rel="stylesheet" href="../Sidebar/Sidebar.css">
+<link rel="stylesheet" href="Sidebar.css">
 
 <div id="mySidebar" class="sidebar">
     <!-- Logo and Toggle Button -->

@@ -1,11 +1,6 @@
 <?php
 include '../../authentication/check_login_admin.php';
 include '../../connection/database.php';
-error_reporting(1);
-if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
-}
-
 include 'daily_update.php';
 include 'auto-update.php';
 

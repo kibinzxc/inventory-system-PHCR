@@ -3,14 +3,14 @@ session_start();
 include 'connection/database-conn.php';
 include 'connection/database-db.php';
 // Check if user is logged in
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['uid'])) {
     $loggedIn = true;
-    $currentUserId = $_SESSION['user_id'];
+    $currentUserId = $_SESSION['uid'];
     // Database connection details
 
 
     // Retrieve the current user's ID from the session
-    $currentUserId = $_SESSION['user_id'];
+    $currentUserId = $_SESSION['uid'];
 
     $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
     $result = $conn->query($sql);
@@ -32,7 +32,7 @@ if (isset($_SESSION['user_id'])) {
         $userAddress = "House No, Street, City, Province"; // Set a default value if no address is found
     }
 
-    $queryz = "SELECT COUNT(*) as unread_count FROM msg_users WHERE status = 'unread' AND uid =" . $_SESSION['user_id'];
+    $queryz = "SELECT COUNT(*) as unread_count FROM msg_users WHERE status = 'unread' AND uid =" . $_SESSION['uid'];
     $result41 = $conn->query($queryz);
 
     if ($result41) {
@@ -66,22 +66,22 @@ if (isset($_SESSION['user_id'])) {
 
 
 if (isset($_GET['logout'])) {
-    if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['uid'])) {
 
         session_destroy();
-        unset($_SESSION['user_id']);
+        unset($_SESSION['uid']);
     }
     header("Location:../../../login.php");
     exit();
 }
 
 if (isset($_POST['addtobag'])) {
-    if (!isset($_SESSION['user_id'])) {
+    if (!isset($_SESSION['uid'])) {
         // User is not logged in, redirect to login page
         header("Location: ../../../login.php");
         exit();
     }
-    $uid = $_SESSION['user_id'];
+    $uid = $_SESSION['uid'];
     $name = $_POST['name'];
     $price = $_POST['price'];
     $img = $_POST['img'];

@@ -210,7 +210,7 @@ if (count($lowStockIngredients) > 0 || count($outOfStockIngredients) > 0) {
 
                     $mail->Body = $message;
 
-                    $mail->send();
+                    // $mail->send();
                     // echo 'Email sent to ' . $email . '<br>';
 
                     // Insert the user UID and today's date into the notify_user table

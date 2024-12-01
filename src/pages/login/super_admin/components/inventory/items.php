@@ -26,7 +26,6 @@ include 'auto-lowstock.php';
 
     <?php include 'MainContent.php'; ?>
 
-    <script src="../Sidebar/Sidebar.js"></script>
 
 </body>
 

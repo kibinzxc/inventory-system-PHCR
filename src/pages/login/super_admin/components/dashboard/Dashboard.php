@@ -26,7 +26,7 @@ include 'auto-update.php';
 
 <body>
 
-    <?php include '../../components/Sidebar/Sidebar.php'; ?>
+    <?php include '../Sidebar/Sidebar.php'; ?>
 
 
 

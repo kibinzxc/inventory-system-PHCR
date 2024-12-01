@@ -1,7 +1,7 @@
 <?php
 include '../../authentication/check_login_admin.php';
 include '../../connection/database.php';
-error_reporting(0);
+error_reporting(1);
 if (!$conn) {
     die("Database connection failed: " . mysqli_connect_error());
 }
@@ -26,12 +26,13 @@ include 'auto-update.php';
 
 <body>
 
-    <?php include '../Sidebar/Sidebar.php'; ?>
+    <?php include '../../components/Sidebar/Sidebar.php'; ?>
 
 
 
     <?php include 'MainContent.php'; ?>
 
+    <script src="../Sidebar/Sidebar.js"></script>
 
 </body>
 

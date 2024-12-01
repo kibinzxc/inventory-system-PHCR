@@ -3,16 +3,16 @@ session_start();
 include 'connection/database-conn.php';
 include 'connection/database-db.php';
 // Check if user is logged in
-if (isset($_SESSION['uid'])) {
+if (isset($_SESSION['user_id'])) {
     $loggedIn = true;
-    $currentUserId = $_SESSION['uid'];
+    $currentUserId = $_SESSION['user_id'];
     // Database connection details
 
 
     // Retrieve the current user's ID from the session
-    $currentUserId = $_SESSION['uid'];
+    $currentUserId = $_SESSION['user_id'];
 
-    $sql = "SELECT address FROM customerinfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
+    $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
     $result = $conn->query($sql);
     $hasActiveOrders = false;
     $orderStatuses = ["placed", "preparing", "delivery"];
@@ -32,7 +32,7 @@ if (isset($_SESSION['uid'])) {
         $userAddress = "House No, Street, City, Province"; // Set a default value if no address is found
     }
 
-    $queryz = "SELECT COUNT(*) as unread_count FROM msg_users WHERE status = 'unread' AND uid =" . $_SESSION['uid'];
+    $queryz = "SELECT COUNT(*) as unread_count FROM msg_users WHERE status = 'unread' AND uid =" . $_SESSION['user_id'];
     $result41 = $conn->query($queryz);
 
     if ($result41) {
@@ -66,22 +66,22 @@ if (isset($_SESSION['uid'])) {
 
 
 if (isset($_GET['logout'])) {
-    if (isset($_SESSION['uid'])) {
+    if (isset($_SESSION['user_id'])) {
 
         session_destroy();
-        unset($_SESSION['uid']);
+        unset($_SESSION['user_id']);
     }
     header("Location:../../../login.php");
     exit();
 }
 
 if (isset($_POST['addtobag'])) {
-    if (!isset($_SESSION['uid'])) {
+    if (!isset($_SESSION['user_id'])) {
         // User is not logged in, redirect to login page
         header("Location: ../../../login.php");
         exit();
     }
-    $uid = $_SESSION['uid'];
+    $uid = $_SESSION['user_id'];
     $name = $_POST['name'];
     $price = $_POST['price'];
     $img = $_POST['img'];

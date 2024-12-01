@@ -198,7 +198,6 @@ body {
     border-radius: 5px;
     font-size: 14px;
     z-index: 1000;
-    /* Ensure it appears above other elements */
 }
 
 .sidebar.collapsed .tooltip {
@@ -207,89 +206,26 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-    .collapsed .bglinks img {
-        width: 35px;
-        margin-right: 0;
-    }
-
-    .collapsed .bglinks {
-        margin-top: 0;
-    }
-
-    .bglinks img,
-    .bglink_footer img {
-        margin-right: 20px;
-    }
-
-    .toggle-btn {
-        left: 280px;
-    }
-
-    .toggle-btn img {
-        width: 35px;
-    }
-
-    .logo {
-        margin-left: 50px;
-        margin-top: 10px;
-    }
-
-    .collapsed .toggle-btn {
-        left: 8px;
-    }
-
-    .collapsed .toggle-btn img {
-        width: 35px;
-    }
-
-    .sidebar.collapsed .tooltip {
-        display: none;
-    }
-
-    .collapsed .notification-badge {
-        font-size: 15px;
-        right: 40px;
-    }
-
-    .sidebar a {
-        font-size: 20px;
-    }
-
     .sidebar {
-        overflow: hidden;
-        z-index: 1000;
-        width: 350px;
-        overflow: hidden;
-        height: 100vh;
-
-
-    }
-
-    .sidebar a {
-        padding: 20px 50px;
-    }
-
-
-    .collapsed {
         width: 60px;
-        padding: 10px 25px;
-        text-decoration: none;
-        font-size: 18px;
-        display: flex;
-        align-items: center;
-
     }
 
-    .collapsed .bglink_footer img {
-        width: 35px;
-        margin-right: 0;
-    }
-
-    .hr_style {
+    .sidebar a span {
         display: none;
     }
 
+    .sidebar a {
+        justify-content: center;
+        padding: 10px 0;
+    }
 
+    .logo img {
+        display: none;
+    }
+
+    #orders {
+        display: none;
+    }
 
 
 }

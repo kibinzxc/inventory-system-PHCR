@@ -3,14 +3,14 @@ session_start();
 include 'connection/database-conn.php';
 include 'connection/database-db.php';
 // Check if user is logged in
-if (isset($_SESSION['user_id'])) {
+if (isset($_SESSION['uid'])) {
     $loggedIn = true;
-    $currentUserId = $_SESSION['user_id'];
+    $currentUserId = $_SESSION['uid'];
     // Database connection details
 
 
     // Retrieve the current user's ID from the session
-    $currentUserId = $_SESSION['user_id'];
+    $currentUserId = $_SESSION['uid'];
 
     $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
     $result = $conn->query($sql);

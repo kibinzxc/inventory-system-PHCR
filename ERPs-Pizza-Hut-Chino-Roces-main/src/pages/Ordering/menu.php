@@ -5,12 +5,12 @@ include 'connection/database-db.php';
 // Check if user is logged in
 if (isset($_SESSION['user_id'])) {
     $loggedIn = true;
-    $currentUserId = $_SESSION['uid'];
+    $currentUserId = $_SESSION['user_id'];
     // Database connection details
 
 
     // Retrieve the current user's ID from the session
-    $currentUserId = $_SESSION['uid'];
+    $currentUserId = $_SESSION['user_id'];
 
     $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
     $result = $conn->query($sql);

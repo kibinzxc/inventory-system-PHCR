@@ -1,8 +1,9 @@
 <?php
-$servername = "localhost";
-$username = "u560143421_kibinzxc";
-$password = "Kevin0405!";
-$database = "u560143421_phcr_db";
+$host = 'localhost';
+$dbUsername = 'u560143421_kibinzxc';
+$dbPassword =  'Kevin0405';
+$dbName = 'u560143421_phcr_db';
+
 
 $db = new mysqli($host, $dbUsername, $dbPassword, $dbName);
 

@@ -12,7 +12,7 @@
 <body>
     <div class="LoginForm">
         <div class="LoginForm_header">
-            <h1>Login TEST12345</h1>
+            <h1>Login</h1>
         </div>
 
         <?php if (isset($_GET['error'])): ?>

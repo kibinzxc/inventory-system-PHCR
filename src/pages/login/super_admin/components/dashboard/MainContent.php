@@ -373,33 +373,32 @@ if (isset($_SESSION['user_id'])) {
                     <p><?php echo 'From ' . $last_week_sd . ' - ' . $last_week_ed; ?></p>
                 </div>
             </div>
+        </div>
 
 
-
-
-            <div class="same-column-container">
-                <div class="same-column">
-                    <div class="table_container daily_sales">
-                        <?php include 'daily_sales.php'; ?>
-                    </div>
-                    <div class="table_container recent_orders">
-                        <h3>Recent Orders</h3>
-                        <?php include 'recent_orders.php'; ?>
-                    </div>
+        <div class="same-column-container">
+            <div class="same-column">
+                <div class="table_container daily_sales">
+                    <?php include 'daily_sales.php'; ?>
                 </div>
-
-                <div class="same-column">
-                    <div class="table_container daily_sales2">
-                        <h3 class="h3-header"> Recent Inventory Updates</h3>
-                        <?php include 'recent_updates.php'; ?>
-                    </div>
-                    <div class="table_container recent_orders2">
-                        <h3>Current Week Top Products</h3>
-                        <?php include 'top_products.php'; ?>
-                    </div>
-
+                <div class="table_container recent_orders">
+                    <h3>Recent Orders</h3>
+                    <?php include 'recent_orders.php'; ?>
                 </div>
             </div>
 
+            <div class="same-column">
+                <div class="table_container daily_sales2">
+                    <h3 class="h3-header"> Recent Inventory Updates</h3>
+                    <?php include 'recent_updates.php'; ?>
+                </div>
+                <div class="table_container recent_orders2">
+                    <h3>Current Week Top Products</h3>
+                    <?php include 'top_products.php'; ?>
+                </div>
+
+            </div>
         </div>
+
     </div>
+</div>

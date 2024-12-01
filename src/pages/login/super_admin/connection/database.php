@@ -1,8 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "u560143421_kibinzxc";
-$password = "Kevin0405!";
-$database = "u560143421_phcr_db";
+$host = 'localhost';
+$dbUsername = 'root';
+$dbPassword =  '';
+$dbName = 'phcr_db';
 
 $conn = new mysqli($host, $dbUsername, $dbPassword, $dbName);
 

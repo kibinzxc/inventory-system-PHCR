@@ -1,6 +1,7 @@
 <?php
 
 date_default_timezone_set('Asia/Manila');
+
 Error_reporting(1);
 // Get the raw POST data (JSON format)
 $data = json_decode(file_get_contents("php://input"), true);

@@ -414,11 +414,11 @@ a.btn2.disabled:hover {
     transition: all 0.3s ease;
     height: auto;
     text-align: left;
+    padding: 20px 30px 5px 30px;
     flex-grow: 1;
     cursor: default;
     width: 20rem;
     /* Adjust the card width to 20rem for smaller screens */
-    padding: 15px 25px 5px 25px;
 }
 
 .card:hover {
@@ -561,6 +561,7 @@ h5 {
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 0;
+    width: 100%;
 
 }
 

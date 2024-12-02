@@ -97,7 +97,7 @@ body {
     border-radius: 15px;
 
     color: white;
-    padding: 30px 70px 30px 70px;
+    padding: 30px 30px 30px 30px;
     /* top | right | bottom | left */
 }
 
@@ -246,11 +246,6 @@ input[type="text1"] {
     color: white;
 }
 
-.cancel {
-    background-color: #ffffff;
-    border-color: #ffffff;
-    color: black;
-}
 
 .btn-primary:hover {
     background-color: #a12c12;

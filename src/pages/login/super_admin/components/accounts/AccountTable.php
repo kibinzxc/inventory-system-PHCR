@@ -50,7 +50,13 @@ $result = $stmt->get_result();
                 echo "<td>" . $row["uid"] . "</td>";
                 echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["userType"]) . "</td>";
+                $userType = htmlspecialchars($row["userType"]);
+                if ($userType == 'rider') {
+                    $userType = 'Delivery Rider';
+                } else {
+                    $userType = ucfirst($userType);
+                }
+                echo "<td>" . $userType . "</td>";
                 echo "<td>
                         <div class='actions_icon'>
                             <a href='#' onclick=\"openEditModal('" . $row['uid'] . "', '" . addslashes($row['name']) . "', '" . addslashes($row['email']) . "', '" . addslashes($row['userType']) . "')\" data-icon-tooltip='Edit'>

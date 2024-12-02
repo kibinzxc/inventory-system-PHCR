@@ -291,6 +291,10 @@ input[type="text1"] {
         padding: 10px;
     }
 
+    .full-screen {
+        height: 0;
+    }
+
 
     .error,
     .success {

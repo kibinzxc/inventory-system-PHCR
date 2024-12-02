@@ -255,14 +255,14 @@ body {
     }
 
     @media (max-width: 768px) and (orientation: landscape) {
-        .wrapper {
+        .container {
             display: none;
         }
     }
 }
 
 @media (max-width: 768px) and (orientation: landscape) {
-    .wrapper {
+    .container {
         display: none;
     }
 }

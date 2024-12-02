@@ -238,6 +238,7 @@ input[type="text1"] {
     display: flex;
     gap: 10px;
     justify-content: flex-end;
+    margin-right: 10px;
 }
 
 .btn-primary {
@@ -254,7 +255,6 @@ input[type="text1"] {
 }
 
 .submit {
-    padding-left: 30px;
-    padding-right: 30px;
-    font-weight: 600;
+    padding-left: 50px;
+    padding-right: 50px;
 }

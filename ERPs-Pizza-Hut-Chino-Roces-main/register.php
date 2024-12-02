@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
                 <div class="wrapper">
                     <div class="login-wrapper">
-                        <h2 class="title">Create Account</h2><br><br><br><br>
+                        <h2 class="title">Create Account</h2><br><br><br>
                         <form action="" method="post">
                             <div class="box-wrapper" style="padding:0 20px 0 20px;">
                                 <div class="box">

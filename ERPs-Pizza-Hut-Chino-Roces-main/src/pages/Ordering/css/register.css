@@ -103,12 +103,14 @@ body {
 
 .title {
     position: absolute;
-    top: 12%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 2em;
     font-weight: 800;
     letter-spacing: 1px;
+    width: 100%;
+    text-align: center;
 }
 
 .user-box {
@@ -280,6 +282,13 @@ input[type="text1"] {
         height: auto;
         padding: 10px;
     }
+
+    .btn-primary {
+        font-size: 20px;
+        height: auto;
+        padding: 10px;
+    }
+
 
     .error,
     .success {

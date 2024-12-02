@@ -411,7 +411,7 @@ $conn->close();
         if (lowStockIngredients.length > 0) {
             lowStockIngredients.forEach(ingredient => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>(Current Stock: ${ingredient.current_stock}, <strong>Minimum Req.: ${ingredient.threshold})</strong>`;
+                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>(Current Stock: ${ingredient.current_stock}, <strong>Threshold: ${ingredient.threshold})</strong>`;
                 lowStockListElement.appendChild(listItem);
             });
         } else {

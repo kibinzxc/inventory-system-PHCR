@@ -255,3 +255,9 @@ body {
     }
 
 }
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .wrapper {
+        display: none;
+    }
+}

@@ -137,8 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             echo '</div>';
                                         } ?>
                                         <div class="edit">
-                                            <a href="login.php" class="btn btn-primary" style="color:white;">Cancel</a>
-                                            <button type="submit" class="btn btn-primary submit">Register</button>
+                                            <button type="submit" class="btn btn-primary submit">Continue</button>
                                         </div>
                                         <div class="additional-links">
                                             <p>Already have an account?<a href="login.php" class="register-link">Login</a></p>

@@ -150,12 +150,12 @@ foreach ($ingredientThresholds as $ingredientName => $data) {
             $lowStockIngredients[] = [
                 'ingredient' => ucfirst($ingredientName),
                 'current_stock' => $currentStock . ' ' . $currentUom,
-                'threshold' => $threshold . ' ' . $measurement
+                'quantity_to_order' => ($threshold - $currentStock) . ' ' . $measurement
             ];
         } elseif ($status === 'out of stock') {
             $outOfStockIngredients[] = [
                 'ingredient' => ucfirst($ingredientName),
-                'threshold' => $threshold . ' ' . $measurement
+                'quantity_to_order' => $threshold . ' ' . $measurement
             ];
         }
     }
@@ -412,27 +412,32 @@ $conn->close();
         // Show the low stock ingredients
         // Show the low stock ingredients
         const lowStockListElement = document.getElementById('low-stock-list');
+        // Render low stock ingredients
         if (lowStockIngredients.length > 0) {
             lowStockIngredients.forEach(ingredient => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>(Current Stock: ${ingredient.current_stock}, <strong>Threshold: ${ingredient.threshold})</strong>`;
+                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>
+                              (Current Stock: ${ingredient.current_stock}, 
+                              <strong>Order: ${ingredient.quantity_to_order})</strong>`;
                 lowStockListElement.appendChild(listItem);
             });
         } else {
             document.getElementById('low-stock-section').style.display = 'none';
         }
 
-        // Show the out-of-stock ingredients
-        const outOfStockListElement = document.getElementById('out-of-stock-list');
+        // Render out-of-stock ingredients
         if (outOfStockIngredients.length > 0) {
             outOfStockIngredients.forEach(ingredient => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>(Out of stock, <strong>Reorder: ${ingredient.threshold})</strong>`;
+                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>
+                              (Out of stock, 
+                              <strong>Reorder: ${ingredient.quantity_to_order})</strong>`;
                 outOfStockListElement.appendChild(listItem);
             });
         } else {
             document.getElementById('out-of-stock-section').style.display = 'none';
         }
+
 
 
         // Display the unavailable count message

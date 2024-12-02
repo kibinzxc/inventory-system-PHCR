@@ -65,10 +65,13 @@ if (isset($_GET['invID'])) {
     $pdf->Cell(40, 6, 'Qty  Item Description', 0, 0);
     $pdf->Cell(50, 6, 'Amount', 0, 1, 'L');
     $pdf->SetFont('Arial', '', 8);
-
     foreach ($orders as $order) {
+        // Replace 'with' with 'w/' and remove extra spaces around the item name
+        $itemName = str_replace(' with ', 'w/', $order['name']);
+        $itemName = preg_replace('/\s+/', '', $itemName);  // Remove all spaces
+
         // Item name and size
-        $itemDetails = $order['quantity'] . 'x ' . $order['name'];
+        $itemDetails = $order['quantity'] . 'x ' . $itemName;
         $size = '(' . $order['size'] . ')';
         $price = 'PHP ' . number_format($order['price'], 2);
 
@@ -77,6 +80,8 @@ if (isset($_GET['invID'])) {
         $pdf->Cell(50, 1, $size, 0, 1); // Reduced height to 4 for tighter spacing
         $pdf->Ln(3);
     }
+
+
 
     // Draw a straight line
     $pdf->Line(10, $pdf->GetY(), 70, $pdf->GetY());

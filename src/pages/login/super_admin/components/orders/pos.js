@@ -31,6 +31,11 @@ document.addEventListener('click', function (e) {
     }
 });
 
+function scrollToBottom() {
+    const panelCardsContainer = document.querySelector('.panel-cards');
+    panelCardsContainer.scrollTop = panelCardsContainer.scrollHeight;
+}
+
 function renderPanel() {
     const panelCardsContainer = document.querySelector('.panel-cards');
     const totalPriceContainer = document.querySelector('#total-price');
@@ -42,8 +47,11 @@ function renderPanel() {
     let vatAmount = 0;
     let totalItems = 0; // Variable to track the total number of items
 
+
+
     // Clear the current panel
     panelCardsContainer.innerHTML = '';
+
 
     // Populate panel with items
     orders.forEach(order => {
@@ -84,7 +92,7 @@ function renderPanel() {
 
     updateItemLabel(totalItems); // Pass the updated totalItems count to the function
 
-
+    scrollToBottom();
 }
 
 

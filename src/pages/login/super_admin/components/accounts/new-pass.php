@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="edit_password.css">
-<div id="editpassModal" class="editpass-modal" style="display: <?php echo $showModal ? 'block' : 'none'; ?>;">
+<div id="editpassModal" class="editpass-modal" style="display: <?php echo $showModal ? 'block' : 'block'; ?>;">
     <div class="editpass-modal-content">
         <!-- Modal Header -->
         <div class="editpass-modal-header">

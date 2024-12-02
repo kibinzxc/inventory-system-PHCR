@@ -1,27 +1,7 @@
 <?php
 include '../../connection/database.php';
 
-// Fetch all raw data grouped by day of the week
-$sql = "
-    SELECT transaction_date, total_amount, DAYOFWEEK(transaction_date) AS weekday
-    FROM invoice
-    ORDER BY transaction_date
-";
-$result = $conn->query($sql);
-
-$rawData = [];
-while ($row = $result->fetch_assoc()) {
-    $rawData[] = $row; // Collect raw data
-}
-
-// Debug: Output raw data
-echo "<pre>Raw Data:\n";
-foreach ($rawData as $data) {
-    echo "Date: " . $data['transaction_date'] . ", Weekday: " . $data['weekday'] . ", Amount: ₱" . number_format($data['total_amount'], 2) . "\n";
-}
-echo "</pre>";
-
-// Calculate average sales for each weekday
+// Fetch all historical data for seasonality calculation (across all data, not just last week)
 $sql = "
     SELECT DAYOFWEEK(transaction_date) AS weekday, AVG(total_amount) AS avg_sales
     FROM invoice
@@ -31,13 +11,9 @@ $result = $conn->query($sql);
 
 $seasonality = [];
 while ($row = $result->fetch_assoc()) {
+    // Store the average sales for each weekday (1=Monday, 7=Sunday)
     $seasonality[$row['weekday']] = $row['avg_sales'];
 }
-
-// Debug: Output the seasonality array
-echo "<pre>Seasonality Data (Averages):\n";
-print_r($seasonality);
-echo "</pre>";
 
 $conn->close();
 
@@ -51,10 +27,54 @@ for ($i = 0; $i < 7; $i++) { // Loop Monday to Sunday (7 days)
     $weekday = date('N', strtotime($date)); // Get weekday (1=Monday, 7=Sunday)
     $nextWeekSales[] = $seasonality[$weekday] ?? 0; // Apply seasonality factor for each day
 }
+?>
 
-// Debug: Output the forecast data
-echo "<pre>Next Week Forecast:\n";
-for ($i = 0; $i < 7; $i++) {
-    echo $nextWeekDates[$i] . ": ₱" . number_format($nextWeekSales[$i], 2) . "\n";
-}
-echo "</pre>";
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div id="chart-container">
+    <canvas id="salesForecastChart"></canvas>
+</div>
+
+<script>
+    const nextWeekDates = <?php echo json_encode($nextWeekDates); ?>;
+    const nextWeekSales = <?php echo json_encode($nextWeekSales); ?>;
+
+    const ctx6 = document.getElementById('salesForecastChart').getContext('2d');
+    new Chart(ctx6, {
+        type: 'line',
+        data: {
+            labels: nextWeekDates,
+            datasets: [{
+                label: 'Forecasted Sales (₱)',
+                data: nextWeekSales,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 2,
+                pointRadius: 4,
+                tension: 0.4
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Sales (₱)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            // Format the Y-axis labels as currency
+                            return '₱' + value.toFixed(2);
+                        }
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Days of Next Week'
+                    }
+                }
+            }
+        }
+    });
+</script>

@@ -292,7 +292,7 @@ input[type="text1"] {
     }
 
     .full-screen {
-        height: 0;
+        height: auto;
     }
 
 

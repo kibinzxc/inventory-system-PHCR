@@ -243,6 +243,9 @@ input[type="text1"] {
     gap: 10px;
     justify-content: flex-end;
     margin-right: 10px;
+    margin-left: 10px;
+    flex-grow: 1;
+    margin-bottom: 20px;
 }
 
 .btn-primary {

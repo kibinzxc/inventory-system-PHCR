@@ -214,7 +214,11 @@ if (count($lowStockIngredients) > 0 || count($outOfStockIngredients) > 0) {
                     // echo 'Email sent to ' . $email . '<br>';
 
                     // Insert the user UID and today's date into the notify_user table
-                    $insertSql = "INSERT INTO notify_user (uid) VALUES (?)";
+                    $insertSql = "
+                        INSERT INTO notify_user (uid, date_notified) 
+                        VALUES (?, NOW()) 
+                        ON DUPLICATE KEY UPDATE date_notified = NOW()
+                    ";
                     $insertStmt = $conn->prepare($insertSql);
                     $insertStmt->bind_param("i", $uid);
                     $insertStmt->execute();

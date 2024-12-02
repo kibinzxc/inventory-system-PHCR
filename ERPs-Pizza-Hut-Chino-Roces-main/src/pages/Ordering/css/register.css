@@ -245,12 +245,14 @@ input[type="text1"] {
     margin-right: 10px;
     margin-left: 10px;
     margin-bottom: 20px;
+    margin-top: 30px;
 }
 
 .btn-primary {
     background-color: #C23415;
     border-color: #C23415;
     color: white;
+    font-size: 1.2rem;
 }
 
 
@@ -294,7 +296,7 @@ input[type="text1"] {
     }
 
     .btn-primary {
-        font-size: 0.8rem;
+        font-size: 1rem;
         height: auto;
         flex-grow: 1;
 
@@ -307,5 +309,6 @@ input[type="text1"] {
         width: 90%;
         left: 5%;
         right: 5%;
+        top: 50px;
     }
 }

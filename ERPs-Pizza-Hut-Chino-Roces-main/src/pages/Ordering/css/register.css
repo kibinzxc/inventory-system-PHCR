@@ -279,8 +279,13 @@ input[type="text1"] {
         height: auto;
     }
 
+    .full-screen {
+        height: auto;
+    }
+
+
     .login-btn {
-        font-size: 20px;
+        font-size: 15px;
         height: auto;
         padding: 10px;
     }
@@ -291,9 +296,6 @@ input[type="text1"] {
         padding: 10px;
     }
 
-    .full-screen {
-        height: auto;
-    }
 
 
     .error,

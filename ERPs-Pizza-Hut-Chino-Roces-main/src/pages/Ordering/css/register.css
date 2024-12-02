@@ -92,7 +92,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     height: 65%;
-    width: 50%;
+    width: 30%;
     background: #2c2c2c;
     border-radius: 15px;
 
@@ -237,12 +237,19 @@ input[type="text1"] {
 .edit {
     display: flex;
     gap: 10px;
+    justify-content: flex-end;
 }
 
 .btn-primary {
     background-color: #C23415;
     border-color: #C23415;
     color: white;
+}
+
+.cancel {
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: black;
 }
 
 .btn-primary:hover {

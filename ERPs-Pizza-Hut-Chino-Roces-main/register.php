@@ -136,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             unset($_SESSION['errorMessage1']);
                                             echo '</div>';
                                         } ?>
-                                        <div class="edit" style="margin-left:10px;">
+                                        <div class="edit">
                                             <a href="profile.php" class="btn btn-primary" style="color:white;">Cancel</a>
                                             <button type="submit" class="btn btn-primary submit">Register</button>
                                         </div>

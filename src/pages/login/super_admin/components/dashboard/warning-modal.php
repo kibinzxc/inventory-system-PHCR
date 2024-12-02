@@ -149,13 +149,13 @@ foreach ($ingredientThresholds as $ingredientName => $data) {
         if ($status === 'low stock') {
             $lowStockIngredients[] = [
                 'ingredient' => ucfirst($ingredientName),
-                'current_stock' => $currentStock . ' ' . $currentUom,
-                'quantity_to_order' => ($threshold - $currentStock) . ' ' . $measurement
+                'current_stock' => ($currentUom === 'kg' ? number_format($currentStock, 2) : $currentStock) . ' ' . $currentUom,
+                'quantity_to_order' => ($measurement === 'kg' ? number_format($threshold - $currentStock, 2) : $threshold - $currentStock) . ' ' . $measurement
             ];
         } elseif ($status === 'out of stock') {
             $outOfStockIngredients[] = [
                 'ingredient' => ucfirst($ingredientName),
-                'quantity_to_order' => $threshold . ' ' . $measurement
+                'quantity_to_order' => ($measurement === 'kg' ? number_format($threshold, 2) : $threshold) . ' ' . $measurement
             ];
         }
     }

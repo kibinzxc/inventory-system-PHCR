@@ -210,7 +210,7 @@ if (count($lowStockIngredients) > 0 || count($outOfStockIngredients) > 0) {
 
                     $mail->Body = $message;
 
-                    // $mail->send();
+                    $mail->send();
                     // echo 'Email sent to ' . $email . '<br>';
 
                     // Insert the user UID and today's date into the notify_user table
@@ -411,7 +411,7 @@ $conn->close();
         if (lowStockIngredients.length > 0) {
             lowStockIngredients.forEach(ingredient => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>(Current Stock: ${ingredient.current_stock}, <strong>Reorder: ${ingredient.threshold})</strong>`;
+                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>(Current Stock: ${ingredient.current_stock}, <strong>Minimum Req.: ${ingredient.threshold})</strong>`;
                 lowStockListElement.appendChild(listItem);
             });
         } else {

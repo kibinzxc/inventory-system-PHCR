@@ -22,7 +22,7 @@ error_reporting(1);
 
 
     <?php include 'new-pass.php'; ?>
-
+    <?php include 'MainContent.php'; ?>
     <?php include 'SuccessErrorModal.php'; ?>
     <script src="../Sidebar/Sidebar.js"></script>
     <script src="SuccessErrorModal.js"></script>

@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <div class="row">
             <div class="col-sm-1" style="height:6vh; background:white;">
-                <button type="button" class="back-btn" onclick="window.history.back()">
+                <button type="button" class="back-btn" onclick="window.location.href='src/pages/Ordering/menu.php'">
                     <i class="fa-solid fa-arrow-left" style="margin-right:7px;"></i>BACK
                 </button>
             </div>
@@ -137,8 +137,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             echo '</div>';
                                         } ?>
                                         <div class="edit">
-                                            <a href="profile.php" class="btn btn-primary" style="color:white;">Cancel</a>
+                                            <a href="login.php" class="btn btn-primary" style="color:white;">Cancel</a>
                                             <button type="submit" class="btn btn-primary submit">Register</button>
+                                        </div>
+                                        <div class="additional-links">
+                                            <p>Already have an account?<a href="login.php" class="register-link">Login</a></p>
                                         </div>
                                     </div>
                         </form>

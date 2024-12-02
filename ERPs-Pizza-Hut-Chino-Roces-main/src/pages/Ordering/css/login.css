@@ -254,15 +254,5 @@ body {
         right: 5%;
     }
 
-    @media (max-width: 768px) and (orientation: landscape) {
-        .container {
-            display: none;
-        }
-    }
-}
 
-@media (max-width: 768px) and (orientation: landscape) {
-    .container {
-        display: none;
-    }
 }

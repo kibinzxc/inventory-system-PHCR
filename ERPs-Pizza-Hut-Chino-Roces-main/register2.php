@@ -81,8 +81,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container">
         <div class="row">
             <div class="col-sm-1" style="height:6vh; background:white;">
-                <button type="button" class="back-btn" onclick="window.history.back()">
-                    <i class="fa-solid fa-arrow-left" style="margin-right:7px;"></i>BACK
+                <button type="button" class="back-btn" onclick="window.location.href='src/pages/Ordering/menu.php'">
+                    <i class=" fa-solid fa-arrow-left" style="margin-right:7px;"></i>BACK
                 </button>
             </div>
 

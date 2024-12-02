@@ -254,5 +254,6 @@ input[type="text1"] {
 }
 
 .submit {
-    padding: 10px 30px;
+    padding: 0 50px;
+    font-weight: 600;
 }

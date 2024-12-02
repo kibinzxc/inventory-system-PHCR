@@ -101,14 +101,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="box-wrapper" style="padding:0 20px 0 20px;">
                                 <div class="box">
                                     <div class="box-content" style="margin:20px 0 50px 0;">
+
                                         <div class="row" style="margin-bottom:20px">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-12">
                                                 <label for="name">First Name</label>
                                                 <input type="text1" id="name" name="firstName"
                                                     value=""
                                                     placeholder="Enter your first name">
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-12">
                                                 <label for="name">Last Name</label>
                                                 <input type="text1" id="name" name="lastName"
                                                     value=""
@@ -117,16 +118,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                         </div>
                                         <div class="row" style="margin-bottom:20px">
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-12">
                                                 <label for="contact">Contact Number</label>
                                                 <input type="text1" id="contact" name="contactNum"
                                                     value="" placeholder="Enter your contact number">
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <label for="email">Email</label>
-                                                <input type="text1" id="email" name="email"
-                                                    value="" placeholder="Enter your email">
                                             </div>
 
                                         </div>

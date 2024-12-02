@@ -117,22 +117,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                         </div>
                                         <div class="row" style="margin-bottom:20px">
+                                            <div class="col-sm-6">
+                                                <label for="contact">Contact Number</label>
+                                                <input type="text1" id="contact" name="contactNum"
+                                                    value="" placeholder="Enter your contact number">
+                                            </div>
 
-                                            <div class="col-sm-2">
-                                                <label for="address">House No.</label>
-                                                <input type="text1" id="address" name="houseNo"
-                                                    value="" placeholder="House No.">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <label for="address">Street</label>
-                                                <input type="text1" id="address" name="street"
-                                                    value="" placeholder="Street">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <label for="address">Baranggay</label>
-                                                <input type="text1" id="address" name="baranggay"
-                                                    value="" placeholder="Baranggay">
-                                            </div>
                                             <div class="col-sm-6">
                                                 <label for="email">Email</label>
                                                 <input type="text1" id="email" name="email"
@@ -140,29 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
 
                                         </div>
-                                        <div class="row" style="margin-bottom:20px">
-                                            <div class="col-sm-2">
-                                                <label for="address">City</label>
-                                                <input type="text1" id="address" name="city"
-                                                    value="" placeholder="City">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <label for="address">Province</label>
-                                                <input type="text1" id="address" name="province"
-                                                    value="" placeholder="Province">
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <label for="address">Zip Code</label>
-                                                <input type="text1" id="address" name="zipCode"
-                                                    value="" placeholder="Zip Code">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="contact">Contact Number</label>
-                                                <input type="text1" id="contact" name="contactNum"
-                                                    value="" placeholder="Enter your contact number">
-                                            </div>
 
-                                        </div>
                                         <?php
                                         if (isset($_SESSION['errorMessage1']) && !empty($_SESSION['errorMessage1'])) {
                                             echo '<div class="error" id="message-box">';

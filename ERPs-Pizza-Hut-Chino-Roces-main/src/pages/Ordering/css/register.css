@@ -110,7 +110,9 @@ body {
     font-weight: 800;
     letter-spacing: 1px;
     width: 100%;
+    min-width: 100%;
     text-align: center;
+    white-space: nowrap;
 }
 
 .user-box {

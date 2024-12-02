@@ -109,6 +109,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     value=""
                                                     placeholder="Enter your first name">
                                             </div>
+
+                                        </div>
+                                        <div class="row" style="margin-bottom:20px">
                                             <div class="col-sm-12">
                                                 <label for="name">Last Name</label>
                                                 <input type="text1" id="name" name="lastName"

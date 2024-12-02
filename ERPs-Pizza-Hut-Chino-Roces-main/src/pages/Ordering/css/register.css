@@ -89,10 +89,10 @@ body {
 .login-wrapper {
     position: absolute;
     top: 50%;
-    left:50%;
+    left: 50%;
     transform: translate(-50%, -50%);
     height: 65%;
-    width: 80%;
+    width: 50%;
     background: #2c2c2c;
     border-radius: 15px;
 
@@ -187,39 +187,40 @@ body {
 
 .error {
 
-	color: #d32903; 
-	width: 70%; 
-	margin: 0px auto; 
-	padding: 5px; 
-	border-radius: 25px; 
-	text-align: left;
-  text-align: center;
-  position:absolute;
-  font-family: "Outfit";
-  bottom:100px;
-  left:90px;
-  right:100px;
-  animation:flyIn 0.5s ease-in-out;
-    
+    color: #d32903;
+    width: 70%;
+    margin: 0px auto;
+    padding: 5px;
+    border-radius: 25px;
+    text-align: left;
+    text-align: center;
+    position: absolute;
+    font-family: "Outfit";
+    bottom: 100px;
+    left: 90px;
+    right: 100px;
+    animation: flyIn 0.5s ease-in-out;
+
 }
 
 .success {
-	color: #3c763d; 
-	width: 20%; 
-	margin: 0px auto; 
-	padding: 5px; 
-	border: 1px solid #3c763d; 
-	background: #dff0d8; 
-	border-radius: 25px; 
-	text-align: left;
-  text-align: center;
-  position:absolute;
-  font-family: "Outfit";
-  bottom:250px;
-  left:100px;
-  right:100px;
-  animation:flyIn 0.5s ease-in-out;
+    color: #3c763d;
+    width: 20%;
+    margin: 0px auto;
+    padding: 5px;
+    border: 1px solid #3c763d;
+    background: #dff0d8;
+    border-radius: 25px;
+    text-align: left;
+    text-align: center;
+    position: absolute;
+    font-family: "Outfit";
+    bottom: 250px;
+    left: 100px;
+    right: 100px;
+    animation: flyIn 0.5s ease-in-out;
 }
+
 input[type="text1"] {
     padding: 10px 30px 10px 10px;
     /* Adjust padding to accommodate the icon */
@@ -232,18 +233,20 @@ input[type="text1"] {
     background-repeat: no-repeat;
     background-position: right 10px center;
 }
-.edit{
-display: flex;
-gap:10px;
-}
-.btn-primary{
-  background-color: #C23415;
-  border-color: #C23415;
-  color: white;
+
+.edit {
+    display: flex;
+    gap: 10px;
 }
 
-.btn-primary:hover{
-  background-color: #a12c12;
-  border-color: #a12c12;
-  color: white;
+.btn-primary {
+    background-color: #C23415;
+    border-color: #C23415;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #a12c12;
+    border-color: #a12c12;
+    color: white;
 }

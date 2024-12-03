@@ -11,7 +11,7 @@ $(document).ready(function () {
             subtotal += newPrice;
         });
 
-        var deliveryFee = 65; // Change this to your actual delivery fee
+        var deliveryFee = 65; // Change this to your a ctual delivery fee
         var vat = 0.12 * subtotal;
         var vatable = subtotal - vat;
         var total = subtotal + deliveryFee;

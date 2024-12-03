@@ -437,15 +437,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                 <input class="form-check-input" type="radio"
                                                                     name="flexRadioDefault" id="flexRadioDefault1"
                                                                     style="margin-left: 5px" value="COD" checked>
-                                                                <label class="form-check label" for="flexRadioDefault1"
-                                                                    style="">
+                                                                <label class="form-check label" for="flexRadioDefault1">
                                                                     Cash on Delivery
                                                                 </label>
                                                                 <input class="form-check-input" type="radio"
                                                                     name="flexRadioDefault" id="flexRadioDefault2"
                                                                     style="margin-left: 5px" disabled>
-                                                                <label class="form-check label" for="flexRadioDefault2"
-                                                                    style="">
+                                                                <label class="form-check label" for="flexRadioDefault2">
                                                                     GCash (Not Available)
                                                                 </label>
                                                             </div>

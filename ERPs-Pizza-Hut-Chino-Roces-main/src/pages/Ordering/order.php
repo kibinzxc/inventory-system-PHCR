@@ -392,10 +392,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             $fullName = $row['name'];
                                             $fullAddress = $row['address'];
                                             // Explode the full name using the comma as a delimiter
-                                            $nameParts = explode(", ", $fullName);
-                                            // Extract the first and last names
-                                            $lastName = $nameParts[0];
-                                            $firstName = $nameParts[1];
+
                                         }
                                         ?><form action="" method="post">
                                             <div class="col-sm-12">
@@ -412,12 +409,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         <div class="col-sm-9" style="padding:0 0 0 20px; margin:0;">
                                                             <p id="name"
                                                                 style=" margin-left: 30px; margin-bottom:30px;">
-                                                                <?php echo $firstName . " " . $lastName; ?></p>
+                                                                <?php echo $fullName ?></p>
                                                             </p>
                                                             <p id="address"
                                                                 style="margin-left: 30px; margin-bottom:30px;">
-                                                                <?php echo $fullAddress; ?>
                                                             </p>
+                                                            <script>
+                                                                // Get the new address from localStorage
+                                                                var newAddress = localStorage.getItem('pinnedAddress');
+                                                                if (newAddress) {
+                                                                    document.getElementById('address').innerText = newAddress;
+                                                                }
+                                                            </script>
                                                             <p id="contact_number"
                                                                 style="margin-left: 30px;margin-bottom:30px;">
                                                                 <?php echo $row['contactNum']; ?>

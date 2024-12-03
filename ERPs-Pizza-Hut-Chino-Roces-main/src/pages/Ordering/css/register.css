@@ -190,21 +190,19 @@ body {
 }
 
 .error {
-
     color: #d32903;
     width: 70%;
-    margin: 0px auto;
+    margin: 0 auto;
     padding: 5px;
     border-radius: 25px;
-    text-align: left;
     text-align: center;
     position: absolute;
     font-family: "Outfit";
     top: 100px;
-    left: 90px;
-    right: 100px;
+    left: 0;
+    right: 0;
     animation: flyIn 0.5s ease-in-out;
-
+    font-size: 1.2em;
 }
 
 .success {
@@ -223,9 +221,11 @@ body {
     left: 100px;
     right: 100px;
     animation: flyIn 0.5s ease-in-out;
+    font-size: 1.2em;
+
 }
 
-input[type="text1"] {
+input[type="text"] {
     padding: 10px 30px 10px 10px;
     /* Adjust padding to accommodate the icon */
     width: 100%;
@@ -268,6 +268,123 @@ input[type="text1"] {
     flex-grow: 1;
 }
 
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 10px;
+    /* Adjust spacing between checkbox and label */
+    vertical-align: middle;
+    /* Align the checkbox with the label */
+    height: 20px;
+    /* Adjust checkbox height if needed */
+    width: 40px;
+    /* Adjust checkbox width if needed */
+}
+
+.checkbox-container label {
+    line-height: 20px;
+    /* Ensure the label aligns with the checkbox height */
+    font-size: 0.9rem;
+}
+
+.checkbox-container a {
+    text-decoration: none;
+    color: #C23415;
+    margin-top: 15px;
+    display: inline;
+}
+
+.checkbox-container a:hover {
+    color: #a12c12;
+    text-decoration: underline;
+    /* Underlines the link */
+}
+
+.input-group {
+    width: 100%;
+    display: flex;
+}
+
+.input-group-text {
+    background-color: #f8f9fa;
+    /* Make sure the +63 background matches the input */
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px 0 0 4px;
+    /* Border radius to match the input */
+}
+
+#contact {
+    width: calc(100% - 50px);
+    /* Adjust the width of the input to account for the +63 */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 0 4px 4px 0;
+    /* Border radius to match the input */
+    outline: none;
+    box-sizing: border-box;
+}
+
+@media (max-width: 1280px) {
+    .login-wrapper {
+        width: 60%;
+        /* Adjust for 1280px */
+    }
+
+    .title {
+        font-size: 1.6em;
+        /* Further reduce title size */
+    }
+
+    .user-box input {
+        font-size: 15px;
+    }
+
+    .login-btn {
+        font-size: 18px;
+    }
+
+    .error,
+    .success {
+        width: 80%;
+        /* Adjust error/success messages */
+        left: 10%;
+        right: 10%;
+        top: 90px;
+        font-size: 1rem;
+    }
+
+    .checkbox-container label {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 1559px) {
+    .login-wrapper {
+        width: 50%;
+        /* Adjust for 1559px */
+    }
+
+    .title {
+        font-size: 1.8em;
+        /* Slightly smaller title */
+    }
+
+    .user-box input {
+        font-size: 16px;
+    }
+
+    .login-btn {
+        font-size: 20px;
+    }
+}
+
 @media (max-width: 768px) {
     .login-wrapper {
         width: 80%;
@@ -303,12 +420,27 @@ input[type="text1"] {
     }
 
 
-
     .error,
     .success {
         width: 90%;
         left: 5%;
         right: 5%;
         top: 80px;
+        font-size: 0.8rem;
     }
+
+    .checkbox-container label {
+        font-size: 0.7rem;
+        line-height: 12px;
+        text-align: justify;
+    }
+
+    .edit {
+        margin-top: 0;
+    }
+
+    .box-content {
+        margin-bottom: 10px !important;
+    }
+
 }

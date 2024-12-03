@@ -36,7 +36,6 @@ if (isset($_SESSION['uid'])) {
             exit(); // Ensure script stops execution after redirection
         }
     }
-    $conn->close();
 } else {
     header("Location: menu.php");
 }
@@ -53,7 +52,6 @@ if (isset($_GET['logout'])) {
 }
 
 if (isset($_POST['addtobag'])) {
-    $dbz = new mysqli('localhost', 'root', '', 'ph_db');
     $uid = $_SESSION['uid'];
     $name = $_POST['name'];
     $price = $_POST['price'];
@@ -80,7 +78,6 @@ if (isset($_POST['addtobag'])) {
 }
 
 if (isset($_POST["confirmation"])) {
-    $conn = new mysqli('localhost', 'root', '', 'ph_db');
     $selectedQty = $_POST["qty"];
     $dish_id = $_GET['edit_item'];
     $updateQuery = "UPDATE cart SET qty = '$selectedQty' WHERE dish_id = '$dish_id'";
@@ -96,7 +93,6 @@ if (isset($_POST['checkout'])) {
     $uid = $_SESSION['uid'];
 
     // Connect to the database
-    $db = new mysqli('localhost', 'root', '', 'ph_db');
 
     // Check for a successful connection
     if ($db->connect_error) {
@@ -264,8 +260,7 @@ if ($result41) {
                             <div class="flex-container">
 
                                 <?php
-                                $db = new mysqli('localhost', 'root', '', 'ph_db');
-                                $sql = "SELECT * FROM dishes where categoryID ='3' ORDER BY price asc ";
+                                $sql = "SELECT * FROM products where category = 'beverages' AND status = 'available' ORDER BY price asc ";
                                 $result = $db->query($sql);
                                 $result1 = $db->query($sql);
                                 $newrow = mysqli_fetch_array($result1);
@@ -357,7 +352,6 @@ if ($result41) {
                                         style="margin:0 0 -25px 0; padding:0; height:45vh; overflow-y: scroll; overflow:auto; ">
 
                                         <?php
-                                        $db = new mysqli('localhost', 'root', '', 'ph_db');
                                         if ($loggedIn) {
                                             $sql = "SELECT * FROM cart WHERE uid = $currentUserId";
                                             $result = $db->query($sql);
@@ -544,7 +538,6 @@ if ($result41) {
                             style="margin:0 0 -25px 0; padding:0; height:61.8vh; overflow-y: scroll; overflow:auto; ">
 
                             <?php
-                            $db = new mysqli('localhost', 'root', '', 'ph_db');
                             if ($loggedIn) {
                                 $sql3 = "SELECT * FROM cart WHERE uid = $currentUserId";
                                 $result3 = $db->query($sql3);

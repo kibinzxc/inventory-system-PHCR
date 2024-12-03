@@ -71,6 +71,10 @@ body {
     pointer-events: auto;
 }
 
+.user-box:first-child {
+    margin-top: 20px;
+}
+
 .wrapper {
     position: absolute;
     top: 53%;
@@ -88,7 +92,7 @@ body {
     top: 50%;
     left: 72%;
     transform: translate(-50%, -50%);
-    height: 65%;
+    height: auto;
     width: 35%;
     background: #2c2c2c;
     border-radius: 15px;
@@ -173,36 +177,41 @@ body {
 }
 
 .error {
+
     color: #d32903;
     width: 70%;
-    margin: 0 auto;
+    margin: 0px auto;
     padding: 5px;
     border-radius: 25px;
+    text-align: left;
     text-align: center;
     position: absolute;
     font-family: "Outfit";
-    top: 100px;
-    left: 0;
-    right: 0;
+    top: 20px;
+    left: 90px;
+    right: 100px;
     animation: flyIn 0.5s ease-in-out;
     font-size: 1.2em;
+
 }
 
 .success {
     color: #3c763d;
-    width: 70%;
-    margin: 0 auto;
+    width: 20%;
+    margin: 0px auto;
     padding: 5px;
+    border: 1px solid #3c763d;
+    background: #dff0d8;
     border-radius: 25px;
+    text-align: left;
     text-align: center;
     position: absolute;
     font-family: "Outfit";
-    top: 100px;
-    left: 0;
-    right: 0;
+    top: 10px;
+    left: 100px;
+    right: 100px;
     animation: flyIn 0.5s ease-in-out;
     font-size: 1.2em;
-
 }
 
 .forgot {
@@ -313,7 +322,6 @@ input[type="checkbox"]:checked {
         width: 90%;
         left: 5%;
         right: 5%;
-        top: 80px;
         font-size: 0.9em;
     }
 

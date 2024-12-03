@@ -125,10 +125,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <label>Email</label>
                                 <input type="text" name="email" placeholder="username@email.com">
                             </div>
-                            <div class="user-box" style="margin-bottom:50px;">
+                            <div class="user-box" style="margin-bottom:20px;">
                                 <label>Password</label>
                                 <input type="password" name="password" placeholder="Password">
+                                <div class="unders" style="display: flex; align-items: center; justify-content: space-between;">
+                                    <div>
+                                        <input type="checkbox" id="remember-me" name="remember-me">
+                                        <label for="remember-me" class="remember">Remember me</label>
+                                    </div>
+                                    <div class="forgot">
+                                        <a href="forgot-password.php" class="forgot-password">Forgot password?</a>
+                                    </div>
+                                </div>
                             </div>
+
+
                             <?php
                             if (isset($_SESSION['message']) && !empty($_SESSION['message'])) {
                                 echo '<div class="error" id="message-box">';
@@ -143,7 +154,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 echo '</div>';
                             }
                             ?>
+
                             <input type="submit" value="Sign in" class="login-btn" name="login">
+
                             <div class="additional-links">
                                 <p>Don't have an account yet?<a href="register.php" class="register-link">Register here</a></p>
                             </div>
@@ -154,14 +167,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
     </div>
-    <script>
+    <!-- <script>
         setTimeout(function() {
             var messageBox = document.getElementById('message-box');
             if (messageBox) {
                 messageBox.style.display = 'none';
             }
         }, 2000);
-    </script>
+    </script> -->
 </body>
 
 </html>

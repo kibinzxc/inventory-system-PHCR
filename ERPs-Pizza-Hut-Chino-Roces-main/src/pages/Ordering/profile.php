@@ -208,8 +208,9 @@ if ($loggedIn) {
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <label for="address">Address</label>
-                                                <input type="text" id="address" name="address"
-                                                    value="<?php echo $userAddress; ?>" disabled>
+                                                <div class="address-btn">
+                                                    <a href="addresses.php" class="edit-link" onclick="window.open('addresses.php', 'newwindow', 'width=400,height=700'); return false;">View Saved Addresses</a>
+                                                </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <label for="contact">Contact Number</label>

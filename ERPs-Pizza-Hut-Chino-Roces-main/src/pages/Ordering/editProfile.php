@@ -121,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['errorMessage1'] = "Invalid zip code format";
     } else {
         //combine the firstname and lastName
-        $fullName = $lastName . ", " . $firstName;
+        $fullName =  $firstName . ' ' . $lastName;
         $fullName = strtoupper($fullName);
         //combine the address
         $fullAddress = $houseNo . ", " . $street . ", " . $baranggay . ", " . $city . ", " . $province . ", " . $zipCode;
@@ -256,17 +256,10 @@ if ($loggedIn) {
                                     <div class="box">
                                         <div class="box-content" style="margin:20px 0 50px 0;">
                                             <div class="row" style="margin-bottom:20px">
-                                                <div class="col-sm-3">
-                                                    <label for="name">First Name</label>
-                                                    <input type="text1" id="name" name="firstName"
-                                                        value="<?php echo $firstName ?>"
-                                                        placeholder="Enter your first name">
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <label for="name">Last Name</label>
-                                                    <input type="text1" id="name" name="lastName"
-                                                        value="<?php echo $lastName ?>"
-                                                        placeholder="Enter your last name">
+                                                <div class="col-sm-6">
+                                                    <label for="name">Name</label>
+                                                    <input type="text1" id="name" name="name"
+                                                        value="<?php echo $row['name']; ?>">
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label for="email">Email</label>
@@ -275,21 +268,11 @@ if ($loggedIn) {
                                                 </div>
                                             </div>
                                             <div class="row" style="margin-bottom:20px">
-
-                                                <div class="col-sm-2">
-                                                    <label for="address">House No.</label>
-                                                    <input type="text1" id="address" name="houseNo"
-                                                        value="<?php echo $houseNo ?>">
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <label for="address">Street</label>
-                                                    <input type="text1" id="address" name="street"
-                                                        value="<?php echo $street ?>">
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <label for="address">Baranggay</label>
-                                                    <input type="text1" id="address" name="baranggay"
-                                                        value="<?php echo $baranggay ?>">
+                                                <div class="col-sm-6">
+                                                    <label for="address">Address</label>
+                                                    <div class="address-btn">
+                                                        <a href="addresses.php" class="edit-link" onclick="window.open('addresses.php', 'newwindow', 'width=400,height=700'); return false;">View Saved Addresses</a>
+                                                    </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <label for="contact">Contact Number</label>
@@ -297,27 +280,7 @@ if ($loggedIn) {
                                                         value="<?php echo $row['contactNum']; ?>">
                                                 </div>
                                             </div>
-                                            <div class="row" style="margin-bottom:20px">
-                                                <div class="col-sm-2">
-                                                    <label for="address">City</label>
-                                                    <input type="text1" id="address" name="city"
-                                                        value="<?php echo $city ?>">
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <label for="address">Province</label>
-                                                    <input type="text1" id="address" name="province"
-                                                        value="<?php echo $province ?>">
-                                                </div>
-                                                <div class="col-sm-2">
-                                                    <label for="address">Zip Code</label>
-                                                    <input type="text1" id="address" name="zipCode"
-                                                        value="<?php echo $zipCode ?>">
-                                                </div>
-                                                <div class="col-sm-6">
 
-                                                </div>
-
-                                            </div>
                                             <div class="edit">
                                                 <button type="submit" class="btn btn-primary">Save</button>
                                                 <a href="profile.php" class="btn btn-primary">Cancel</a>

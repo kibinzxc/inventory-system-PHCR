@@ -128,7 +128,7 @@ body::-webkit-scrollbar {
   width: 10px;
 }
 
-body::-webkit-scrollbar-track {}
+
 
 body::-webkit-scrollbar-thumb {
 
@@ -278,7 +278,7 @@ input[type="text1"]:focus {
   width: 7px;
 }
 
-.cart::-webkit-scrollbar-track {}
+
 
 .cart::-webkit-scrollbar-thumb {
   background-color: gray;
@@ -720,7 +720,7 @@ button:not(.active) {
 
 @media (max-width: 1590px) {
   .col-sm-9 {
-    width: 65%;
+    width: 70%;
     /* Adjust to your desired width */
     /* Other adjustments based on 1590px breakpoint */
   }
@@ -731,6 +731,10 @@ button:not(.active) {
 
   .sidebar .item-last {
     margin-bottom: 250px;
+  }
+
+  .item-login {
+    margin-top: 50px !important;
   }
 
 }
@@ -759,5 +763,13 @@ button:not(.active) {
 
   .scroll {
     height: 75vh !important;
+  }
+
+  .addtobag {
+    height: auto !important;
+  }
+
+  .item-login {
+    margin-top: 50px !important;
   }
 }

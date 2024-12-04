@@ -12,6 +12,13 @@ if (isset($_SESSION['uid'])) {
     $result = $conn->query($sql);
     $hasActiveOrders = false;
     $orderStatuses = ["placed", "preparing", "delivery"];
+    //get the selected address from the session
+    if (isset($_SESSION['selectedAddress'])) {
+        $selectedAddress = $_SESSION['selectedAddress'];
+    } else {
+        $selectedAddress = "";
+    }
+
     // Query the database to check for orders with specified statuses
     $checkOrdersSql = "SELECT COUNT(*) AS orderCount FROM orders WHERE uid = $currentUserId AND status IN ('" . implode("','", $orderStatuses) . "')";
     $resultOrders = $conn->query($checkOrdersSql);
@@ -119,29 +126,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Iterate through cart items to calculate total price and store item details
         while ($row = mysqli_fetch_assoc($resultCart)) {
             //get the category id from dishes table
-            $sqlCategory = "SELECT category FROM products WHERE dish_id =" . $row['dish_id'];
-            $resultCategory = $db->query($sqlCategory);
-            $category = mysqli_fetch_assoc($resultCategory);
 
-            // Check if the categoryID is '1'
-            if ($category['categoryID'] == '1') {
-                // Append additional text to the size for categoryID '1'
-                $size = $row['size'] . " Regular Pan Pizza";
-            } else {
-                // Use the original size if categoryID is not '1'
-                $size = $row['size'];
-            }
 
             // Assuming you have columns 'name', 'size', and 'price' in your cart table
             $cartItems[] = array(
                 'name' => $row['name'],
-                'size' => $size,
+                'size' => $row['size'],
+                'quantity' => $row['qty'],
                 'price' => $row['price'],
-                'qty' => $row['qty'],
-                'totalPrice' => $row['totalprice'],
             );
+            $totalPrice = 0;
 
-            $totalPrice += $row['totalprice'];
+            // Loop through the cart items and calculate the total price
+            foreach ($cartItems as $item) {
+                $totalPrice += $item['price'] * $item['quantity'];
+            }
         }
 
         // Add delivery fee to total price
@@ -150,16 +149,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Convert cart items array to JSON for storage in the database
         $cartItemsJSON = json_encode($cartItems);
 
-        // Insert order details into the 'test' table
-        $insertOrderSql = "INSERT INTO `orders` (uid, name, address, items, totalPrice, payment, del_instruct, status)
-                           VALUES ('$currentUserId', '{$userDetails['name']}', '{$userDetails['address']}', '$cartItemsJSON', '$totalPrice', '$payment', '$del_instruct', 'preparing')";
-        $db->query($insertOrderSql);
-        $deleteCartSql = "DELETE FROM cart WHERE uid = $currentUserId";
-        $db->query($deleteCartSql);
 
-        $_SESSION['success'] = "Order has been placed successfully";
-        header("Location: order-placed.php");
-        exit();
+        // Start transaction (if supported by your DB)
+        $db->begin_transaction();
+
+        try {
+            // Step 1: Insert the order into the 'orders' table
+            $insertOrderSql = "INSERT INTO `orders` (uid, name, address, items, totalPrice, payment, del_instruct, status)
+                       VALUES ('$currentUserId', '{$userDetails['name']}', '$selectedAddress', '$cartItemsJSON', '$totalPrice', '$payment', '$del_instruct', 'placed')";
+            if (!$db->query($insertOrderSql)) {
+                throw new Exception("Error inserting order: " . $db->error);
+            }
+
+            // Step 2: Retrieve the 'orderID' of the recently inserted order
+            $orderID = $db->insert_id;
+            if (!$orderID) {
+                throw new Exception("Error retrieving order ID");
+            }
+
+            // Step 3: Insert data into the 'float_orders' table
+            $insertFloatOrderSql = "INSERT INTO `float_orders` (orderID, orders, total_amount, amount_received, amount_change, order_type, mop, status)
+                            VALUES ('$orderID', '$cartItemsJSON', '$totalPrice', '$totalPrice', 0, 'online', '$payment', 'placed')";
+            if (!$db->query($insertFloatOrderSql)) {
+                throw new Exception("Error inserting into float_orders: " . $db->error);
+            }
+
+            // Step 4: Delete cart items after placing the order
+            $deleteCartSql = "DELETE FROM cart WHERE uid = $currentUserId";
+            if (!$db->query($deleteCartSql)) {
+                throw new Exception("Error deleting cart items: " . $db->error);
+            }
+
+            // Commit the transaction
+            $db->commit();
+            header("Location: order-placed.php");
+        } catch (Exception $e) {
+            // Rollback transaction if anything fails
+            $db->rollback();
+            echo "Failed to place order: " . $e->getMessage();
+        }
     } else {
         // Handle query error for cart
         echo "Error fetching cart: " . $db->error;
@@ -277,7 +305,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <hr>
                                         </div>
                                         <div class="col-sm-12 cart"
-                                            style="margin:0 0 0 0; padding:0; height:45vh; overflow-y: scroll; overflow:auto; border-radius:25px; ">
+                                            style="margin:0 0 0 0; padding:0; height:40vh; overflow-y: scroll; overflow:auto; border-radius:25px; ">
                                             <?php
                                             if ($loggedIn) {
                                                 $sql = "SELECT * FROM cart WHERE uid = $currentUserId";
@@ -344,11 +372,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <div class="container">
                                                 <div class="row">
                                                     <div class="col-sm-6" style="padding:0 0 0 80px; margin:0;">
-                                                        <p style="font-weight:550">Sub Total</p>
+                                                        <p style="font-weight:550">Vatable Sales</p>
+                                                        <p style="font-weight:550">Vat (12%)</p>
                                                         <p style="font-weight:550">Delivery Fee</p>
                                                     </div>
                                                     <div class="col-sm-6" style="padding:0 0 0 80px; margin:0;">
-                                                        <p id="subtotal" style="margin-left: 30px; font-weight:bold;">
+                                                        <p id="vatable" style="margin-left: 30px; font-weight:bold;"></p>
+                                                        <p id="vat" style="margin-left:30px; font-weight:bold;"></p>
+                                                        <p id="delivery_fee" style="margin-left:30px; font-weight:bold;"></p>
                                                         </p>
                                                         <p id="delivery_fee"
                                                             style="margin-left:30px; font-weight:bold;"></p>
@@ -401,7 +432,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         <div class="col-sm-3"
                                                             style="padding:0 0 0 20px; margin:0 0 20px 0;">
                                                             <p style="font-weight:550; margin-bottom:30px">Name:</p>
-                                                            <p style="font-weight:550; margin-bottom:30px;">Address:</p>
+                                                            <p style="font-weight:550; margin-bottom:60px;">Address:</p>
                                                             <p style="font-weight:550; margin-bottom:30px;">Contact
                                                                 Number:
                                                             </p>
@@ -413,14 +444,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             </p>
                                                             <p id="address"
                                                                 style="margin-left: 30px; margin-bottom:30px;">
+                                                                <?php echo $selectedAddress; ?>
                                                             </p>
-                                                            <script>
-                                                                // Get the new address from localStorage
-                                                                var newAddress = localStorage.getItem('pinnedAddress');
-                                                                if (newAddress) {
-                                                                    document.getElementById('address').innerText = newAddress;
-                                                                }
-                                                            </script>
+
                                                             <p id="contact_number"
                                                                 style="margin-left: 30px;margin-bottom:30px;">
                                                                 <?php echo $row['contactNum']; ?>

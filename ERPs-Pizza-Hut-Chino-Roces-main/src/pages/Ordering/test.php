@@ -33,7 +33,7 @@ function haversineDistance($lat1, $lon1, $lat2, $lon2)
 }
 
 $apiKey = '9f368e104b744ddab127fb3cbcf84673';
-$address1 = '64B don carlos revilla st, pasay city, philippines';
+$address1 = '64B, don carlos revilla st, pasay city, 1300';
 $address2 = ' 2116 Chino Roces Ave, Cor Dela Rosa Street, Pio, Makati, Metro Manila, Philippines';
 
 $coords1 = getCoordinates($address1, $apiKey);

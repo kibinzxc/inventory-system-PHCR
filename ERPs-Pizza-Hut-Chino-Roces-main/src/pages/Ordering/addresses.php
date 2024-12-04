@@ -42,13 +42,11 @@ function capitalizeAddress($str)
 // Handling address update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['edit_address'])) {
+        // Set the specific address to edit mode
         $addressId = $_POST['address_id'];
-
-        // Set the address to edit mode
         foreach ($addresses as &$address) {
             if ($address['id'] == $addressId) {
-                $address['edit_mode'] = true; // Set edit_mode to true
-                break;
+                $address['edit_mode'] = true; // Set edit_mode to true for the specific address
             }
         }
     }
@@ -75,9 +73,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Update the JSON in the database
         $updatedAddressesJson = json_encode($addresses);
-        $sql = "UPDATE customerInfo SET address = '$updatedAddressesJson' WHERE uid = $currentUserId";
-        $conn->query($sql);
+        $escapedJson = mysqli_real_escape_string($conn, $updatedAddressesJson);
 
+        $sql = "UPDATE customerInfo SET address = '$escapedJson' WHERE uid = $currentUserId";
+        $conn->query($sql);
+        echo "
+            <script>
+                if (window.opener) {
+                    window.opener.location.reload(); // Refresh the parent window
+                }
+            </script>
+        ";
+        echo "
+            <script>
+                if (window.opener) {
+                    window.opener.location.reload(); // Refresh the parent window
+                }
+            </script>
+        ";
         $conn->close();
         header("Location: " . $_SERVER['PHP_SELF']);
         exit();
@@ -102,34 +115,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Update the JSON in the database
         $updatedAddressesJson = json_encode(array_values($addresses)); // Re-index the array
-        $sql = "UPDATE customerInfo SET address = '$updatedAddressesJson' WHERE uid = $currentUserId";
+        $escapedJson = mysqli_real_escape_string($conn, $updatedAddressesJson);
+
+        $sql = "UPDATE customerInfo SET address = '$escapedJson' WHERE uid = $currentUserId";
         $conn->query($sql);
 
-        $conn->close();
-        header("Location: " . $_SERVER['PHP_SELF']);
+        echo "
+            <script>
+                if (window.opener) {
+                    window.opener.location.reload(); // Refresh the parent window
+                }
+                window.history.back(); // Go back to the form page
+
+            </script>
+        ";
         exit();
     }
 
     // Handle adding a new address
     if (isset($_POST['add_address'])) {
         // Get the new address details from the form
-        $houseNo = $_POST['house_no'];
-        $street = $_POST['street'];
-        $barangay = $_POST['barangay'];
-        $city = $_POST['city'];
-        $province = $_POST['province'];
-        $zipCode = $_POST['zip_code'];
-        $newAddress = "$houseNo, $street, $barangay, $city, $province, $zipCode";
+        $houseNo = preg_replace('/[^\w\s]/', '', $_POST['house_no']);
+        $street = preg_replace('/[^\w\s]/', '', $_POST['street']); // Remove special characters
+        $street = preg_replace('/\s*st$/i', '', $street); // Remove "st" at the end, case-insensitive
+        $barangay = preg_replace('/[^\w\s]/', '', $_POST['barangay']);
+        $city = preg_replace('/[^\w\s]/', '', $_POST['city']);
+        $province = preg_replace('/[^\w\s]/', '', $_POST['province']);
+        $newAddress = "$houseNo, $street, $barangay, $city, $province";
         $newName = $_POST['address_name'];
 
         // Capitalize the address fields
         $newAddress = capitalizeAddress($newAddress);
         $newName = capitalizeAddress($newName);
 
+        // Retrieve the current list of addresses from the database
+        $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId";
+        $result = $conn->query($sql);
+        $row = $result->fetch_assoc();
+        $addresses = json_decode($row['address'], true);
+
+        // Find the highest existing ID and increment it by 1
+        $maxId = 0;
+        foreach ($addresses as $address) {
+            $addressId = (int) $address['id'];  // Make sure ID is treated as an integer
+            if ($addressId > $maxId) {
+                $maxId = $addressId;
+            }
+        }
+
+        // Set the new address ID as the next available number
+        $newAddressId = $maxId + 1;
+
         // Create a new address entry
         $newAddressArray = [
-            'id' => uniqid(),
-            'name' => $newName,  // Title for the address
+            'id' => $newAddressId,  // Use the incremented ID
+            'name' => $newName,      // Title for the address
             'address' => $newAddress
         ];
 
@@ -142,8 +182,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $sql = "UPDATE customerInfo SET address = '$escapedJson' WHERE uid = $currentUserId";
         $conn->query($sql);
 
-        $conn->close();
-        header("Location: " . $_SERVER['PHP_SELF']);
+        echo "
+            <script>
+                if (window.opener) {
+                    window.opener.location.reload(); // Refresh the parent window
+                }
+                window.history.back(); // Go back to the form page
+
+            </script>
+        ";
         exit();
     }
 }
@@ -239,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .address-input {
-            width: 100%;
+            width: 90%;
             padding: 10px;
             margin-top: 10px;
             border: 1px solid #ddd;
@@ -328,6 +375,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: none;
             /* Hidden by default */
         }
+
+        @media (max-width: 400px) {}
     </style>
 </head>
 
@@ -359,7 +408,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php if (isset($address['edit_mode']) && $address['edit_mode']): ?>
                                 <button type="submit" name="save_changes">Save Changes</button>
                             <?php else: ?>
-                                <button type="submit" name="edit_address">Edit</button>
                             <?php endif; ?>
                             <button type="submit" name="remove_address" class="remove-address-btn">Remove Address</button>
                         </div>
@@ -385,7 +433,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" name="barangay" placeholder="Barangay" required>
                 <input type="text" name="city" placeholder="City" required>
                 <input type="text" name="province" placeholder="Province" required>
-                <input type="text" name="zip_code" placeholder="Zip Code" required>
                 <button type="submit" name="add_address">Add Address</button>
                 <button type="button" class="cancel-button" onclick="toggleAddressForm()">Cancel</button>
             </form>

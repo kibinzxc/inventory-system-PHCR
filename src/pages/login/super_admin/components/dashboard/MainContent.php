@@ -112,7 +112,13 @@ if (isset($_SESSION['user_id'])) {
                         <h5>Total Sales Today</h5>
                         <p class="sales-amount"><?php echo '₱' . number_format($totalSales, 2); ?></p>
                     </div>
+                    <div class="percentage-box">
+                        <div class="percentage-body">
+                            <div style="height:30px;"></div>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="card-footer">
                     <p><?php echo 'As of ' . date('F d, Y g:i A'); ?></p>
                 </div>

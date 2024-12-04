@@ -354,7 +354,7 @@ if (isset($_POST['checkout'])) {
                                     </div>
                                 </div>
                             </div>
-                            <hr style="">
+                            <hr>
                         </div>
                         <div class="col-sm-12 scroll" style="overflow-y: auto; height: 50vh; margin:0; padding:0;">
 

@@ -196,8 +196,7 @@ if (isset($_POST['checkout'])) {
                 if ($selectedAddress) {
                     $apiKey = '9f368e104b744ddab127fb3cbcf84673'; // Replace with your actual API key
                     $fixedAddress = '2116 Chino Roces Ave, Cor Dela Rosa Street, Pio, Makati, Metro Manila, Philippines';
-                    $selectedAddress2 = $selectedAddress['address']; // Assuming the address is stored as a string
-                    // Get coordinates of the addresses
+                    $selectedAddress2 = $selectedAddress['address'] . ', Philippines';
 
                     $coordsSelected = getCoordinates($selectedAddress2, $apiKey);
                     $coordsFixed = getCoordinates($fixedAddress, $apiKey);
@@ -213,7 +212,8 @@ if (isset($_POST['checkout'])) {
                         if ($distance > 5) {
                             $_SESSION['error'] = "The delivery address is outside the maximum delivery range.";
                         } else {
-                            $_SESSION['error'] = "The distance between the addresses is: " . $distance . " km.";
+                            $_SESSION['selectedAddress'] = $selectedAddress2;
+                            header("Location: order.php");
                         }
                     } else {
                         $_SESSION['error'] = "Could not retrieve coordinates for one or both addresses.";
@@ -431,7 +431,7 @@ if (isset($_POST['checkout'])) {
                 <!-- Add the fill-remaining class -->
                 <div class="container" style="margin:0;padding:0;">
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-12" style="<?php echo (!$loggedIn) ? 'margin-bottom:150px;' : ''; ?>">
                             <h3 style="margin-top:35px;margin-left:10px; color:#404040;">My Bag</h3>
                         </div>
 
@@ -458,7 +458,7 @@ if (isset($_POST['checkout'])) {
 
                                             <div class="add-address" style="text-align:center;margin-top:10px;">
                                                 <div class="address-btn">
-                                                    <a href="addresses.php" onclick="window.open('addresses.php', 'newwindow', 'width=400,height=700'); return false;">Add New Address</a>
+                                                    <a href="addresses.php" onclick="window.open('addresses.php', 'newwindow', 'width=450,height=700'); return false;">Add New Address</a>
                                                 </div>
                                             </div>
                                             <input type="text" id="addressInput" name="address"
@@ -537,7 +537,7 @@ if (isset($_POST['checkout'])) {
                                             echo '<p style="text-align:center; margin-top:50px;">Add Items to your Bag</p> ';
                                         }
                                     } else {
-                                        echo '<p style="text-align:center; margin-top:50px;">Please Login to Continue</p> ';
+                                        echo '<p style="text-align:center; margin-top:150px;">Please Login to Continue</p> ';
                                     }
                                     $isCartEmpty = true;
 
@@ -683,32 +683,50 @@ if (isset($_POST['checkout'])) {
             // Update the input field with the address only
             document.getElementById('addressInput').value = addressOnly;
 
-            // Store the selected address ID in local storage
+            // Store the selected address ID in session storage
             sessionStorage.setItem('selectedAddress', addressId);
         });
 
         window.onload = function() {
-            var storedAddressId = sessionStorage.getItem('selectedAddress') || '1'; // Default to ID 1 if not set
-            if (storedAddressId) {
-                // Find the option that matches the stored address ID
-                var options = document.getElementById('addressSelect').options;
-                for (var i = 0; i < options.length; i++) {
-                    if (options[i].value === storedAddressId) {
-                        options[i].selected = true;
+            var addressSelect = document.getElementById('addressSelect');
+            var addressInput = document.getElementById('addressInput');
 
-                        // Split the option text into name and address
-                        var addressText = options[i].text;
-                        var parts = addressText.split(' - ');
-                        var addressOnly = parts.length > 1 ? parts[1] : addressText; // Get the address part
+            // If there's only one option in the select dropdown
+            if (addressSelect.options.length === 1) {
+                var singleOption = addressSelect.options[0];
+                singleOption.selected = true;
 
-                        // Update the input field with the address only
-                        document.getElementById('addressInput').value = addressOnly;
-                        break;
+                // Extract the name and address
+                var addressText = singleOption.text;
+                var parts = addressText.split(' - ');
+                var addressOnly = parts.length > 1 ? parts[1] : addressText;
+
+                // Update the input field with the address and session storage
+                addressInput.value = addressOnly;
+                sessionStorage.setItem('selectedAddress', singleOption.value);
+            } else {
+                // Handle normal loading with multiple options
+                var storedAddressId = sessionStorage.getItem('selectedAddress') || null;
+                if (storedAddressId) {
+                    for (var i = 0; i < addressSelect.options.length; i++) {
+                        if (addressSelect.options[i].value === storedAddressId) {
+                            addressSelect.options[i].selected = true;
+
+                            // Extract the name and address
+                            var addressText = addressSelect.options[i].text;
+                            var parts = addressText.split(' - ');
+                            var addressOnly = parts.length > 1 ? parts[1] : addressText;
+
+                            // Update the input field with the address only
+                            addressInput.value = addressOnly;
+                            break;
+                        }
                     }
                 }
             }
         };
     </script>
+
 
 </body>
 

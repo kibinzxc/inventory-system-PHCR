@@ -202,6 +202,7 @@ if ($loggedIn) {
                             $results = $db->query($sql);
                             $rowz = $results->fetch_assoc();
 
+                            $totalPrice = $rowz['totalPrice'];
                             $orderPlaced = $rowz['orderPlaced'];
                             // Create a DateTime object from the input data
                             $dateTime = new DateTime($orderPlaced);
@@ -301,7 +302,6 @@ if ($loggedIn) {
                                                             <th>Size</th>
                                                             <th>Price</th>
                                                             <th>Quantity</th>
-                                                            <th>Total Price</th>
                                                         </tr>
                                                     </thead>
                                                     <?php $totalOrderPrice = 0;
@@ -316,15 +316,12 @@ if ($loggedIn) {
                                                                     $name = $item['name'];
                                                                     $size = $item['size'];
                                                                     $price = $item['price'];
-                                                                    $qty = $item['qty'];
-                                                                    $totalPrice = $item['totalPrice'];
-                                                                    $totalOrderPrice += $totalPrice;
+                                                                    $qty = $item['quantity'];
                                                                     echo ' <tr>
                                                         <td>' . $name . '</td>
                                                         <td>' . $size . '</td>
                                                         <td>₱ ' . $price . '</td>
                                                         <td>' . $qty . '</td>
-                                                        <td>₱ ' . $totalPrice . '</td>
                                                     </tr>';
                                                                 }
                                                             } else {
@@ -336,8 +333,10 @@ if ($loggedIn) {
                                                         echo "0 results";
                                                     }
 
-                                                    $deliveryFee = 50;
-                                                    $totalAmount = $totalOrderPrice + $deliveryFee;
+                                                    $vat = $totalPrice * 0.12;
+                                                    $vatable = $totalPrice - $vat;
+                                                    $deliveryFee = 65;
+                                                    $totalAmount = $totalPrice + $deliveryFee;
 
                                                     ?>
 
@@ -355,18 +354,26 @@ if ($loggedIn) {
                                                             <td>Cash on Delivery</td>
                                                         </tr>
                                                         <tr class="subtotal">
+                                                            <td>Vatable</td>
+                                                            <td>₱ <?php echo number_format($vatable, 2) ?></td>
+                                                        </tr>
+                                                        <tr class="vat">
+                                                            <td>Vat (12%)</td>
+                                                            <td>₱ <?php echo number_format($vat, 2) ?></td>
+                                                        </tr>
+                                                        <tr class="subtotal">
                                                             <td>Subtotal</td>
-                                                            <td>₱ <?php echo $totalOrderPrice ?></td>
+                                                            <td>₱ <?php echo number_format($totalPrice, 2) ?></td>
                                                         </tr>
                                                         <tr class="lasttotal">
                                                             <td>Delivery Fee</td>
                                                             <td>₱
-                                                                <?php echo $deliveryFee ?></td>
+                                                                <?php echo number_format($deliveryFee, 2) ?></td>
                                                         </tr>
                                                         <tr class="total">
                                                             <td style="color:maroon;">Total</td>
                                                             <td style="color:maroon;">₱
-                                                                <?php echo $totalAmount ?></td>
+                                                                <?php echo number_format($totalAmount, 2) ?></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

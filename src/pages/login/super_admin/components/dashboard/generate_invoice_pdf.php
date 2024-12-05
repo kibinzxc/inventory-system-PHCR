@@ -117,7 +117,7 @@ if (isset($_GET['invID'])) {
     $vat = $invoice['total_amount'] - $vatable; // VAT (12%)
 
     $financialDetails = [
-        'Vatable Sales' => 'PHP ' . number_format($invoice['total_amount'], 2),
+        'Vatable Sales' => 'PHP ' . number_format($vatable, 2),
         'VAT (12%)' => 'PHP ' . number_format($vat, 2),
         'VAT Exempt Sales' => 'PHP ' . number_format(0, 2),
         'Zero Rated Sales' => 'PHP ' . number_format(0, 2),

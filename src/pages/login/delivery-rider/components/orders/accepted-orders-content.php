@@ -32,9 +32,36 @@
 </div>
 
 </div>
-<script src="archive.js"></script>
+
 
 echo '<script>
+    function handleFileChange(event, orderID) {
+        const fileInput = event.target;
+        const file = fileInput.files[0];
+        const preview = document.getElementById(`image-preview-${orderID}`);
+        const notDeliveredBtn = document.getElementById(`not-delivered-btn-${orderID}`);
+        const deliveredBtn = document.getElementById(`delivered-btn-${orderID}`);
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = "block"; // Show image preview
+
+                // Enable modal buttons when image is uploaded
+                notDeliveredBtn.style.display = "inline-block";
+                deliveredBtn.style.display = "inline-block";
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.style.display = "none";
+
+            // Disable modal buttons when no image is uploaded
+            notDeliveredBtn.style.display = "none";
+            deliveredBtn.style.display = "none";
+        }
+    }
+
     function previewImage(event) {
         const preview = document.getElementById("image-preview");
         const file = event.target.files[0];
@@ -50,4 +77,21 @@ echo '<script>
             preview.style.display = "none";
         }
     }
+
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        const modals = document.getElementsByClassName('modal');
+        for (let i = 0; i < modals.length; i++) {
+            if (event.target == modals[i]) {
+                modals[i].style.display = 'none';
+            }
+        }
+    };
 </script>';

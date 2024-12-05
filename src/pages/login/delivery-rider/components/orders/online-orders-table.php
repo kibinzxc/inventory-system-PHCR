@@ -71,6 +71,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accept'])) {
             throw new Exception('Float order not found or already updated.');
         }
 
+        //get the uid of the user who placed the order
+        $query = "SELECT uid FROM orders WHERE orderID = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("i", $orderID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $uid = $row['uid'];
+
+        $title = "Order ID#$orderID Status Update";
+        $category = "Order status";
+        $description = "Your order with ID#$orderID is out for delivery and will be 
+        arriving shortly. Thank you for choosing Pizza Hut Chino Roces! We are committed to delivering your order quickly and safely, and we appreciate your business. Should you have any questions or need assistance, feel free to contact us.";
+        $image = "delivery.png";
+        $status = "unread";
+
+        // Insert notification
+        $sql3 = "INSERT INTO msg_users (uid, title, category, description, image, status) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt3 = $conn->prepare($sql3);
+        $stmt3->bind_param("isssss", $uid, $title, $category, $description, $image, $status);
+        $stmt3->execute();
+
+
         // Commit the transaction
         $conn->commit();
         header("Location: " . $_SERVER['PHP_SELF']);

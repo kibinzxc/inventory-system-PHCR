@@ -10,7 +10,6 @@ date_default_timezone_set('Asia/Manila');
 $currentDateTime = new DateTime();
 $currentHour = (int) $currentDateTime->format('H');
 
-// Determine the inventory date (previous day or current day based on the time)
 if ($currentHour < 6) {
     $inventoryDate = $currentDateTime->modify('-1 day')->format('Y-m-d');
 } else {
@@ -18,7 +17,7 @@ if ($currentHour < 6) {
 }
 
 // Fetch today's total sales from the invoice table
-$today = date('Y-m-d');
+$today = $inventoryDate;
 $sql = "
     SELECT SUM(total_amount) as totalSalesToday
     FROM invoice
@@ -34,8 +33,8 @@ $stmt->close();
 // Get the dates for the last week and two weeks ago
 $startOfLastWeek = date('Y-m-d 00:00:00', strtotime('monday last week'));
 $endOfLastWeek = date('Y-m-d 23:59:59', strtotime('sunday last week'));
-$startOfTwoWeeksAgo = date('Y-m-d 00:00:00', strtotime('monday -2 weeks'));
-$endOfTwoWeeksAgo = date('Y-m-d 23:59:59', strtotime('sunday -2 weeks'));
+$startOfTwoWeeksAgo = date('Y-m-d 00:00:00', strtotime('monday last week -7 days'));
+$endOfTwoWeeksAgo = date('Y-m-d 23:59:59', strtotime('sunday last week -7 days'));
 
 // Fetch weekly revenue and average sales for last week
 $sql = "
@@ -137,4 +136,5 @@ $pdf->Cell(0, 10, 'Highest Forecasted Sales Day: ' . $maxSalesDay . ' (PHP ' . n
 $pdf->Cell(0, 10, 'Lowest Forecasted Sales Day: ' . $minSalesDay . ' (PHP ' . number_format($minForecastedSales, 2) . ')', 0, 1, 'C');
 
 // Output the PDF
-$pdf->Output('D', 'Sales_Analytics_Report.pdf');
+// $pdf->Output('D', 'Sales_Analytics_Report.pdf');
+$pdf->Output();

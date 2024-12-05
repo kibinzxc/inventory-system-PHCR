@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Initialize variables for total price and delivery fee
         $totalPrice = 0;
-        $deliveryFee = 50;
+        $deliveryFee = 65;
 
         // Initialize an array to store cart items
         $cartItems = array();

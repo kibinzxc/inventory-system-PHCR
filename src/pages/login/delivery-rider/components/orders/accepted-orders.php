@@ -27,7 +27,7 @@ error_reporting(1);
 
 
 
-    <?php include 'online-orders-content.php'; ?>
+    <?php include 'accepted-orders-content.php'; ?>
 
     <script src="../Sidebar/Sidebar.js"></script>
 

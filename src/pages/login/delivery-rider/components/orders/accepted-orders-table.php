@@ -31,19 +31,6 @@ if ($userResult->num_rows === 0) {
 $user = $userResult->fetch_assoc();
 $currentUsername = $user['name'];
 
-// Check if the current user already has a pending order in float_orders
-$orderQuery = "SELECT * FROM float_orders WHERE cashier = ?";
-$stmtOrder = $conn->prepare($orderQuery);
-$stmtOrder->bind_param("s", $currentUsername);
-$stmtOrder->execute();
-$orderResult = $stmtOrder->get_result();
-
-if ($orderResult->num_rows > 0) {
-    // Redirect to accepted-orders.php if an order is found
-    header("Location: accepted-orders.php");
-    exit;
-}
-
 // Handle the "Accept" button action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accept'])) {
     $orderID = $_POST['orderID'];
@@ -82,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accept'])) {
 }
 
 // Fetch and display orders with 'ready for pickup' status
-$query = "SELECT orderID, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status FROM orders WHERE status = 'ready for pickup' ORDER BY orderPlaced DESC";
+$query = "SELECT orderID, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status FROM orders WHERE status = 'delivery' ORDER BY orderPlaced DESC";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -117,13 +104,20 @@ while ($row = $result->fetch_assoc()) {
     echo '<p><strong>Address:</strong> ' . htmlspecialchars($address) . '</p>';
     echo '<p><strong>Total Price:</strong> ₱' . number_format($totalPrice, 2) . '</p>';
     echo '</div>';
-
-    echo '<form method="POST" class="order-actions">';
+    echo '<form method="POST" enctype="multipart/form-data" class="order-actions">';
+    echo '<br>';
+    echo '<form method="POST" enctype="multipart/form-data" class="order-actions">';
+    echo '<label for="image" style="font-size: 1.2rem; color: #343434; display: block; margin-bottom: 10px;">Proof of Delivery</label>';
+    echo '<input type="file" name="image" id="image" accept="image/*" required onchange="previewImage(event)">';
+    echo '<br>';
+    echo '<img id="image-preview" src="#" alt="Image Preview" style="display:none; margin-top: 15px; max-width: 100%; max-height: 200px; border: 1px solid #ccc; border-radius: 5px;">';
     echo '<input type="hidden" name="orderID" value="' . htmlspecialchars($orderID) . '">';
-    echo '<button type="submit" name="accept" class="btn btn-done">Accept</button>';
+    echo '<button type="submit" name="Done" class="btn btn-done">Mark as Delivered</button>';
     echo '</form>';
     echo '</div>';
 }
+
+
 
 $stmt->close();
 $conn->close();

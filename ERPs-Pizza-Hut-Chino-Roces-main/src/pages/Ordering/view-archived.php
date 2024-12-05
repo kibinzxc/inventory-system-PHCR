@@ -126,6 +126,16 @@ if (isset($_GET['inbox'])) {
     } else {
     }
 }
+if (isset($_POST['mark_all_read'])) {
+    $deleteQuery = "DELETE FROM msg_users WHERE uid =" . $_SESSION['uid'] . " AND status = 'archived'";
+
+    if ($db->query($deleteQuery) === TRUE) {
+        $_SESSION['success2']  = "Message has been successfully deleted";
+    } else {
+        // Handle deletion error
+        echo "Error deleting record: " . $db->error;
+    }
+}
 $queryz1 = "SELECT COUNT(*) as archived_count FROM msg_users WHERE status = 'archived' AND uid =" . $_SESSION['uid'];
 $result42 = $db->query($queryz1);
 
@@ -298,7 +308,7 @@ if ($loggedIn) {
                             <div class="' . $row['status'] . '" style = "padding:20px 20px 5px 20px; width:100%; border-bottom:1px solid #B6B6B6; border-radius:5px; margin-bottom:10px;">
                                 <div style = "float:left; margin-top:10px;"> 
                                     
-                                    <i class="' . $icon . '" alt="Category Icon" style="font-size:35px; color:#605D5D;"></i>
+                                    <img src="../../assets/img/bell.svg" alt="Category Icon" style="width:50px; color:#605D5D;"></img>
                                 </div>
                                 <div style = "float:center; margin-left:60px;">
                                     <h5>' . $row['title'] . '</h5>

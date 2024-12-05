@@ -11,7 +11,7 @@ if (isset($_SESSION['uid'])) {
     $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
     $result = $conn->query($sql);
     $hasActiveOrders = false;
-    $orderStatuses = ["placed", "preparing", "delivery"];
+    $orderStatuses = ["placed", "preparing", "ready for pickup", "delivery"];
     //get the selected address from the session
     if (isset($_SESSION['selectedAddress'])) {
         $selectedAddress = $_SESSION['selectedAddress'];
@@ -37,7 +37,7 @@ if (isset($_SESSION['uid'])) {
             $order_status = $row['status'];
 
             // Check if the order status is 'placed' or 'delivery'
-            if ($order_status == 'placed' || $order_status == 'delivery' || $order_status == 'preparing') {
+            if ($order_status == 'placed' || $order_status == 'delivery' || $order_status == 'ready for pickup' || $order_status == 'preparing') {
                 // Redirect to another page
                 header("Location: order-placed.php");
                 exit();
@@ -49,7 +49,7 @@ if (isset($_SESSION['uid'])) {
     $resultCartCheck = $conn->query($sqlCartCheck);
 
 
-    $sqlactiveOrder = "SELECT * FROM cart WHERE uid = $currentUserId";
+    $sqlactiveOrder = "SELECT * FROM orders WHERE uid = $currentUserId AND status IN ('placed', 'ready for pickup', 'preparing', 'delivery')";
     $resultactiveOrder = $conn->query($sqlactiveOrder);
     $orderActive = true;
 

@@ -41,15 +41,14 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
         color: #343434;
         margin-bottom: 12px;
         flex: 1;
-
     }
 
     .mg-card-total-price {
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: bold;
         color: #343434;
-        margin-bottom: 15px;
-        text-align: left;
+        margin-bottom: 25px;
+        text-align: center;
     }
 
     .mg-card-actions {
@@ -95,7 +94,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
 <div id="main-content">
     <div class="container">
         <div class="header">
-            <h2 style="color:#343434">All Orders | Now Preparing</h2>
+            <h2 style="color:#343434">All Orders | Ready for Pickup</h2>
             <div class="btn-wrapper">
                 <a href="orders.php" class="btn"><img src="../../assets/external-link.svg" alt=""> Point-of-Sale</a>
                 <a href="order-logs.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Logs</a>
@@ -109,8 +108,8 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
             <a href="https://www.flaticon.com/free-icons/delivery" title="delivery icons">Delivery icons created by monkik - Flaticon</a>
             <a href="https://www.flaticon.com/free-icons/email" title="email icons">Email icons created by Dewi Sari - Flaticon</a> -->
             <a href="manage-orders.php"><img src="../../assets/order.png" class="img-btn-link"> New Orders</a>
-            <a href="now-preparing.php" class="active"><img src="../../assets/cooking-time.png" class="img-btn-link"> Now Preparing</a>
-            <a href="pickup.php"><img src="../../assets/delivery-man.png" class="img-btn-link"> Ready for Pickup</a>
+            <a href="now-preparing.php"><img src="../../assets/cooking-time.png" class="img-btn-link"> Now Preparing</a>
+            <a href="pickup.php" class="active"><img src="../../assets/delivery-man.png" class="img-btn-link"> Ready for Pickup</a>
             <a href="tbd.php"><img src="../../assets/delivery.png" class="img-btn-link"> To be Delivered</a>
         </div>
 
@@ -123,7 +122,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
                 }
 
                 // Query to fetch data
-                $query = "SELECT orderID, orders, order_type FROM float_orders where status = 'preparing' ORDER BY transaction_date ASC";
+                $query = "SELECT orderID, orders, order_type FROM float_orders where status = 'ready for pickup' ORDER BY transaction_date ASC";
                 $result = mysqli_query($conn, $query);
 
                 if (mysqli_num_rows($result) > 0) {
@@ -143,11 +142,8 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
                         <div class='mg-card' data-order-id='$orderID'>
                             <div class='mg-card-title'>Order ID: $orderID</div>
                             <div class='mg-card-content'>$orderDetails</div>
-                            <div class='mg-card-total-price'>Transaction: $orderType</div>
-                            <div class='mg-card-actions'>
-                                <button class='mg-button mg-remove-button' onclick='updateOrderStatus($orderID, \"cancelled\")'>Cancel</button>
-                                <button class='mg-button mg-accept-button' onclick='updateOrderStatus($orderID, \"ready for pickup\")'>Done</button>
-                            </div>
+                            <div class='mg-card-total-price'>Waiting for Pickup</div>
+                            
                         </div>";
                     }
                 } else {
@@ -162,28 +158,3 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
 </div>
 <?php include 'SuccessErrorModal.php'; ?>
 <script src="SuccessErrorModal.js"></script>
-<script>
-    // JavaScript function to handle button clicks
-    function updateOrderStatus(orderID, status) {
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'update-preparing.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-            if (xhr.status == 200) {
-                var response = xhr.responseText;
-                if (response.includes("success")) {
-                    // Redirect to manage-orders.php on success
-                    window.location.href = 'now-preparing.php?action=success&message=Order status updated';
-                } else {
-                    // Redirect to manage-orders.php on failure
-                    alert("Error: " + response);
-                    window.location.href = 'now-preparing.php?action=error&reason=' + encodeURIComponent(response);
-                }
-            } else {
-                window.location.href = 'now-preparing.php?action=error&reason=server_error';
-            }
-        };
-        xhr.send('orderID=' + orderID + '&status=' + status);
-    }
-</script>

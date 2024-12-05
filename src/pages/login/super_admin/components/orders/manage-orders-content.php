@@ -31,19 +31,21 @@ include '../../connection/database.php';
         font-size: 1.5rem;
         font-weight: bold;
         margin-bottom: 8px;
+        color: #343434;
     }
 
     .mg-card-content {
         font-size: 1.1rem;
-        color: #555;
+        color: #343434;
         margin-bottom: 12px;
         flex: 1;
+
     }
 
     .mg-card-total-price {
         font-size: 1.2rem;
         font-weight: bold;
-        color: #333;
+        color: #343434;
         margin-bottom: 15px;
         text-align: center;
     }
@@ -91,7 +93,7 @@ include '../../connection/database.php';
 <div id="main-content">
     <div class="container">
         <div class="header">
-            <h1>All Orders</h1>
+            <h2 style="color:#343434">All Orders | New Orders</h2>
             <div class="btn-wrapper">
                 <a href="orders.php" class="btn"><img src="../../assets/external-link.svg" alt=""> Point-of-Sale</a>
                 <a href="order-logs.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Logs</a>
@@ -99,10 +101,15 @@ include '../../connection/database.php';
         </div>
         <br>
         <div class="btncontents">
-            <a href="items.php" class="active">New Orders</a>
-            <a href="now-preparing.php">Now Preparing</a>
-            <a href="items.php">Ready for Pickup</a>
-            <a href="items.php">To be Delivered</a>
+            <!-- <a href="https://www.flaticon.com/free-icons/food-delivery" title="food delivery icons">Food delivery icons created by HAJICON - Flaticon</a>
+            <a href="https://www.flaticon.com/free-icons/submit" title="submit icons">Submit icons created by Vectors Tank - Flaticon</a>
+            <a href="https://www.flaticon.com/free-icons/cooking-time" title="cooking time icons">Cooking time icons created by Freepik - Flaticon</a>
+            <a href="https://www.flaticon.com/free-icons/delivery" title="delivery icons">Delivery icons created by monkik - Flaticon</a>
+            <a href="https://www.flaticon.com/free-icons/email" title="email icons">Email icons created by Dewi Sari - Flaticon</a> -->
+            <a href="manage-orders.php" class="active"><img src="../../assets/order.png" class="img-btn-link"> New Orders</a>
+            <a href="now-preparing.php"><img src="../../assets/cooking-time.png" class="img-btn-link"> Now Preparing</a>
+            <a href="pickup.php"><img src="../../assets/delivery-man.png" class="img-btn-link"> Ready for Pickup</a>
+            <a href="tbd.php"><img src="../../assets/delivery.png" class="img-btn-link"> To be Delivered</a>
         </div>
 
         <div class="content-wrapper">
@@ -168,8 +175,9 @@ include '../../connection/database.php';
                     // Redirect to manage-orders.php on success
                     window.location.href = 'manage-orders.php?action=success&message=Order status updated';
                 } else {
+
                     // Redirect to manage-orders.php on failure
-                    window.location.href = 'manage-orders.php?action=error&reason=update_failed';
+                    window.location.href = 'manage-orders.php?action=error&reason=' + encodeURIComponent(response);
                 }
             } else {
                 window.location.href = 'manage-orders.php?action=error&reason=server_error';

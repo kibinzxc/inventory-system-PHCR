@@ -506,6 +506,9 @@ $conn->close();
         height: 50vh;
     }
 
+
+
+
     /* Responsive Layout */
     @media (max-width: 768px) {
         .analysis {

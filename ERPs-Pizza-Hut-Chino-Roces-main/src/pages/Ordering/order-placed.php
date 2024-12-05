@@ -12,11 +12,13 @@ if (isset($_SESSION['uid'])) {
     $resultz = $conn->query($sql);
     $row1 = $resultz->fetch_assoc();
     $orderStatus1 = $row1['status'];
-    if ($orderStatus1 !== "placed" && $orderStatus1 !== "preparing" && $orderStatus1 !== "delivery") {
+    if ($orderStatus1 !== "placed" && $orderStatus1 !== "preparing" && $orderStatus1 !== "ready for pickup" && $orderStatus1 !== "delivery") {
         // Redirect to the specific page
         header("Location: order.php"); // Replace "/specific-page.php" with the actual page URL
         exit(); // Ensure that no further code is executed after the redirection
     }
+
+
 
     $userTypeQuery = "SELECT user_type FROM users WHERE uid = $currentUserId";
     $result = $conn->query($userTypeQuery);
@@ -197,7 +199,7 @@ if ($loggedIn) {
                             <?php
                             // Assuming you have a database connection established as $db and $currentUserId is defined
 
-                            $sql = "SELECT * FROM orders WHERE uid = $currentUserId";
+                            $sql = "SELECT * FROM orders WHERE uid = $currentUserId AND status != 'cancelled' ORDER BY orderID DESC LIMIT 1";
                             $result = $db->query($sql);
                             $results = $db->query($sql);
                             $rowz = $results->fetch_assoc();
@@ -218,12 +220,19 @@ if ($loggedIn) {
                             $time1 = $dateTime1->format("h:i A");
 
                             $orderStatus = $rowz['status'];
+
+                            //if ready for pickup make it 'waiting for delivery' 
+                            if ($orderStatus === "ready for pickup") {
+                                $orderStatus = "waiting for delivery";
+                            }
                             function getBadgeClass($status)
                             {
                                 switch ($status) {
                                     case "placed":
                                         return "badge bg-secondary";
                                     case "preparing":
+                                        return "badge custom-warning";
+                                    case "waiting for delivery":
                                         return "badge custom-warning";
                                     case "delivery":
                                         return "badge custom1-warning";

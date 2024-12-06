@@ -53,7 +53,8 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
 
     .mg-card-actions {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+
     }
 
     .mg-button {
@@ -74,6 +75,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
         background-color: #006D6D;
         color: #fff;
         font-size: 1.2rem;
+        text-align: center;
     }
 
     .mg-button:hover {
@@ -102,11 +104,6 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
         </div>
         <br>
         <div class="btncontents">
-            <!-- <a href="https://www.flaticon.com/free-icons/food-delivery" title="food delivery icons">Food delivery icons created by HAJICON - Flaticon</a>
-            <a href="https://www.flaticon.com/free-icons/submit" title="submit icons">Submit icons created by Vectors Tank - Flaticon</a>
-            <a href="https://www.flaticon.com/free-icons/cooking-time" title="cooking time icons">Cooking time icons created by Freepik - Flaticon</a>
-            <a href="https://www.flaticon.com/free-icons/delivery" title="delivery icons">Delivery icons created by monkik - Flaticon</a>
-            <a href="https://www.flaticon.com/free-icons/email" title="email icons">Email icons created by Dewi Sari - Flaticon</a> -->
             <a href="manage-orders.php"><img src="../../assets/order.png" class="img-btn-link"> New Orders</a>
             <a href="now-preparing.php"><img src="../../assets/cooking-time.png" class="img-btn-link"> Now Preparing</a>
             <a href="pickup.php" class="active"><img src="../../assets/delivery-man.png" class="img-btn-link"> Ready for Pickup</a>
@@ -143,7 +140,9 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
                             <div class='mg-card-title'>Order ID: $orderID</div>
                             <div class='mg-card-content'>$orderDetails</div>
                             <div class='mg-card-total-price'>Waiting for Pickup</div>
-                            
+                            <div class='mg-card-actions'>
+                                <button class='mg-button mg-accept-button' onclick='downloadReceipt($orderID)'>Generate Receipt</button>
+                            </div>
                         </div>";
                     }
                 } else {
@@ -158,3 +157,11 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
 </div>
 <?php include 'SuccessErrorModal.php'; ?>
 <script src="SuccessErrorModal.js"></script>
+
+<script>
+    function downloadReceipt(orderID) {
+        const url = `generate_inv.php?invID=${orderID}`;
+        const windowFeatures = "width=400,height=600,scrollbars=no,toolbar=no,location=no,status=no,menubar=no,resizable=no";
+        window.open(url, "_blank", windowFeatures);
+    }
+</script>

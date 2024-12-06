@@ -10,7 +10,7 @@ if (isset($_SESSION['uid'])) {
     $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
     $result = $conn->query($sql);
     $hasActiveOrders = false;
-    $orderStatuses = ["placed", "preparing", "delivery"];
+    $orderStatuses = ["placed", "preparing", "ready for pickup", "delivery"];
     // Query the database to check for orders with specified statuses
     $checkOrdersSql = "SELECT COUNT(*) AS orderCount FROM orders WHERE uid = $currentUserId AND status IN ('" . implode("','", $orderStatuses) . "')";
     $resultOrders = $conn->query($checkOrdersSql);

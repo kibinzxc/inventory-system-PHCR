@@ -51,7 +51,6 @@ if ($orderResult->num_rows < 1) {
 }
 
 
-// Handle the "Accept" button action
 // Handle the "Not Delivered" button action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['not-yet'])) {
     $orderID = $_POST['orderID'];
@@ -84,6 +83,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['not-yet'])) {
         $uidResult = $stmtGetUid->get_result();
         $uidRow = $uidResult->fetch_assoc();
         $uid = $uidRow['uid'];
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            // Define the upload directory
+            $uploadDir = '../../../super_admin/assets/pod/';
+
+            $imgExt = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+
+            $imgName = 'proof' . $orderID . '.' . $imgExt; // 'proofORDERID.extension'
+
+            $imgPath = $uploadDir . $imgName;
+
+
+            // Move the uploaded image to the server
+            if (!move_uploaded_file($_FILES['image']['tmp_name'], $imgPath)) {
+                throw new Exception('Error uploading the image.');
+            }
+        } else {
+            // If no image was uploaded, ensure imgPath is set to null
+            $imgPath = null;
+        }
 
         $title = "Order ID#$orderID Status Update";
         $category = "Order status";
@@ -120,13 +139,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['not-yet'])) {
         $del_instruct = $row['del_instruct'];
         $orderPlaced = $row['orderPlaced'];
         $status = $row['status'];
-        $query = "INSERT INTO success_orders (orderID, uid, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO success_orders (orderID, uid, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         $stmt = $conn->prepare($query);
 
         if (!$stmt) {
             die("Prepare failed: " . $conn->error);
         }
-        $stmt->bind_param('isssssssss', $orderID, $uid, $name, $address, $items, $totalPrice, $payment, $del_instruct, $orderPlaced, $status);
+        $stmt->bind_param('issssssssss', $orderID, $uid, $name, $address, $items, $totalPrice, $payment, $del_instruct, $orderPlaced, $status, $imgName);
         if ($stmt->execute()) {
             //delete float 
             $removeOrder = "DELETE FROM orders WHERE orderID = ?";
@@ -146,6 +165,221 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['not-yet'])) {
         echo '<p>Error: ' . htmlspecialchars($e->getMessage()) . '</p>';
     }
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
+    $orderID = $_POST['orderID'];
+
+    $conn->begin_transaction();
+
+    try {
+        // Update the status in `orders` table
+        $updateOrdersSql = "UPDATE orders SET status = 'delivered' WHERE orderID = ?";
+        $stmtUpdateOrders = $conn->prepare($updateOrdersSql);
+        $stmtUpdateOrders->bind_param("i", $orderID);
+        $stmtUpdateOrders->execute();
+
+        if ($stmtUpdateOrders->affected_rows === 0) {
+            throw new Exception('Order not found or already updated.');
+        }
+
+        // Update the status in `float_orders` table to 'delivered'
+        $updateFloatOrdersSql = "UPDATE float_orders SET status = 'delivered' WHERE orderID = ?";
+        $stmtUpdateFloatOrders = $conn->prepare($updateFloatOrdersSql);
+        $stmtUpdateFloatOrders->bind_param("i", $orderID);
+        $stmtUpdateFloatOrders->execute();
+
+        if ($stmtUpdateFloatOrders->affected_rows === 0) {
+            throw new Exception('Float order not found or already updated.');
+        }
+
+        // Get the UID of the user who placed the order
+        $getUidSql = "SELECT uid FROM orders WHERE orderID = ?";
+        $stmtGetUid = $conn->prepare($getUidSql);
+        $stmtGetUid->bind_param("i", $orderID);
+        $stmtGetUid->execute();
+        $uidResult = $stmtGetUid->get_result();
+        $uidRow = $uidResult->fetch_assoc();
+        $uid = $uidRow['uid'];
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            // Define the upload directory
+            $uploadDir = '../../../super_admin/assets/pod/';
+
+            $imgExt = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+
+            $imgName = 'proof' . $orderID . '.' . $imgExt; // 'proofORDERID.extension'
+
+            $imgPath = $uploadDir . $imgName;
+
+            // Move the uploaded image to the server
+            if (!move_uploaded_file($_FILES['image']['tmp_name'], $imgPath)) {
+                throw new Exception('Error uploading the image.');
+            }
+        } else {
+            // If no image was uploaded, ensure imgPath is set to null
+            $imgPath = null;
+        }
+
+        $title = "Order ID#$orderID Status Update";
+        $category = "Order status";
+        $description = "We are pleased to inform you that the delivery of your order with ID#$orderID has been successfully completed. Thank you for your purchase! If you have any questions or concerns, feel free to contact us.";
+        $image = "delivered.png";
+        $status = "unread";
+
+        // Insert notification
+        $sql3 = "INSERT INTO msg_users (uid, title, category, description, image, status) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt3 = $conn->prepare($sql3);
+        $stmt3->bind_param("isssss", $uid, $title, $category, $description, $image, $status);
+        $stmt3->execute();
+
+        // Commit the transaction
+        $conn->commit();
+
+        // Insert order into success_orders table
+        $query = "SELECT * FROM orders WHERE orderID = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('i', $orderID);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+
+        $orderID = $row['orderID'];
+        $uid = $row['uid'];
+        $name = $row['name'];
+        $address = $row['address'];
+        $items = $row['items'];
+        $totalPrice = $row['totalPrice'];
+        $payment = $row['payment'];
+        $del_instruct = $row['del_instruct'];
+        $orderPlaced = $row['orderPlaced'];
+        $status = $row['status'];
+
+        // Insert into success_orders table
+        $query = "INSERT INTO success_orders (orderID, uid, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('issssssssss', $orderID, $uid, $name, $address, $items, $totalPrice, $payment, $del_instruct, $orderPlaced, $status, $imgName);
+        if ($stmt->execute()) {
+
+            $fetchOrderSql = "SELECT items, totalPrice FROM orders WHERE orderID = ?";
+            $stmtFetchOrder = $conn->prepare($fetchOrderSql);
+            $stmtFetchOrder->bind_param("i", $orderID);
+            $stmtFetchOrder->execute();
+            $resultOrder = $stmtFetchOrder->get_result();
+
+            if ($resultOrder->num_rows === 0) {
+                throw new Exception('Order details not found.');
+            }
+
+            $order = $resultOrder->fetch_assoc();
+            $items = json_decode($order['items'], true);
+
+            // Process ingredients and check stock
+            $insufficientStocks = [];
+            foreach ($items as $item) {
+                $productName = $item['name'];
+                $orderQty = $item['quantity'];
+
+                $ingredientsSql = "SELECT ingredients FROM products WHERE name = ?";
+                $stmtIngredients = $conn->prepare($ingredientsSql);
+                $stmtIngredients->bind_param("s", $productName);
+                $stmtIngredients->execute();
+                $resultIngredients = $stmtIngredients->get_result();
+
+                if ($resultIngredients->num_rows > 0) {
+                    $rowIngredients = $resultIngredients->fetch_assoc();
+                    $ingredients = json_decode($rowIngredients['ingredients'], true);
+
+                    foreach ($ingredients as $ingredient) {
+                        $ingredientName = $ingredient['ingredient_name'];
+                        $requiredQty = $ingredient['quantity'] * $orderQty;
+
+                        $stockSql = "SELECT ending, uom FROM daily_inventory WHERE name = ?";
+                        $stmtStock = $conn->prepare($stockSql);
+                        $stmtStock->bind_param("s", $ingredientName);
+                        $stmtStock->execute();
+                        $resultStock = $stmtStock->get_result();
+
+                        if ($resultStock->num_rows > 0) {
+                            $stock = $resultStock->fetch_assoc();
+                            $availableQty = $stock['ending'];
+
+                            if ($stock['uom'] === 'kg') {
+                                $requiredQty /= 1000; // Convert grams to kilograms
+                            }
+
+                            error_log("Checking stock for $ingredientName: available $availableQty, required $requiredQty");
+
+                            if ($availableQty < $requiredQty) {
+                                $insufficientStocks[] = $ingredientName;
+                            } else {
+                                $updateStockSql = "UPDATE daily_inventory SET usage_count = usage_count + ?, ending = ending - ? WHERE name = ?";
+                                $stmtUpdateStock = $conn->prepare($updateStockSql);
+                                $stmtUpdateStock->bind_param("dds", $requiredQty, $requiredQty, $ingredientName);
+                                if ($stmtUpdateStock->execute()) {
+                                    error_log("Stock updated for $ingredientName: -$requiredQty from ending, +$requiredQty to usage.");
+                                } else {
+                                    error_log("Failed to update stock for $ingredientName.");
+                                }
+                            }
+                        } else {
+                            $insufficientStocks[] = $ingredientName;
+                        }
+                    }
+                }
+            }
+
+            if (!empty($insufficientStocks)) {
+                $conn->rollback();
+                echo '<p>Insufficient stock for: ' . implode(', ', $insufficientStocks) . '</p>';
+                exit;
+            }
+
+            $insertInvoiceSql = "INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) 
+                                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmtInvoice = $conn->prepare($insertInvoiceSql);
+            $orderItems = json_encode($items);
+            $cashier = $currentUsername;
+            $orderType = 'delivery';
+            $mop = 'cod';
+            $amountChange = 0; // Use a variable for the constant value
+            $stmtInvoice->bind_param("ssddssss", $orderID, $orderItems, $totalPrice, $totalPrice, $amountChange, $orderType, $mop, $cashier);
+            if ($stmtInvoice->execute()) {
+                //delete float_orders and orders 
+                $removeOrder = "DELETE FROM orders WHERE orderID = ?";
+                $stmtRemoveOrder = $conn->prepare($removeOrder);
+                $stmtRemoveOrder->bind_param("i", $orderID);
+                $stmtRemoveOrder->execute();
+                $stmtRemoveOrder->close();
+
+                $removeFloatOrder = "DELETE FROM float_orders WHERE orderID = ?";
+                $stmtRemoveFloatOrder = $conn->prepare($removeFloatOrder);
+                $stmtRemoveFloatOrder->bind_param("i", $orderID);
+                $stmtRemoveFloatOrder->execute();
+                $stmtRemoveFloatOrder->close();
+
+                //delete invoice_temp
+                $removeInvoiceTemp = "DELETE FROM invoice_temp WHERE invID = ?";
+                $stmtRemoveInvoiceTemp = $conn->prepare($removeInvoiceTemp);
+                $stmtRemoveInvoiceTemp->bind_param("i", $orderID);
+                $stmtRemoveInvoiceTemp->execute();
+                $stmtRemoveInvoiceTemp->close();
+
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit();
+            }
+
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit();
+        } else {
+            die("Error executing stmt3: " . $stmt3->error);  // More detailed error if insert fails
+        }
+    } catch (Exception $e) {
+        $conn->rollback();
+        echo '<p>Error: ' . htmlspecialchars($e->getMessage()) . '</p>';
+    }
+}
+
+
 
 
 // Fetch and display orders with 'ready for pickup' status
@@ -195,7 +429,6 @@ while ($row = $result->fetch_assoc()) {
     echo '<button type="button" class="btn btn-secondary" id="not-delivered-btn-' . $orderID . '" style="display: none;" onclick="openModal(\'not-delivered-modal-' . $orderID . '\')">Not Delivered</button>';
     echo '<button type="button" class="btn btn-done" id="delivered-btn-' . $orderID . '" style="display: none;" onclick="openModal(\'delivered-modal-' . $orderID . '\')">Mark as Delivered</button>';
     echo '</div>';
-    echo '</form>';
 
     // Not Delivered Modal
     echo '<div id="not-delivered-modal-' . $orderID . '" class="modal">';
@@ -203,10 +436,8 @@ while ($row = $result->fetch_assoc()) {
     echo '<p>Are you sure you want to mark this order as "Not Delivered"?</p>';
     echo '<div class="modal-buttons">';
     echo '<button onclick="closeModal(\'not-delivered-modal-' . $orderID . '\')" class="btn btn-cancel2">Cancel</button>';
-    echo '<form method="POST" style="display: inline;">';
     echo '<input type="hidden" name="orderID" value="' . htmlspecialchars($orderID) . '">';
     echo '<button type="submit" name="not-yet" class="btn btn-secondary">Confirm</button>';
-    echo '</form>';
     echo '</div>';
     echo '</div>';
     echo '</div>';
@@ -217,9 +448,8 @@ while ($row = $result->fetch_assoc()) {
     echo '<p>Are you sure you want to mark this order as "Delivered"?</p>';
     echo '<div class="modal-buttons">';
     echo '<button onclick="closeModal(\'delivered-modal-' . $orderID . '\')" class="btn btn-cancel2">Cancel</button>';
-    echo '<form method="POST" style="display: inline;">';
     echo '<input type="hidden" name="orderID" value="' . htmlspecialchars($orderID) . '">';
-    echo '<button type="submit" name="Done" class="btn btn-done">Confirm</button>';
+    echo '<button type="submit" name="done" class="btn btn-done">Confirm</button>';
     echo '</form>';
     echo '</div>';
     echo '</div>';

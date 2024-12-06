@@ -39,17 +39,28 @@ foreach ($orders as $order) {
 
 // Generate invID
 $today = date('mdY');
-$query = "SELECT invID FROM invoice WHERE invID LIKE '$today%' ORDER BY invID DESC LIMIT 1";
-$result = $conn->query($query);
+$query_invoice = "SELECT invID FROM invoice WHERE invID LIKE '$today%' ORDER BY invID DESC LIMIT 1";
+$query_invoice_temp = "SELECT invID FROM invoice_temp WHERE invID LIKE '$today%' ORDER BY invID DESC LIMIT 1";
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $last_invID = $row['invID'];
-    $last_number = (int)substr($last_invID, -3);
-    $next_number = str_pad($last_number + 1, 3, '0', STR_PAD_LEFT);
-} else {
-    $next_number = '001';
+$result_invoice = $conn->query($query_invoice);
+$result_invoice_temp = $conn->query($query_invoice_temp);
+
+$last_number_invoice = 0;
+$last_number_invoice_temp = 0;
+
+if ($result_invoice->num_rows > 0) {
+    $row_invoice = $result_invoice->fetch_assoc();
+    $last_invID_invoice = $row_invoice['invID'];
+    $last_number_invoice = (int)substr($last_invID_invoice, -3);
 }
+
+if ($result_invoice_temp->num_rows > 0) {
+    $row_invoice_temp = $result_invoice_temp->fetch_assoc();
+    $last_invID_invoice_temp = $row_invoice_temp['invID'];
+    $last_number_invoice_temp = (int)substr($last_invID_invoice_temp, -3);
+}
+
+$next_number = str_pad(max($last_number_invoice, $last_number_invoice_temp) + 1, 3, '0', STR_PAD_LEFT);
 $invID = $today . $next_number;
 
 // Start a transaction
@@ -68,7 +79,7 @@ try {
     $stmt->execute();
 
     // Insert invoice data
-    $stmtInvoice = $conn->prepare("INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) 
+    $stmtInvoice = $conn->prepare("INSERT INTO invoice_temp (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $orderJson = json_encode($orders);
     $order_type = 'walk-in';

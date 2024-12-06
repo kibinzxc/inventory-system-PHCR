@@ -49,9 +49,12 @@ if (isset($_GET['invID'])) {
     // Walk-in == dine in
     if ($invoice['order_type'] == 'walk-in') {
         $invoice['order_type'] = 'dine in';
+        $staff = 'Cashier';
+    } elseif ($invoice['order_type'] == 'delivery') {
+        $staff = 'Delivery Rider';
     }
     // Cashier and Order Type
-    $pdf->Cell(0, 5, 'Cashier: ' . $invoice['cashier'], 0, 1);
+    $pdf->Cell(0, 5, $staff . ': ' . $invoice['cashier'], 0, 1);
     $pdf->Cell(0, 5, 'Transaction Type: ' . strtoupper($invoice['order_type']), 0, 1);
     $pdf->Cell(0, 5, 'Method of Payment: ' . strtoupper($invoice['mop']), 0, 1);
     $pdf->Ln(2);

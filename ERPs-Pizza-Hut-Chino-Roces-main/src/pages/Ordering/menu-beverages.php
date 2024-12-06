@@ -6,11 +6,17 @@ include 'connection/database-db.php';
 if (isset($_SESSION['uid'])) {
     $loggedIn = true;
     $currentUserId = $_SESSION['uid'];
+    // Database connection details
 
-    $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
+
+    // Retrieve the current user's ID from the session
+    $currentUserId = $_SESSION['uid'];
+
+    $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'customerInfo' with your table name
     $result = $conn->query($sql);
     $hasActiveOrders = false;
-    $orderStatuses = ["placed", "preparing", "delivery"];
+    $orderStatuses = ["placed", "preparing", "ready for pickup", "delivery"];
+
     // Query the database to check for orders with specified statuses
     $checkOrdersSql = "SELECT COUNT(*) AS orderCount FROM orders WHERE uid = $currentUserId AND status IN ('" . implode("','", $orderStatuses) . "')";
     $resultOrders = $conn->query($checkOrdersSql);
@@ -20,18 +26,26 @@ if (isset($_SESSION['uid'])) {
         $hasActiveOrders = ($rowOrders['orderCount'] > 0);
     }
 
-    // Retrieve the current user's ID from the session
-    $currentUserId = $_SESSION['uid'];
-
-    $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
-    $result = $conn->query($sql);
-
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $userAddress = $row['address']; // Store the user's address in a variable
-        $currentUserId = $currentUserId;
+        $userAddressJson = $row['address']; // Assuming address is stored as JSON in the database
+        $addresses = json_decode($userAddressJson, true); // Decode JSON into an associative array
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            // You can now access the addresses as an array
+            // Example: Let's say you want to get all addresses and display them in a formatted way
+            $formattedAddresses = [];
+            foreach ($addresses as $address) {
+                $formattedAddresses[] = $address['name'] . " - " . $address['address'];
+            }
+            // Join the formatted addresses into a single string
+            $formattedAddress = implode(", ", $formattedAddresses);
+        } else {
+            // Default address if JSON is malformed
+            $formattedAddress = "House No, Street, City, Province";
+        }
     } else {
-        $userAddress = "House No, Street, City, Province"; // Set a default value if no address is found
+        $formattedAddress = "House No, Street, City, Province"; // Set a default value if no address is found
     }
 
     $queryz = "SELECT COUNT(*) as unread_count FROM msg_users WHERE status = 'unread' AND uid =" . $_SESSION['uid'];
@@ -57,12 +71,13 @@ if (isset($_SESSION['uid'])) {
             exit(); // Ensure script stops execution after redirection
         }
     }
-    $conn->close();
 } else {
-    $currentUserId = 123; // or any default value
     $loggedIn = false;
+    $currentUserId = 123; // or any default value
     $userAddress = "";
     $unreadNotificationCount = 0;
+
+    $hasActiveOrders = false; // Non-logged-in users won't have active orders
 }
 
 
@@ -87,13 +102,14 @@ if (isset($_POST['addtobag'])) {
     $price = $_POST['price'];
     $img = $_POST['img'];
     $size1 = $_POST['size'];
+    //put a quotation mark on the size
     $size = '' . $size1 . '';
     $dish_id = $_POST['dish_id'];
     $quantity = 1;  // default quantity
 
     // Check if the dish_id already exists in the cart
     $check_sql = "SELECT * FROM cart WHERE dish_id = '$dish_id' AND uid = '$uid'";
-    $result = mysqli_query($dbz, $check_sql);
+    $result = mysqli_query($db, $check_sql);
 
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
@@ -106,7 +122,7 @@ if (isset($_POST['addtobag'])) {
         } else {
             // Update the quantity and multiply the price
             $update_sql = "UPDATE cart SET qty = qty + $quantity, totalprice = totalprice + ($quantity * $price) WHERE dish_id = '$dish_id' AND uid = '$uid'";
-            mysqli_query($dbz, $update_sql);
+            mysqli_query($db, $update_sql);
             $_SESSION['success']  = "Successfully added into your bag";
         }
     } else {
@@ -114,28 +130,109 @@ if (isset($_POST['addtobag'])) {
         $total_price = $quantity * $price;
         $insert_sql = "INSERT INTO cart (dish_id, uid, name, size, qty, price, img,totalprice) 
                         VALUES ('$dish_id', '$uid', '$name', '$size', '$quantity', '$price', '$img','$total_price')";
-        mysqli_query($dbz, $insert_sql);
+        mysqli_query($db, $insert_sql);
         $_SESSION['success']  = "Successfully added into your bag";
     }
 }
 
 
+function getCoordinates($address, $apiKey)
+{
+    $url = "https://api.opencagedata.com/geocode/v1/json?q=" . urlencode($address) . "&key=" . $apiKey;
+    $response = file_get_contents($url);
+    $data = json_decode($response, true);
+
+    if ($data['status']['code'] == 200 && !empty($data['results'])) {
+        $lat = $data['results'][0]['geometry']['lat'];
+        $lng = $data['results'][0]['geometry']['lng'];
+        return ['lat' => $lat, 'lng' => $lng];
+    }
+
+    return null;
+}
+
+function haversineDistance($lat1, $lon1, $lat2, $lon2)
+{
+    $earthRadius = 6371; // in kilometers
+
+    $dLat = deg2rad($lat2 - $lat1);
+    $dLon = deg2rad($lon2 - $lon1);
+
+    $a = sin($dLat / 2) * sin($dLat / 2) +
+        cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+        sin($dLon / 2) * sin($dLon / 2);
+
+    $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+    $distance = $earthRadius * $c;
+
+    return $distance; // distance in kilometers
+}
 
 if (isset($_POST['checkout'])) {
-    header("Location:order.php");
-    exit();
-    $db->close();
-}
-$isCartEmpty = true;
+    // Get the selected address ID from the form
+    $selectedAddressId = $_POST['address'] ?? null;
 
-if ($loggedIn) {
-    $sqlCartCheck = "SELECT * FROM cart WHERE uid = $currentUserId";
-    $resultCartCheck = $db->query($sqlCartCheck);
+    if ($selectedAddressId) {
+        // Query the database to get the user's address data
+        $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId";
+        $result = $conn->query($sql);
 
-    if ($resultCartCheck->num_rows > 0) {
-        $isCartEmpty = false;
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $userAddressJson = $row['address']; // Assuming the address is stored as JSON in the database
+            $addresses = json_decode($userAddressJson, true); // Decode JSON into an associative array
+
+            if (json_last_error() === JSON_ERROR_NONE) {
+                // Loop through the addresses and find the selected one
+                $selectedAddress = null;
+                foreach ($addresses as $address) {
+                    if ((int)$address['address'] === (int)$selectedAddressId) {
+                        $selectedAddress = $address;
+                        break;
+                    }
+                }
+
+                if ($selectedAddress) {
+                    $apiKey = '9f368e104b744ddab127fb3cbcf84673'; // Replace with your actual API key
+                    $fixedAddress = '2116 Chino Roces Ave, Cor Dela Rosa Street, Pio, Makati, Metro Manila, Philippines';
+                    $selectedAddress2 = $selectedAddress['address'] . ', Philippines';
+
+                    $coordsSelected = getCoordinates($selectedAddress2, $apiKey);
+                    $coordsFixed = getCoordinates($fixedAddress, $apiKey);
+
+                    if ($coordsSelected && $coordsFixed) {
+                        $distance = haversineDistance(
+                            $coordsSelected['lat'],
+                            $coordsSelected['lng'],
+                            $coordsFixed['lat'],
+                            $coordsFixed['lng']
+                        );
+
+                        if ($distance > 5) {
+                            $_SESSION['error'] = "The delivery address is outside the maximum delivery range.";
+                        } else {
+                            $_SESSION['selectedAddress'] = $selectedAddress2;
+                            header("Location: order.php");
+                        }
+                    } else {
+                        $_SESSION['error'] = "Could not retrieve coordinates for one or both addresses.";
+                    }
+                } else {
+                    $_SESSION['error'] = "Address not found for the selected ID.";
+                }
+            } else {
+                $_SESSION['error'] = "Error decoding address JSON.";
+            }
+        } else {
+            $_SESSION['error'] = "No address found for the user.";
+        }
+    } else {
+        $_SESSION['error'] = "No address selected.";
     }
 }
+
+
 ?>
 
 
@@ -174,7 +271,7 @@ if ($loggedIn) {
                         <i class="fa-solid fa-utensils"></i>
                         <span>Menu</span>
                     </a>
-                    <a href="order.php" class="item" id="orderLink">
+                    <a href="order.php" class="item <?php echo ($hasActiveOrders) ? '' : 'disabled'; ?>" id="orderLink">
                         <i class="fa-solid fa-receipt"></i>
                         <span>Orders</span>
                     </a>
@@ -186,8 +283,8 @@ if ($loggedIn) {
                         <i class="fa-solid fa-envelope"></i>
                         <span>Messages</span>
                         <?php
-
-                        $unreadNotificationCount = $unreadNotificationCount;
+                        // Include your PHP logic here to determine the count of unread notifications
+                        $unreadNotificationCount = $unreadNotificationCount; // Replace with your actual logic
 
                         if ($unreadNotificationCount > 0) {
                             echo '<span class="notification-count">' . $unreadNotificationCount . '</span>';
@@ -200,7 +297,7 @@ if ($loggedIn) {
                             <i class="fa-solid fa-user"></i>
                             <span>Profile</span>
                         </a>
-                        <a href="menu-beverages.php?logout=1" class="item">
+                        <a href="menu.php?logout=1" class="item">
                             <i class="fa-solid fa-right-from-bracket"></i>
                             <span>Logout</span>
                         </a>
@@ -239,32 +336,32 @@ if ($loggedIn) {
                         <div class="col-sm-12" style="padding:0; margin:0; margin-top:30px;">
                             <div class="container" style="padding:0;">
                                 <div class="row" style="padding:0px 15px 0 12px;">
-                                    <div class="col-sm-4" style="text-align:center;">
+                                    <div class="col-sm-4"
+                                        style="text-align:center; ">
                                         <a href="menu.php" class="menu-item">
                                             <span>Pizza</span>
                                         </a>
                                     </div>
-                                    <div class="col-sm-4" style="text-align:center; ">
+                                    <div class="col-sm-4" style="text-align:center;">
                                         <a href="menu-pasta.php" class="menu-item">
                                             <span>Pasta</span>
                                         </a>
                                     </div>
-                                    <div class="col-sm-4"
-                                        style="text-align:center;border-bottom:5px solid red; margin-bottom:-20px;padding-bottom:20px;">
-                                        <a href="menu-beverages.php" class="menu-item">
+                                    <div class="col-sm-4" style="text-align:center; border-bottom:5px solid red; margin-bottom:-20px;padding-bottom:20px;">
+                                        <a href="menu-beverages.php" class="menu-item active">
                                             <span>Beverages</span>
                                         </a>
                                     </div>
                                 </div>
                             </div>
-                            <hr style="margin-right:5px;">
+                            <hr>
                         </div>
                         <div class="col-sm-12 scroll" style="overflow-y: auto; height: 50vh; margin:0; padding:0;">
 
                             <div class="flex-container">
 
                                 <?php
-                                $sql = "SELECT * FROM products where category ='beverages' AND status = 'available' ORDER BY price asc ";
+                                $sql = "SELECT * FROM products where category = 'beverages' AND status = 'available' ORDER BY name asc ";
                                 $result = $db->query($sql);
                                 $result1 = $db->query($sql);
                                 $newrow = mysqli_fetch_array($result1);
@@ -275,6 +372,7 @@ if ($loggedIn) {
 
 
                                     while ($row = $result->fetch_assoc()) {
+
 
                                         echo '
                 <form method="post" action="">
@@ -334,42 +432,61 @@ if ($loggedIn) {
                 <!-- Add the fill-remaining class -->
                 <div class="container" style="margin:0;padding:0;">
                     <div class="row">
-                        <div class="col-sm-12">
-                            <h3 style="margin-top:35px;margin-left:10px; color:#404040;">My Bag</h3><br><br>
+                        <div class="col-sm-12" style="<?php echo (!$loggedIn) ? 'margin-bottom:150px;' : ''; ?>">
+                            <h3 style="margin-top:35px;margin-left:10px; color:#404040;">My Bag</h3>
                         </div>
 
                         <?php if ($currentUserId !== '1001'): ?>
                             <form method="post" action="">
-                                <div class="col-sm-12">
-                                    <button id="counterBtn" style="font-weight:550; cursor:auto;" class="active"
-                                        disabled>Delivery Address</button>
-                                </div>
+
                                 <div id="deliveryContent" style="display: block;">
-
                                     <div class="col-sm-12">
-                                        <input style="font-weight:bold; color:#333; margin-left:10px;" type="text"
-                                            name="address" value="<?php echo $userAddress; ?>"
-                                            <?php if (!$loggedIn) echo 'disabled';
-                                            else echo 'readonly'; ?>><br><br>
-                                    </div>
-                                    <div class="col-sm-12 cart"
-                                        style="margin:0 0 -25px 0; padding:0; height:45vh; overflow-y: scroll; overflow:auto; ">
+                                        <?php if ($loggedIn): ?>
+                                            <label for="addressSelect" style="font-weight: bold; color: #333; margin-left: 10px;">Select Address</label>
+                                            <select id="addressSelect" name="address" style="font-weight: bold; color: #333; margin-left: 10px;">
+                                                <?php
+                                                $defaultAddressId = isset($defaultAddressId) ? $defaultAddressId : 1; // Default to ID 1 if not set
 
-                                        <?php
-                                        if ($loggedIn) {
-                                            $sql = "SELECT * FROM cart WHERE uid = $currentUserId";
-                                            $result = $db->query($sql);
-                                            $result1 = $db->query($sql);
-                                            $newrow = mysqli_fetch_array($result1);
-                                            if ($result->num_rows > 0) {
-                                                $cart = array();
-                                                // Display events
-                                                while ($row = $result->fetch_assoc()) {
-                                                    $cart[] = $row;
-                                                }
-                                                $cart = array_reverse($cart);
-                                                foreach ($cart as $row) {
-                                                    echo '
+                                                // Assuming $addresses is an array of addresses retrieved from the database
+                                                foreach ($addresses as $address):
+                                                ?>
+                                                    <option value="<?php echo htmlspecialchars($address['id']); ?>"
+                                                        <?php echo $address['id'] == $defaultAddressId ? 'selected' : ''; ?>>
+                                                        <?php echo htmlspecialchars($address['name']) . " - " . htmlspecialchars($address['address']); ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+
+                                            <div class="add-address" style="text-align:center;margin-top:10px;">
+                                                <div class="address-btn">
+                                                    <a href="addresses.php" onclick="window.open('addresses.php', 'newwindow', 'width=450,height=700'); return false;">Add New Address</a>
+                                                </div>
+                                            </div>
+                                            <input type="text" id="addressInput" name="address"
+                                                style="font-weight: bold; color: #333; margin-left: 10px;" readonly>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-12 cart"
+                                    style="margin:0 0 -25px 0; padding:0; height:45vh; overflow-y: scroll; overflow:auto; ">
+
+                                    <?php
+                                    if ($loggedIn) {
+                                        $sql = "SELECT * FROM cart WHERE uid = $currentUserId";
+                                        $result = $db->query($sql);
+                                        $result1 = $db->query($sql);
+                                        $newrow = mysqli_fetch_array($result1);
+                                        if ($result->num_rows > 0) {
+                                            $cart = array();
+                                            // Display events
+                                            while ($row = $result->fetch_assoc()) {
+                                                $cart[] = $row;
+                                            }
+                                            $cart = array_reverse($cart);
+                                            foreach ($cart as $row) {
+                                                echo '
                                             <div class = "box" style = "padding: 10px;border-radius:10px; margin: 10px 10px 10px 5px; position:relative; margin-left:10px;">
                                                 <div class = "container" style="margin:0; padding:0;">
                                                     <div class ="row">
@@ -399,13 +516,13 @@ if ($loggedIn) {
                                                             <a  href="edit_item3.php?edit_item=' . $row['dish_id'] . '" class="edit-btn"><i class="fa-solid fa-pencil"  style="font-size:20px;"></i></a> 
                                                             </div>
                                                             <select class="quantity" name="quantity" data-id="' . $row['cart_id'] . '" disabled>';
-                                                    $sizes = explode(',', $row['qty']);
+                                                $sizes = explode(',', $row['qty']);
 
-                                                    // Iterate over the 'size' data and create an option for each size
-                                                    foreach ($sizes as $size) {
-                                                        echo '<option value="' . $size . '">' . ucfirst($size) . '</option>';
-                                                    }
-                                                    echo '</select>
+                                                // Iterate over the 'size' data and create an option for each size
+                                                foreach ($sizes as $size) {
+                                                    echo '<option value="' . $size . '">' . ucfirst($size) . '</option>';
+                                                }
+                                                echo '</select>
                                                     
                                                             </div>
                                                         </div>
@@ -415,155 +532,109 @@ if ($loggedIn) {
 
                                             </div>
                                             ';
-                                                }
-                                            } else {
-
-                                                echo '<p style="text-align:center; margin-top:50px;">Add Items to your Bag</p> ';
                                             }
                                         } else {
-                                            echo '<p style="text-align:center; margin-top:50px;">Please Login to Continue</p> ';
-                                        }
-                                        ?>
 
+                                            echo '<p style="text-align:center; margin-top:50px;">Add Items to your Bag</p> ';
+                                        }
+                                    } else {
+                                        echo '<p style="text-align:center; margin-top:150px;">Please Login to Continue</p> ';
+                                    }
+                                    $isCartEmpty = true;
+
+                                    if ($loggedIn) {
+                                        $sqlCartCheck = "SELECT * FROM cart WHERE uid = $currentUserId";
+                                        $resultCartCheck = $db->query($sqlCartCheck);
+
+                                        if ($resultCartCheck->num_rows > 0) {
+                                            $isCartEmpty = false;
+                                        }
+                                    }
+
+                                    ?>
+
+                                </div>
+                                <div class="col-sm-12" style="margin: 30px 0 0 0;">
+                                    <div class="linebreak" style="margin:0 15px 0 5px;">
+                                        <hr style="height:2px;">
                                     </div>
-                                    <div class="col-sm-12" style="margin: 30px 0 0 0;">
-                                        <div class="linebreak" style="margin:0 15px 0 5px;">
-                                            <hr style="height:2px;">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-sm-6" style="padding:0; margin:0;">
-                                                    <p style="font-weight:550">Sub Total</p>
-                                                    <p style="font-weight:550">Delivery Fee</p>
-                                                </div>
-                                                <div class="col-sm-6" style="padding:0; margin:0;">
-                                                    <p id="subtotal" style="margin-left: 30px; font-weight:bold;"></p>
-                                                    <p id="delivery_fee" style="margin-left:30px; font-weight:bold;"></p>
-                                                </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-sm-6" style="padding:0; margin:0;">
+                                                <p style="font-weight:550">Vatable Sales</p>
+                                                <p style="font-weight:550">Vat (12%)</p>
+                                                <p style="font-weight:550">Delivery Fee</p>
+                                            </div>
+                                            <div class="col-sm-6" style="padding:0; margin:0;">
+                                                <p id="vatable" style="margin-left: 30px; font-weight:bold;"></p>
+                                                <p id="vat" style="margin-left:30px; font-weight:bold;"></p>
+                                                <p id="delivery_fee" style="margin-left:30px; font-weight:bold;"></p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12">
-                                        <div class="linebreak" style="margin:0 15px 0 5px;">
-                                            <hr style="height:2px;">
-                                        </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="linebreak" style="margin:0 15px 0 5px;">
+                                        <hr style="height:2px;">
                                     </div>
-                                    <div class="col-sm-12">
-                                        <div class="container">
-                                            <div class="row">
-                                                <div class="col-sm-6" style="padding:0; margin:0;">
-                                                    <p style="font-weight:550">Total</p>
-                                                </div>
-                                                <div class="col-sm-6" style="padding:0; margin:0;">
-                                                    <p id="total_amount" style="margin-left:30px; font-weight:bold;"></p>
-                                                </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-sm-6" style="padding:0; margin:0;">
+                                                <p style="font-weight:550">Total</p>
+                                            </div>
+                                            <div class="col-sm-6" style="padding:0; margin:0;">
+                                                <p id="total_amount" style="margin-left:30px; font-weight:bold;"></p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12" style="padding:0 20px 0 20px; margin-top:20px;">
-                                        <input type="submit" value="Checkout" class="checkout" name="checkout" <?php if (!$loggedIn)
-                                                                                                                    echo 'disabled'; ?>>
+                                </div>
+
+                                <div class="col-sm-12" style="padding:0 20px 0 20px; ">
+                                    <?php if ($isCartEmpty || !$loggedIn) : ?>
+                                        <input type="submit" value="Checkout" class="checkout" name="checkout" disabled>
+                                        <?php if (!$loggedIn) : ?>
+                                        <?php elseif ($isCartEmpty) : ?>
+                                        <?php endif; ?>
+                                    <?php else : ?>
+                                        <input type="submit" value="Checkout" class="checkout" name="checkout">
+                                    <?php endif; ?>
                             </form>
                     </div>
                 </div>
 
             <?php else: ?>
                 <div class="col-sm-12">
-                    <button id="deliveryBtn" class="active" style="font-weight:550; cursor:auto;" disabled>Over the
-                        Counter</button>
+
+                    ?>
+
                 </div>
-                <div id="counterContent" style="display: block;">
-                    <form method="post">
-                        <div class="col-sm-12"><br>
-                        </div>
-                        <div class="col-sm-12 cart"
-                            style="margin:0 0 -25px 0; padding:0; height:61.8vh; overflow-y: scroll; overflow:auto; ">
 
-                            <?php
-                            $db = new mysqli('localhost', 'root', '', 'ph_db');
-                            if ($loggedIn) {
-                                $sql3 = "SELECT * FROM cart WHERE uid = $currentUserId";
-                                $result3 = $db->query($sql3);
-                                $newrow3 = mysqli_fetch_array($result);
-                                if ($result3->num_rows > 0) {
-                                    $cart3 = array();
-                                    // Display events
-                                    while ($row3 = $result3->fetch_assoc()) {
-                                        $cart3[] = $row3;
-                                    }
-                                    $cart3 = array_reverse($cart3);
-                                    foreach ($cart3 as $row3) {
-                                        echo '
-                                            <div class = "box" style = "padding: 10px;border-radius:10px; margin: 10px 10px 10px 5px; position:relative; margin-left:10px;">
-                                                <div class = "container" style="margin:0; padding:0;">
-                                                    <div class ="row">
-                                                        <div class = "col-sm-3">
-                                                            <div class = "image" style="height:100%; width:100%">
-                                                                <img src="../../../src/assets/img/menu/' . $row3['img'] . '" alt="notif pic" style="width:100%; max-width:100%; min-width:100px; height:auto; overflow:hidden; border-radius:10px;">
-                                                            </div>
-                                                        </div>
-                                                        <div class = "col-sm-6">
-                                                            <div class = "caption">
-                                                                <p>' . $row3['namesize'] . '</p>
-                                                            </div>
-                                                            <div class="remove-btn">
-                                                                <a  href="#" class="remove-btn"><i class="fa-solid fa-xmark" style="font-size:25px;"></i></a> 
-                                                            </div>    
-                                                        </div>
-                                                        <div class = "col-sm-2">
-                                                            <div class = "price">
-                                                                <p><span class="price-display" data-id="' . $row3['cart_id'] . '">₱' . $row3['price'] . '</span></p>
-                                                                <input type="hidden" class="price" name="price" data-id="' . $row3['cart_id'] . '" value="' . $row3['price'] . '">
-                                                            <div class = "quantity1">
-                                                            <select class="quantity" name="quantity" data-id="' . $row3['cart_id'] . '">';
-                                        for ($i = 1; $i <= 10; $i++) {
-                                            echo '<option value="' . $i . '">' . $i . '</option>';
-                                        }
-                                        echo '</select>
+                <div class="col-sm-12" style="margin: 30px 0 0 0;">
+                    <div class="linebreak" style="margin:0 15px 0 5px;">
+                        <hr style="height:2px;">
+                    </div>
+                </div>
 
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                            </div>';
-                                    }
-                                } else {
-
-                                    echo '<p style="text-align:center; margin-top:100px;">Add items to your bag</p> ';
-                                }
-                            } else {
-                                echo '<p style="text-align:center; margin-top:100px;">Please Login to Continue</p> ';
-                            }
-
-                            ?>
-
-                        </div>
-                        <div class="col-sm-12" style="margin: 30px 0 0 0;">
-                            <div class="linebreak" style="margin:0 15px 0 5px;">
-                                <hr style="height:2px;">
+                <div class="col-sm-12">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6" style="padding:0; margin:0;">
+                                <p style="font-weight:550">Total</p>
+                            </div>
+                            <div class="col-sm-6" style="padding:0; margin:0;">
+                                <p id="total_amount1" style="margin-left:30px; font-weight:bold;">₱ 0
+                                </p>
                             </div>
                         </div>
-
-
-                        <div class="col-sm-12">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-sm-6" style="padding:0; margin:0;">
-                                        <p style="font-weight:550">Total</p>
-                                    </div>
-                                    <div class="col-sm-6" style="padding:0; margin:0;">
-                                        <p id="total_amount1" style="margin-left:30px; font-weight:bold;">₱ 0
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12" style="padding:0 20px 0 20px; margin-top:20px;">
-                            <input type="submit" value="Checkout" class="checkout" name="checkout">
+                    </div>
+                </div>
+                <div class="col-sm-12" style="padding:0 20px 0 20px; margin-top:20px;">
+                    <input type="submit" value="Checkout" class="checkout" name="checkout">
                     </form>
                 </div>
             </div>
@@ -592,13 +663,72 @@ if ($loggedIn) {
             if (messageBox) {
                 messageBox.style.display = 'none';
             }
-        }, 2000);
+        }, 3000);
     </script>
     <script>
         <?php if ($isCartEmpty && !$hasActiveOrders) : ?>
             document.getElementById('orderLink').classList.add('disabled');
         <?php endif; ?>
     </script>
+    <script>
+        // Update the input field when a new address is selected
+        document.getElementById('addressSelect').addEventListener('change', function() {
+            var selectedOption = this.options[this.selectedIndex];
+            var addressId = selectedOption.value; // Get the ID of the selected option
+            var addressText = selectedOption.text; // Get the text of the selected option (name + address)
+
+            // Split the addressText into name and address. Assuming that name and address are separated by a dash
+            var parts = addressText.split(' - ');
+            var addressOnly = parts.length > 1 ? parts[1] : addressText; // Get the second part as address
+
+            // Update the input field with the address only
+            document.getElementById('addressInput').value = addressOnly;
+
+            // Store the selected address ID in session storage
+            sessionStorage.setItem('selectedAddress', addressId);
+        });
+
+        window.onload = function() {
+            var addressSelect = document.getElementById('addressSelect');
+            var addressInput = document.getElementById('addressInput');
+
+            // If there's only one option in the select dropdown
+            if (addressSelect.options.length === 1) {
+                var singleOption = addressSelect.options[0];
+                singleOption.selected = true;
+
+                // Extract the name and address
+                var addressText = singleOption.text;
+                var parts = addressText.split(' - ');
+                var addressOnly = parts.length > 1 ? parts[1] : addressText;
+
+                // Update the input field with the address and session storage
+                addressInput.value = addressOnly;
+                sessionStorage.setItem('selectedAddress', singleOption.value);
+            } else {
+                // Handle normal loading with multiple options
+                var storedAddressId = sessionStorage.getItem('selectedAddress') || null;
+                if (storedAddressId) {
+                    for (var i = 0; i < addressSelect.options.length; i++) {
+                        if (addressSelect.options[i].value === storedAddressId) {
+                            addressSelect.options[i].selected = true;
+
+                            // Extract the name and address
+                            var addressText = addressSelect.options[i].text;
+                            var parts = addressText.split(' - ');
+                            var addressOnly = parts.length > 1 ? parts[1] : addressText;
+
+                            // Update the input field with the address only
+                            addressInput.value = addressOnly;
+                            break;
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+
+
 </body>
 
 </html>

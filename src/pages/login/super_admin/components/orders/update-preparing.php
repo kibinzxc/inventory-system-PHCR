@@ -8,6 +8,10 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
     $orderID = $_POST['orderID'];
     $status = $_POST['status'];
 
+    session_start();
+    $user_id = $_SESSION['user_id'];
+
+
     // Get the uid using the orderID from the 'orders' table
     $query = "SELECT uid FROM orders WHERE orderID = ?";
     $stmt = $conn->prepare($query);
@@ -19,6 +23,21 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
     $stmt->bind_result($uid);
     $stmt->fetch();
     $stmt->close();
+
+    // Check if uid is null or invalid
+    if (is_null($uid)) {
+        header("Location: now-preparing.php?action=error&reason=uid_not_found&orderID=$orderID");
+        exit();
+    }
+
+    $query = "SELECT name FROM accounts WHERE uid = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $uid);
+    $stmt->execute();
+    $stmt->bind_result($cashier);
+    $stmt->fetch();
+    $stmt->close();
+
 
 
     // Fetch order details, including order type and orders
@@ -41,8 +60,9 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
             $stmtRemoveOrder->bind_param("i", $orderID);
             $stmtRemoveOrder->execute();
 
+
             //delete from invoice 
-            $removeOrder = "DELETE FROM invoice WHERE invID = ?";
+            $removeOrder = "DELETE FROM invoice_temp WHERE invID = ?";
             $stmtRemoveOrder = $conn->prepare($removeOrder);
             $stmtRemoveOrder->bind_param("s", $orderID);
             $stmtRemoveOrder->execute();
@@ -122,6 +142,38 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
                             $stmtRemoveOrder = $conn->prepare($removeOrder);
                             $stmtRemoveOrder->bind_param("i", $orderID);
                             $stmtRemoveOrder->execute();
+
+                            //get the data from invoice_temp and insert into invoice
+                            $query = "SELECT * FROM invoice_temp WHERE invID = ?";
+                            $stmt = $conn->prepare($query);
+                            $stmt->bind_param('i', $orderID);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $row = $result->fetch_assoc();
+                            $stmt->close();
+
+                            $invID = $row['invID'];
+                            $orders = $row['orders'];
+                            $total_amount = $row['total_amount'];
+                            $amount_receive = $row['amount_received'];
+                            $amount_change = $row['amount_change'];
+                            $order_type = $row['order_type'];
+                            $mop = $row['mop'];
+                            $cashier = $row['cashier'];
+
+                            $query = "INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                            $stmt = $conn->prepare($query);
+                            $stmt->bind_param('isdddsis', $invID, $orders, $total_amount, $amount_receive, $amount_change, $order_type, $mop, $cashier);
+                            if ($stmt->execute()) {
+                                //delete from invoice_temp
+                                $removeOrder = "DELETE FROM invoice_temp WHERE invID = ?";
+                                $stmtRemoveOrder = $conn->prepare($removeOrder);
+                                $stmtRemoveOrder->bind_param("i", $orderID);
+                                $stmtRemoveOrder->execute();
+                                $stmtRemoveOrder->close();
+                            } else {
+                                die("Error executing stmt3: " . $stmt3->error);
+                            }
                         }
                     }
                 }
@@ -176,6 +228,7 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
             $result = $stmt->get_result();
             $row = $result->fetch_assoc();
             $stmt->close();
+
             $orderID = $row['orderID'];
             $uid = $row['uid'];
             $name = $row['name'];
@@ -207,12 +260,51 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
                 die("Error executing stmt3: " . $stmt3->error);  // More detailed error if insert fails
             }
         } else {
+
+            // Fetch the name of the current user
+            $queryUser = "SELECT name FROM accounts WHERE uid = ?";
+            $stmtUser = $conn->prepare($queryUser);
+            $stmtUser->bind_param('i', $user_id);
+            $stmtUser->execute();
+            $resultUser = $stmtUser->get_result();
+            $userRow = $resultUser->fetch_assoc();
+            $stmtUser->close();
+
+            $cashier = $userRow['name'];
+
+            // Fetch order details
+            $query = "SELECT * FROM orders WHERE orderID = ?";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('i', $orderID);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $stmt->close();
+
+            $invID = $row['orderID'];
+            $orders = $row['items'];
+            $total_amount = $row['totalPrice'];
+            $amount_receive = $row['totalPrice'];
+            $amount_change = 0;
+            $order_type = 'delivery';
+            $mop = $row['payment'];
+
+            // Insert into invoice_temp
+            $query = "INSERT INTO invoice_temp (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($query);
+            $stmt->bind_param('isdddsss', $invID, $orders, $total_amount, $amount_receive, $amount_change, $order_type, $mop, $cashier);
+            $stmt->execute();
+            $stmt->close();
+
             //update the status of the order
             $updateQuery = "UPDATE float_orders SET status = ? WHERE orderID = ?";
             $stmtUpdate = $conn->prepare($updateQuery);
             $stmtUpdate->bind_param('si', $status, $orderID);
 
             if ($stmtUpdate->execute()) {
+
+
+                // Update order status
                 $updateOrderStatus = "UPDATE orders SET status = ? WHERE orderID = ?";
                 $stmtUpdateOrderStatus = $conn->prepare($updateOrderStatus);
                 $stmtUpdateOrderStatus->bind_param("si", $status, $orderID);

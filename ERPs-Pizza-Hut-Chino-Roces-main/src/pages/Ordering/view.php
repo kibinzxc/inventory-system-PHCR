@@ -13,7 +13,7 @@ if (isset($_SESSION['uid'])) {
     $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
     $result = $conn->query($sql);
     $hasActiveOrders = false;
-    $orderStatuses = ["placed", "preparing", "delivery"];
+    $orderStatuses = ["placed", "preparing", "ready for pickup", "delivery"];
     // Query the database to check for orders with specified statuses
     $checkOrdersSql = "SELECT COUNT(*) AS orderCount FROM orders WHERE uid = $currentUserId AND status IN ('" . implode("','", $orderStatuses) . "')";
     $resultOrders = $conn->query($checkOrdersSql);
@@ -75,7 +75,7 @@ if ($result41) {
     $unreadNotificationCount = 0; // Default to 0 if query fails
 }
 if (isset($_POST['mark_all_read'])) {
-    $updateQuery = "UPDATE notif_users SET status = 'read' WHERE uid =" . $_SESSION['uid'];
+    $updateQuery = "UPDATE msg_users SET status = 'read' WHERE uid =" . $_SESSION['uid'];
     if ($db->query($updateQuery) === TRUE) {
         $_SESSION['success1']  = "All messages have been marked as read";
         header("Location:messages.php ");
@@ -167,7 +167,7 @@ if ($loggedIn) {
                         <i class="fa-solid fa-utensils"></i>
                         <span>Menu</span>
                     </a>
-                    <a href="order.php" class="item" id="orderLink">
+                    <a href="order.php" class="item <?php echo ($hasActiveOrders) ? '' : 'disabled'; ?>" id="orderLink">
                         <i class="fa-solid fa-receipt"></i>
                         <span>Orders</span>
                     </a>

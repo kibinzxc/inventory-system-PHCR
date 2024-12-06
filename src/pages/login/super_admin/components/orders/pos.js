@@ -445,7 +445,7 @@ function generateInvoicePDF(invID) {
     var heightPx = height * 3.7795275591;
 
     // Open the window with the specified size
-    var newWindow = window.open('generate_invoice_pdf.php?invID=' + invID, '_blank', 'width=' + widthPx + ',height=' + heightPx);
+    var newWindow = window.open('generate_inv.php?invID=' + invID, '_blank', 'width=' + widthPx + ',height=' + heightPx);
 
     // Focus on the new window
     if (newWindow) {

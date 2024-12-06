@@ -12,7 +12,7 @@ if (isset($_SESSION['uid'])) {
     $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'users' with your table name
     $result = $conn->query($sql);
     $hasActiveOrders = false;
-    $orderStatuses = ["placed", "preparing", "delivery"];
+    $orderStatuses = ["placed", "preparing", "ready for pickup", "delivery"];
     // Query the database to check for orders with specified statuses
     $checkOrdersSql = "SELECT COUNT(*) AS orderCount FROM orders WHERE uid = $currentUserId AND status IN ('" . implode("','", $orderStatuses) . "')";
     $resultOrders = $conn->query($checkOrdersSql);
@@ -121,7 +121,7 @@ if ($loggedIn) {
                         <i class="fa-solid fa-utensils"></i>
                         <span>Menu</span>
                     </a>
-                    <a href="order.php" class="item" id="orderLink">
+                    <a href="order.php" class="item <?php echo ($hasActiveOrders) ? '' : 'disabled'; ?>" id="orderLink">
                         <i class="fa-solid fa-receipt"></i>
                         <span>Orders</span>
                     </a>
@@ -292,7 +292,6 @@ if ($loggedIn) {
                                                             <th>Size</th>
                                                             <th>Price</th>
                                                             <th>Quantity</th>
-                                                            <th>Total Price</th>
                                                         </tr>
                                                     </thead>
                                                     <?php $totalOrderPrice = 0;
@@ -307,15 +306,14 @@ if ($loggedIn) {
                                                                     $name = $item['name'];
                                                                     $size = $item['size'];
                                                                     $price = $item['price'];
-                                                                    $qty = $item['qty'];
-                                                                    $totalPrice = $item['totalPrice'];
+                                                                    $qty = $item['quantity'];
+                                                                    $totalPrice = $row['totalPrice'];
                                                                     $totalOrderPrice += $totalPrice;
                                                                     echo ' <tr>
                                                         <td>' . $name . '</td>
                                                         <td>' . $size . '</td>
                                                         <td>₱ ' . $price . '</td>
                                                         <td>' . $qty . '</td>
-                                                        <td>₱ ' . $totalPrice . '</td>
                                                     </tr>';
                                                                 }
                                                             } else {
@@ -327,9 +325,11 @@ if ($loggedIn) {
                                                         echo "0 results";
                                                     }
 
-                                                    $deliveryFee = 50;
-                                                    $totalAmount = $totalOrderPrice + $deliveryFee;
-
+                                                    $vat = $totalPrice * 0.12;
+                                                    $vatable = $totalPrice - $vat;
+                                                    $deliveryFee = 65;
+                                                    $totalPrice2 = $totalPrice - $deliveryFee;
+                                                    $totalAmount = $totalPrice2 + $deliveryFee;
                                                     ?>
 
                                                 </table>
@@ -346,18 +346,26 @@ if ($loggedIn) {
                                                             <td>Cash on Delivery</td>
                                                         </tr>
                                                         <tr class="subtotal">
+                                                            <td>Vatable</td>
+                                                            <td>₱ <?php echo number_format($vatable, 2) ?></td>
+                                                        </tr>
+                                                        <tr class="vat">
+                                                            <td>Vat (12%)</td>
+                                                            <td>₱ <?php echo number_format($vat, 2) ?></td>
+                                                        </tr>
+                                                        <tr class="subtotal">
                                                             <td>Subtotal</td>
-                                                            <td>₱ <?php echo $totalOrderPrice ?></td>
+                                                            <td>₱ <?php echo number_format($totalPrice2, 2) ?></td>
                                                         </tr>
                                                         <tr class="lasttotal">
                                                             <td>Delivery Fee</td>
                                                             <td>₱
-                                                                <?php echo $deliveryFee ?></td>
+                                                                <?php echo number_format($deliveryFee, 2) ?></td>
                                                         </tr>
                                                         <tr class="total">
                                                             <td style="color:maroon;">Total</td>
                                                             <td style="color:maroon;">₱
-                                                                <?php echo $totalAmount ?></td>
+                                                                <?php echo number_format($totalAmount, 2) ?></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

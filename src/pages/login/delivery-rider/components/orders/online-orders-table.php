@@ -71,6 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accept'])) {
             throw new Exception('Float order not found or already updated.');
         }
 
+        //update the cashier on invoice_temp 
+        $updateInvoiceTempSql = "UPDATE invoice_temp SET cashier = ? WHERE invID = ?";
+        $stmtUpdateInvoiceTemp = $conn->prepare($updateInvoiceTempSql);
+        $stmtUpdateInvoiceTemp->bind_param("si", $currentUsername, $orderID);
+        $stmtUpdateInvoiceTemp->execute();
+
+
         //get the uid of the user who placed the order
         $query = "SELECT uid FROM orders WHERE orderID = ?";
         $stmt = $conn->prepare($query);

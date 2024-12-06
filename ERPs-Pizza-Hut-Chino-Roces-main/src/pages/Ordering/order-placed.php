@@ -345,7 +345,8 @@ if ($loggedIn) {
                                                     $vat = $totalPrice * 0.12;
                                                     $vatable = $totalPrice - $vat;
                                                     $deliveryFee = 65;
-                                                    $totalAmount = $totalPrice + $deliveryFee;
+                                                    $totalPrice2 = $totalPrice - $deliveryFee;
+                                                    $totalAmount = $totalPrice2 + $deliveryFee;
 
                                                     ?>
 
@@ -372,7 +373,7 @@ if ($loggedIn) {
                                                         </tr>
                                                         <tr class="subtotal">
                                                             <td>Subtotal</td>
-                                                            <td>₱ <?php echo number_format($totalPrice, 2) ?></td>
+                                                            <td>₱ <?php echo number_format($totalPrice2, 2) ?></td>
                                                         </tr>
                                                         <tr class="lasttotal">
                                                             <td>Delivery Fee</td>

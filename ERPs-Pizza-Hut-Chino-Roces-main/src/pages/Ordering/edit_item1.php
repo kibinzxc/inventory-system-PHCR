@@ -169,6 +169,19 @@ function haversineDistance($lat1, $lon1, $lat2, $lon2)
     return $distance; // distance in kilometers
 }
 
+if (isset($_POST["confirmation"])) {
+    $selectedQty = $_POST["qty"];
+    $dish_id = $_GET['edit_item'];
+    $updateQuery = "UPDATE cart SET qty = '$selectedQty' WHERE dish_id = '$dish_id'";
+    $_SESSION['success']  = "Bag updated successfully";
+    header("Location:menu-pasta.php");
+    // Execute the update query
+    $result = mysqli_query($conn, $updateQuery);
+
+    // Check if the update was successful
+}
+
+
 if (isset($_POST['checkout'])) {
     // Get the selected address ID from the form
     $selectedAddressId = $_POST['address'] ?? null;
@@ -271,7 +284,7 @@ if (isset($_POST['checkout'])) {
                         <i class="fa-solid fa-utensils"></i>
                         <span>Menu</span>
                     </a>
-                    <a href="order.php" class="item" id="orderLink">
+                    <a href="order.php" class="item <?php echo ($hasActiveOrders) ? '' : 'disabled'; ?>" id="orderLink">
                         <i class="fa-solid fa-receipt"></i>
                         <span>Orders</span>
                     </a>

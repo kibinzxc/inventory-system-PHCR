@@ -53,7 +53,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
 
     .mg-card-actions {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
     }
 
     .mg-button {
@@ -122,7 +122,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
                 }
 
                 // Query to fetch data
-                $query = "SELECT orderID, orders, order_type FROM float_orders where status = 'ready for pickup' ORDER BY transaction_date ASC";
+                $query = "SELECT orderID, orders, order_type, cashier FROM float_orders where status = 'delivery' ORDER BY transaction_date ASC";
                 $result = mysqli_query($conn, $query);
 
                 if (mysqli_num_rows($result) > 0) {
@@ -130,6 +130,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
                         $orderID = $row['orderID'];
                         $orders = json_decode($row['orders'], true);
                         $orderType = ucfirst($row['order_type']);
+                        $cashier = ucfirst($row['cashier']);
 
                         $orderDetails = "<ul>";
                         foreach ($orders as $order) {
@@ -142,8 +143,10 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
                         <div class='mg-card' data-order-id='$orderID'>
                             <div class='mg-card-title'>Order ID: $orderID</div>
                             <div class='mg-card-content'>$orderDetails</div>
-                            <div class='mg-card-total-price'>Waiting for Pickup</div>
-                            
+                            <div class='mg-card-total-price'>Delivery Rider: $cashier </div>
+                            <div class='mg-card-actions'>
+                                <button class='mg-button mg-accept-button' onclick='downloadReceipt($orderID)'>Generate Receipt</button>
+                            </div>
                         </div>";
                     }
                 } else {
@@ -158,3 +161,11 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
 </div>
 <?php include 'SuccessErrorModal.php'; ?>
 <script src="SuccessErrorModal.js"></script>
+
+<script>
+    function downloadReceipt(orderID) {
+        const url = `generate_inv.php?invID=${orderID}`;
+        const windowFeatures = "width=400,height=600,scrollbars=no,toolbar=no,location=no,status=no,menubar=no,resizable=no";
+        window.open(url, "_blank", windowFeatures);
+    }
+</script>

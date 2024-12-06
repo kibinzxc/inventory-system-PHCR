@@ -6,7 +6,7 @@ if (isset($_GET['invID'])) {
 
     // Fetch invoice details
     include '../../connection/database.php';
-    $query = "SELECT * FROM invoice WHERE invID = ?";
+    $query = "SELECT * FROM invoice_temp WHERE invID = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $invID);
     $stmt->execute();

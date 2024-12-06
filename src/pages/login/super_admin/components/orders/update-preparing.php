@@ -102,55 +102,70 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
                                 $ingredientQuantity *= 1000; // Convert kg to grams
                             }
 
-                            // Update usage and ending inventory if stock is sufficient
-                            // Update usage_count in daily_inventory
-                            $updateUsage = "UPDATE daily_inventory SET usage_count = usage_count + ? WHERE name = ?";
-                            $stmtUsageUpdate = $conn->prepare($updateUsage);
-                            $stmtUsageUpdate->bind_param("ds", $ingredientQuantity, $ingredientName);
-                            $stmtUsageUpdate->execute();
-
-                            // Update ending inventory
-                            $updateEnding = "UPDATE daily_inventory SET ending = ending - ? WHERE name = ?";
-                            $stmtEndingUpdate = $conn->prepare($updateEnding);
-                            $stmtEndingUpdate->bind_param("ds", $ingredientQuantity, $ingredientName);
-                            $stmtEndingUpdate->execute();
-
-                            // Remove the order from float_orders
-                            $removeOrder = "DELETE FROM float_orders WHERE orderID = ?";
-                            $stmtRemoveOrder = $conn->prepare($removeOrder);
-                            $stmtRemoveOrder->bind_param("i", $orderID);
-                            $stmtRemoveOrder->execute();
-
-                            //get the data from invoice_temp and insert into invoice
-                            $query = "SELECT * FROM invoice_temp WHERE invID = ?";
-                            $stmt = $conn->prepare($query);
-                            $stmt->bind_param('i', $orderID);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            $row = $result->fetch_assoc();
-                            $stmt->close();
-
-                            $invID = $row['invID'];
-                            $orders = $row['orders'];
-                            $total_amount = $row['total_amount'];
-                            $amount_receive = $row['amount_received'];
-                            $amount_change = $row['amount_change'];
-                            $order_type = $row['order_type'];
-                            $mop = $row['mop'];
-                            $cashier = $row['cashier'];
-
-                            $query = "INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                            $stmt = $conn->prepare($query);
-                            $stmt->bind_param('isdddsis', $invID, $orders, $total_amount, $amount_receive, $amount_change, $order_type, $mop, $cashier);
-                            if ($stmt->execute()) {
-                                //delete from invoice_temp
-                                $removeOrder = "DELETE FROM invoice_temp WHERE invID = ?";
-                                $stmtRemoveOrder = $conn->prepare($removeOrder);
-                                $stmtRemoveOrder->bind_param("i", $orderID);
-                                $stmtRemoveOrder->execute();
-                                $stmtRemoveOrder->close();
+                            // Check if the ending will become negative
+                            if ($currentEnding - $ingredientQuantity < 0) {
+                                // Add to the insufficient stocks array
+                                $insufficientStocks[] = [
+                                    'product' => $itemName,
+                                    'ingredient' => $ingredientName
+                                ];
                             } else {
-                                die("Error executing stmt3: " . $stmt3->error);
+                                // Update usage and ending inventory if stock is sufficient
+                                $updateUsage = "UPDATE daily_inventory SET usage_count = usage_count + ? WHERE name = ?";
+                                $stmtUsage = $conn->prepare($updateUsage);
+                                $stmtUsage->bind_param("ds", $ingredientQuantity, $ingredientName);
+                                $stmtUsage->execute();
+
+                                $updateEnding = "UPDATE daily_inventory SET ending = ending - ? WHERE name = ?";
+                                $stmtEnding = $conn->prepare($updateEnding);
+                                $stmtEnding->bind_param("ds", $ingredientQuantity, $ingredientName);
+                                $stmtEnding->execute();
+
+
+
+                                //get the data from invoice_temp and insert into invoice
+                                $query = "SELECT * FROM invoice_temp WHERE invID = ?";
+                                $stmt = $conn->prepare($query);
+                                $stmt->bind_param('i', $orderID);
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+                                $row = $result->fetch_assoc();
+                                $stmt->close();
+
+                                if ($row) {
+                                    $invID = $row['invID'];
+                                    $orders = $row['orders'];
+                                    $total_amount = $row['total_amount'];
+                                    $amount_receive = $row['amount_received'];
+                                    $amount_change = $row['amount_change'];
+                                    $order_type = $row['order_type'];
+                                    $mop = $row['mop'];
+                                    $cashier = $row['cashier'];
+
+                                    $query = "INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                                    $stmt = $conn->prepare($query);
+                                    $stmt->bind_param('isdddsis', $invID, $orders, $total_amount, $amount_receive, $amount_change, $order_type, $mop, $cashier);
+                                    if ($stmt->execute()) {
+                                        //delete from invoice_temp
+                                        $removeOrder = "DELETE FROM invoice_temp WHERE invID = ?";
+                                        $stmtRemoveOrder = $conn->prepare($removeOrder);
+                                        $stmtRemoveOrder->bind_param("i", $orderID);
+                                        if ($stmtRemoveOrder->execute()) {
+
+                                            // Remove the order from float_orders
+                                            $removeOrder = "DELETE FROM float_orders WHERE orderID = ?";
+                                            $stmtRemoveOrder = $conn->prepare($removeOrder);
+                                            $stmtRemoveOrder->bind_param("i", $orderID);
+                                            $stmtRemoveOrder->execute();
+                                            $stmtRemoveOrder->close();
+                                        } else {
+                                            die("Error: No data found for invoice_temp with invID $orderID");
+                                        }
+                                    } else {
+                                        die("Error: No data found for invoice_temp with invID $orderID");
+                                    }
+                                } else {
+                                }
                             }
                         }
                     }

@@ -100,7 +100,7 @@ if (isset($_POST['addtobag'])) {
     $size1 = $_POST['size'];
     //put a quotation mark on the size
     $size = '' . $size1 . '';
-    $dish_id = $_POST['prodID'];
+    $dish_id = $_POST['dish_id'];
     $quantity = 1;  // default quantity
 
     // Check if the dish_id already exists in the cart

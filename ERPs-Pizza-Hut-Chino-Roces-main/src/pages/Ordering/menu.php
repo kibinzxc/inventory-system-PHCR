@@ -8,10 +8,6 @@ if (isset($_SESSION['uid'])) {
     $currentUserId = $_SESSION['uid'];
     // Database connection details
 
-
-    // Retrieve the current user's ID from the session
-    $currentUserId = $_SESSION['uid'];
-
     $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId"; // Replace 'customerInfo' with your table name
     $result = $conn->query($sql);
     $hasActiveOrders = false;
@@ -92,7 +88,6 @@ if (isset($_GET['logout'])) {
 }
 
 if (isset($_POST['addtobag'])) {
-
     $uid = $_SESSION['uid'];
     $name = $_POST['name'];
     $price = $_POST['price'];

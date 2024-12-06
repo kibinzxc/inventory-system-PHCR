@@ -1,43 +1,12 @@
 <?php
+session_start();
 include '../../connection/database.php';
-
 error_reporting(E_ALL);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 if (isset($_POST['orderID']) && isset($_POST['status'])) {
     $orderID = $_POST['orderID'];
     $status = $_POST['status'];
-
-    session_start();
-    $user_id = $_SESSION['user_id'];
-
-
-    // Get the uid using the orderID from the 'orders' table
-    $query = "SELECT uid FROM orders WHERE orderID = ?";
-    $stmt = $conn->prepare($query);
-    if (!$stmt) {
-        die("Prepare failed: " . $conn->error);
-    }
-    $stmt->bind_param('i', $orderID);
-    $stmt->execute();
-    $stmt->bind_result($uid);
-    $stmt->fetch();
-    $stmt->close();
-
-    // Check if uid is null or invalid
-    if (is_null($uid)) {
-        header("Location: now-preparing.php?action=error&reason=uid_not_found&orderID=$orderID");
-        exit();
-    }
-
-    $query = "SELECT name FROM accounts WHERE uid = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('i', $uid);
-    $stmt->execute();
-    $stmt->bind_result($cashier);
-    $stmt->fetch();
-    $stmt->close();
-
 
 
     // Fetch order details, including order type and orders
@@ -46,6 +15,15 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
     $stmt->bind_param('i', $orderID);
     $stmt->execute();
     $stmt->bind_result($orderType, $ordersJson);
+    $stmt->fetch();
+    $stmt->close();
+
+    //get the uid of the customer 
+    $query = "SELECT uid FROM orders WHERE orderID = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('i', $orderID);
+    $stmt->execute();
+    $stmt->bind_result($uid);
     $stmt->fetch();
     $stmt->close();
 
@@ -260,6 +238,10 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
                 die("Error executing stmt3: " . $stmt3->error);  // More detailed error if insert fails
             }
         } else {
+
+
+            $user_id = $_SESSION['user_id'];
+
 
             // Fetch the name of the current user
             $queryUser = "SELECT name FROM accounts WHERE uid = ?";

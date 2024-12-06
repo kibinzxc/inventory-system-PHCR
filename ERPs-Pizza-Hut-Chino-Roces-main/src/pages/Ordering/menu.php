@@ -92,11 +92,7 @@ if (isset($_GET['logout'])) {
 }
 
 if (isset($_POST['addtobag'])) {
-    if (!isset($_SESSION['uid'])) {
-        // User is not logged in, redirect to login page
-        header("Location: ../../../login.php");
-        exit();
-    }
+
     $uid = $_SESSION['uid'];
     $name = $_POST['name'];
     $price = $_POST['price'];

@@ -116,13 +116,13 @@ include 'noStock.php'; ?>
         );
         xhr.onload = function() {
             if (xhr.status === 200) {
-                setTimeout(() => {
-                    productContainer.innerHTML = xhr.responseText;
-                }, 500); // Smooth delay
+                productContainer.innerHTML = xhr.responseText;
             } else {
+                console.error('Error loading products:', xhr.status, xhr.responseText);
                 productContainer.innerHTML = '<p>Error loading products. Please try again later.</p>';
             }
         };
+
         xhr.send();
 
     }

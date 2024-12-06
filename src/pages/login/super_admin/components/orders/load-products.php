@@ -111,11 +111,11 @@ if ($result->num_rows > 0) {
 
                 if ($ingredientMeasurement == 'pcs' && $availableStockInPieces >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
-                } elseif ($ingredientMeasurement = 'grams' && $availableStockInKg >= ($ingredientQuantity / 1000)) {
+                } elseif ($ingredientMeasurement == 'grams' && $availableStockInKg >= ($ingredientQuantity / 1000)) {
                     $isIngredientAvailable = true;
-                } elseif ($ingredientMeasurement = 'bottle' && $availableStockInBottle >= $ingredientQuantity) {
+                } elseif ($ingredientMeasurement == 'bottle' && $availableStockInBottle >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
-                } elseif ($ingredientMeasurement = 'pc' && $availableStockInPieces >= $ingredientQuantity) {
+                } elseif ($ingredientMeasurement == 'pc' && $availableStockInPieces >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
                 }
             }

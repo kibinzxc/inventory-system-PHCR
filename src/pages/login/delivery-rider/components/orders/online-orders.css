@@ -243,3 +243,67 @@ label {
 .modal-buttons button {
     margin-bottom: 0;
 }
+
+/*mobile responsive*/
+@media screen and (max-width: 768px) {
+    .container {
+        margin: 0;
+    }
+
+    .order-card {
+        width: 100%;
+    }
+
+    .order-items li {
+        font-size: 1.1rem;
+    }
+
+    .order-body p {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .btn-done {
+        margin-bottom: 20px;
+    }
+
+    .order-actions input[type="file"] {
+        text-align: center;
+        font-size: 0.8rem;
+        margin: 0 auto;
+        margin-left: 20px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        /* Stack buttons vertically */
+        align-items: center;
+        /* Center align buttons */
+        gap: 0;
+    }
+
+    .btn-secondary {
+        order: 2;
+    }
+
+    .btn-done {
+        order: 1;
+    }
+
+
+    .btn {
+        margin-bottom: 20px !important;
+    }
+
+    .modal-content {
+        margin: 60% auto !important;
+    }
+
+    .modal-content p {
+        font-size: 1.2rem;
+    }
+
+
+
+
+}

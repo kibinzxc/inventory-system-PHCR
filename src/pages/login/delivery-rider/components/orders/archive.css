@@ -657,7 +657,7 @@ a.btn2.disabled:hover {
 
     #main-content {
         padding: 16px;
-        margin-left: 70px;
+        margin-left: 30px;
     }
 
     .modal-content {
@@ -665,5 +665,14 @@ a.btn2.disabled:hover {
         padding: 20px;
         font-size: 0.5rem;
 
+    }
+
+    body {
+        padding-right: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    .table {
+        margin-top: 20px !important;
     }
 }

@@ -212,7 +212,7 @@ body {
     }
 
     .sidebar {
-        width: 70px;
+        width: 50px;
     }
 
     .sidebar.collapsed .logo img {
@@ -220,7 +220,7 @@ body {
     }
 
     .sidebar a {
-        padding: 10px 12px;
+        padding: 5px 5px;
     }
 
     .logo img {

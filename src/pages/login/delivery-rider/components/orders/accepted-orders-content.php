@@ -34,7 +34,7 @@
 </div>
 
 
-echo '<script>
+<script>
     function handleFileChange(event, orderID) {
         const fileInput = event.target;
         const file = fileInput.files[0];
@@ -94,4 +94,4 @@ echo '<script>
             }
         }
     };
-</script>';
+</script>

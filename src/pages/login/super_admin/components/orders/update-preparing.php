@@ -143,7 +143,7 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
 
                                     $query = "INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                                     $stmt = $conn->prepare($query);
-                                    $stmt->bind_param('isdddsis', $invID, $orders, $total_amount, $amount_receive, $amount_change, $order_type, $mop, $cashier);
+                                    $stmt->bind_param('isdddsss', $invID, $orders, $total_amount, $amount_receive, $amount_change, $order_type, $mop, $cashier);
                                     if ($stmt->execute()) {
                                         //delete from invoice_temp
                                         $removeOrder = "DELETE FROM invoice_temp WHERE invID = ?";

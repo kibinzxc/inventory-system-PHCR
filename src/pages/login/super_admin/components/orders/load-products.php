@@ -1,27 +1,28 @@
 <?php
 include '../../connection/database.php';
-error_reporting(1);
+if ($conn->connect_error) {
+    die('Database connection failed: ' . $conn->connect_error);
+}
+
 $category = $_GET['category'] ?? 'pizza';
 $search = $_GET['search'] ?? '';
 
-// Query to fetch products based on category and search
-$sql = "SELECT * FROM products WHERE category = ? AND STATUS = 'available' order by name ASC";
-
 if (!empty($search)) {
-    $sql .= " AND name LIKE ?";
-}
-
-$stmt = $conn->prepare($sql);
-if (!empty($search)) {
+    $stmt = $conn->prepare("SELECT * FROM products WHERE category = ? AND STATUS = 'available' AND name LIKE ? ORDER BY name ASC");
     $searchParam = '%' . $search . '%';
     $stmt->bind_param("ss", $category, $searchParam);
 } else {
+    $stmt = $conn->prepare("SELECT * FROM products WHERE category = ? AND STATUS = 'available' ORDER BY name ASC");
     $stmt->bind_param("s", $category);
 }
 
 $stmt->execute();
-$result = $stmt->get_result();
 
+if ($stmt->error) {
+    die("Error executing query: " . $stmt->error);
+}
+
+$result = $stmt->get_result();
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         // Initialize the availability flag

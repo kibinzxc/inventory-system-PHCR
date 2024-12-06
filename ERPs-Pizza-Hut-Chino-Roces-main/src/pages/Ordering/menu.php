@@ -379,7 +379,7 @@ if (isset($_POST['checkout'])) {
                         <div class="body-card" style="padding:10px 20px 10px 20px; text-align:justify; background:#D9D9D9; height:13vh;">
                             <input type="hidden" id="hiddenField" name="name" value="' . $row['name'] . '">
                             <input type="hidden" id="hiddenField" name="price" value="' . $row['price'] . '">
-                            <input type="hidden" id="hiddenField" name="dish_id" value="' . $row['prodID'] . '">
+                            <input type="hidden" id="hiddenField" name="dish_id" value="' . $row['dish_id'] . '">
                             <input type="hidden" id="hiddenField" name="img" value="' . $row['img'] . '">
                             <h5 style="font-weight:700;">' . $row['name'] . '</h5>
                             <p style="font-size:12px; color:black; overflow: hidden; margin-top:10px;">' . $row['slogan'] . '</p>
@@ -498,7 +498,7 @@ if (isset($_POST['checkout'])) {
                                                             <a  href="#" class="edit-btn"><i class="fa-solid fa-pencil"  style="font-size:20px;"></i></a> 
                                                             </div>
                                                             <div class="remove-btn">
-                                                                <a  href="remove_item.php?remove_item=' . $row['prodID'] . '" class="remove-btn"><i class="fa-solid fa-xmark" style="font-size:25px;"></i></a> 
+                                                                <a  href="remove_item.php?remove_item=' . $row['dish_id'] . '" class="remove-btn"><i class="fa-solid fa-xmark" style="font-size:25px;"></i></a> 
                                                             </div>    
                                                         </div>
                                                         <div class = "col-sm-2 bottom-footer">
@@ -508,7 +508,7 @@ if (isset($_POST['checkout'])) {
                                                             
                                                             <div class = "quantity1">
                                                              <div class="edit-btn">
-                                                            <a  href="edit_item1.php?edit_item=' . $row['prodID'] . '" class="edit-btn"><i class="fa-solid fa-pencil"  style="font-size:20px;"></i></a> 
+                                                            <a  href="edit_item1.php?edit_item=' . $row['dish_id'] . '" class="edit-btn"><i class="fa-solid fa-pencil"  style="font-size:20px;"></i></a> 
                                                             </div>
                                                             <select class="quantity" name="quantity" data-id="' . $row['cart_id'] . '" disabled>';
                                                 $sizes = explode(',', $row['qty']);

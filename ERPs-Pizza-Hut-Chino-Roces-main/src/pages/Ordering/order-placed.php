@@ -289,7 +289,7 @@ if ($loggedIn) {
                                                     <p>Address: <?php echo $rowz['address'] ?></p>
                                                     <p>Contact Number: <?php
                                                                         $uid = $rowz['uid'];
-                                                                        $sql2 = "SELECT * FROM customerinfo where uid = $uid";
+                                                                        $sql2 = "SELECT * FROM customerInfo where uid = $uid";
                                                                         $resultz = $db->query($sql2);
                                                                         $rows2 = $resultz->fetch_assoc();
                                                                         echo $rows2['contactNum'];

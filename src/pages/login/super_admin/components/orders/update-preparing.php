@@ -51,10 +51,7 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
             // Normal "walk-in" order handling
             $orders = json_decode($ordersJson, true);
             // Loop through each order and insert usage report
-            $insertUsageQuery = "INSERT INTO usage_reports (invID, name, size, price, quantity, day_counted) 
-                             VALUES (?, ?, ?, ?, ?, NOW())";
-            $stmtUsage = $conn->prepare($insertUsageQuery);
-            $invID = $orderID; // Assuming invID is the same as orderID
+
 
             // Loop through each item in the order
             foreach ($orders as $order) {
@@ -62,8 +59,10 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
                 $itemSize = $order['size'];
                 $itemPrice = $order['price'];
                 $orderQuantity = $order['quantity'];
-
-                // Insert product usage data into the usage_reports table
+                $insertUsageQuery = "INSERT INTO usage_reports (invID, name, size, price, quantity, day_counted) 
+                             VALUES (?, ?, ?, ?, ?, NOW())";
+                $stmtUsage = $conn->prepare($insertUsageQuery);
+                $invID = $orderID;
                 $stmtUsage->bind_param("sssdi", $invID, $itemName, $itemSize, $itemPrice, $orderQuantity);
                 $stmtUsage->execute();
 

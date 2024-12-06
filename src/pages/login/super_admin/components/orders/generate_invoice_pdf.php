@@ -74,7 +74,10 @@ if (isset($_GET['invID'])) {
     $pdf->SetFont('Arial', '', 8);
     $pdf->Ln(1);
 
-
+    //if method of payment == 0 show 'cash' 
+    if ($invoice['mop'] == '0') {
+        $invoice['mop'] = 'Cash';
+    };
     // Cashier and Order Type
     $pdf->Cell(0, 5, $staff . ': ' . $invoice['cashier'], 0, 1);
     $pdf->Cell(0, 5, 'Transaction Type: ' . strtoupper($invoice['order_type']), 0, 1);

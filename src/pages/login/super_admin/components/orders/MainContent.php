@@ -21,7 +21,6 @@ include 'noStock.php'; ?>
                     <!-- Utility Buttons and Sorting Options -->
                     <div class="btns_container">
                         <!-- Search Field -->
-                        <input type="text" name="search" id="search" placeholder="Search" class="search_btn">
 
                         <!-- Sorting Options -->
                         <div class="sort-container">

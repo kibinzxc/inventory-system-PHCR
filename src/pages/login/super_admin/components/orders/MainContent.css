@@ -213,7 +213,7 @@ a.btn {
 
 
 .panel-container {
-    max-width: 35%;
+    max-width: 500px;
     min-width: 500px;
     width: 500px;
     background-color: #FFF;

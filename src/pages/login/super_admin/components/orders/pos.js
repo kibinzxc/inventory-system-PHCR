@@ -444,7 +444,7 @@ function generateInvoicePDF(invID) {
     var widthPx = width * 3.7795275591; // Convert mm to pixels (1mm = 3.7795275591px)
     var heightPx = height * 3.7795275591;
 
-    // Open the window with the specified size
+    // Open the window with the specified size and invID
     var newWindow = window.open('generate_inv.php?invID=' + invID, '_blank', 'width=' + widthPx + ',height=' + heightPx);
 
     // Focus on the new window

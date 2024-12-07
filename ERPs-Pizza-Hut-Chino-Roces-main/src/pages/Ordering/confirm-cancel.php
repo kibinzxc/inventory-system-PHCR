@@ -44,7 +44,6 @@ if (isset($_SESSION['uid'])) {
             exit(); // Ensure script stops execution after redirection
         }
     }
-    $conn->close();
 } else {
     header("Location: ../../../login.php");
 }
@@ -193,11 +192,13 @@ if ($loggedIn) {
                             <?php
                             // Assuming you have a database connection established as $db and $currentUserId is defined
 
-                            $sql = "SELECT * FROM orders WHERE uid = $currentUserId";
+
+                            $sql = "SELECT * FROM orders WHERE uid = $currentUserId AND status != 'cancelled' ORDER BY orderID DESC LIMIT 1";
                             $result = $db->query($sql);
                             $results = $db->query($sql);
                             $rowz = $results->fetch_assoc();
 
+                            $totalPrice = $rowz['totalPrice'];
                             $orderPlaced = $rowz['orderPlaced'];
                             // Create a DateTime object from the input data
                             $dateTime = new DateTime($orderPlaced);
@@ -213,12 +214,19 @@ if ($loggedIn) {
                             $time1 = $dateTime1->format("h:i A");
 
                             $orderStatus = $rowz['status'];
+
+                            //if ready for pickup make it 'waiting for delivery' 
+                            if ($orderStatus === "ready for pickup") {
+                                $orderStatus = "waiting for delivery";
+                            }
                             function getBadgeClass($status)
                             {
                                 switch ($status) {
                                     case "placed":
                                         return "badge bg-secondary";
                                     case "preparing":
+                                        return "badge custom-warning";
+                                    case "waiting for delivery":
                                         return "badge custom-warning";
                                     case "delivery":
                                         return "badge custom1-warning";
@@ -230,7 +238,7 @@ if ($loggedIn) {
                             }
                             // Generate HTML based on the order status
                             $badgeClass = getBadgeClass($orderStatus);
-                            $html = "<p  >Order Status: <span class=\"$badgeClass\" style= 'font-size:1rem; color:white; '>" . ucfirst($orderStatus) . "</span></p>";
+                            $html = "<p  >Order Status: <span class=\"$badgeClass\" style= 'font-size:1rem; color:white'>" . ucfirst($orderStatus) . "</span></p>";
                             function shouldDisplayDeliveryDetails($status)
                             {
                                 return $status === "delivered";
@@ -307,15 +315,13 @@ if ($loggedIn) {
                                                                     $name = $item['name'];
                                                                     $size = $item['size'];
                                                                     $price = $item['price'];
-                                                                    $qty = $item['qty'];
-                                                                    $totalPrice = $item['totalPrice'];
-                                                                    $totalOrderPrice += $totalPrice;
+                                                                    $qty = $item['quantity'];
                                                                     echo ' <tr>
                                                         <td>' . $name . '</td>
                                                         <td>' . $size . '</td>
                                                         <td>₱ ' . $price . '</td>
                                                         <td>' . $qty . '</td>
-                                                        <td>₱ ' . $totalPrice . '</td>
+
                                                     </tr>';
                                                                 }
                                                             } else {
@@ -326,9 +332,12 @@ if ($loggedIn) {
                                                     } else {
                                                         echo "0 results";
                                                     }
+                                                    $vat = $totalPrice * 0.12;
+                                                    $vatable = $totalPrice - $vat;
+                                                    $deliveryFee = 65;
+                                                    $totalPrice2 = $totalPrice - $deliveryFee;
+                                                    $totalAmount = $totalPrice2 + $deliveryFee;
 
-                                                    $deliveryFee = 50;
-                                                    $totalAmount = $totalOrderPrice + $deliveryFee;
 
                                                     ?>
 
@@ -346,23 +355,30 @@ if ($loggedIn) {
                                                             <td>Cash on Delivery</td>
                                                         </tr>
                                                         <tr class="subtotal">
+                                                            <td>Vatable</td>
+                                                            <td>₱ <?php echo number_format($vatable, 2) ?></td>
+                                                        </tr>
+                                                        <tr class="vat">
+                                                            <td>Vat (12%)</td>
+                                                            <td>₱ <?php echo number_format($vat, 2) ?></td>
+                                                        </tr>
+                                                        <tr class="subtotal">
                                                             <td>Subtotal</td>
-                                                            <td>₱ <?php echo $totalOrderPrice ?></td>
+                                                            <td>₱ <?php echo number_format($totalPrice2, 2) ?></td>
                                                         </tr>
                                                         <tr class="lasttotal">
                                                             <td>Delivery Fee</td>
                                                             <td>₱
-                                                                <?php echo $deliveryFee ?></td>
+                                                                <?php echo number_format($deliveryFee, 2) ?></td>
                                                         </tr>
                                                         <tr class="total">
                                                             <td style="color:maroon;">Total</td>
                                                             <td style="color:maroon;">₱
-                                                                <?php echo $totalAmount ?></td>
+                                                                <?php echo number_format($totalAmount, 2) ?></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -410,8 +426,6 @@ if ($loggedIn) {
         }, 2000);
     </script>
     <?php
-    session_start();
-
     // Check if user is logged in
     if (isset($_SESSION['uid'])) {
         $loggedIn = true;
@@ -521,200 +535,42 @@ if ($loggedIn) {
     ?>
 
 
-    <!DOCTYPE html>
-    <html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="icon" href="../../assets/img/pizzahut-logo.png">
-        <title>Archived Messages | Pizza Hut Chino Roces</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <link rel="stylesheet" href="../../../src/bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="../../../src/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/messages.css">
-        <script src="../../../src/bootstrap/js/bootstrap.min.js"></script>
-        <script src="../../../src/bootstrap/js/bootstrap.js"></script>
-        <script src="https://kit.fontawesome.com/0d118bca32.js" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="js/menu.js"></script>
-        <script src="js/search-index.js"></script>
-    </head>
-
-    <body>
-
-        <div class="container-fluid" style="overflow:hidden;">
-            <div class="row row-flex">
-                <!-- Add the row-flex class -->
-                <div class="col-sm-1 custom-width" style="height:100vh;">
-                    <!-- Add the custom-width class -->
-                    <div class="sidebar" style="height:100vh;">
-                        <a href="../../../index.php" class="item1">
-                            <img class="logo" src="../../assets/img/pizzahut-logo.png" alt="Pizza Hut Logo">
-                        </a>
-                        <a href="menu.php" class="item">
-                            <i class="fa-solid fa-utensils"></i>
-                            <span>Menu</span>
-                        </a>
-                        <a href="order.php" class="item" id="orderLink">
-                            <i class="fa-solid fa-receipt"></i>
-                            <span>Orders</span>
-                        </a>
-                        <a href="order-history.php" class="item">
-                            <i class="fa-solid fa-receipt"></i>
-                            <span>Records</span>
-                        </a>
-                        <a href="messages.php" class="item-last active" id="messagesLink">
-                            <i class="fa-solid fa-envelope"></i>
-                            <span>Messages</span>
-                            <?php
-
-                            $unreadNotificationCount = $unreadNotificationCount;
-
-                            if ($unreadNotificationCount > 0) {
-                                echo '<span class="notification-count">' . $unreadNotificationCount . '</span>';
-                            }
-                            ?>
-                        </a>
-
-                        <!-- Toggle Login/Logout link -->
-                        <?php if ($loggedIn) : ?>
-                            <a href="profile.php" class="item">
-                                <i class="fa-solid fa-user"></i>
-                                <span>Profile</span>
-                            </a>
-                            <a href="confirm-cancel.php?logout=1" class="item">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                                <span>Logout</span>
-                            </a>
-                        <?php else : ?><br><br>
-                            <a href="../../../login.php" class="item-login">
-                                <i class="fa-solid fa-user"></i>
-                                <span>Login</span>
-                            </a>
-                        <?php endif; ?>
-
-                    </div>
-                </div>
-                <!-- BEGINNING OF BODY -->
-                <div class="col-sm-11" style="background: white;">
-                    <div class="row">
-                        <?php
-                        if (isset($_SESSION['success2']) && !empty($_SESSION['success2'])) {
-                            echo '<div class="success" id="message-box">';
-                            echo $_SESSION['success2'];
-                            unset($_SESSION['success2']);
-                            echo '</div>';
-                        }
-                        if (isset($_SESSION['error2']) && !empty($_SESSION['error2'])) {
-                            echo '<div class="error" id="message-box">';
-                            echo $_SESSION['error2'];
-                            unset($_SESSION['error2']);
-                            echo '</div>';
-                        }
-                        ?>
-
-                        <?php
-
-                        $sql = "SELECT * FROM msg_users WHERE uid=" . $_SESSION['uid'] . " AND status = 'archived'";
-                        $result = $db->query($sql);
-                        $result1 = $db->query($sql);
-                        $newrow = mysqli_fetch_array($result1);
 
 
-                        // Check if any notifications were found
-                        if ($result->num_rows > 0) {
-                            $notifications = array();
-                            // Display notifications
-                            while ($row = $result->fetch_assoc()) {
-                                $notifications[] = $row;
-                            }
-                            $notifications = array_reverse($notifications);
-
-                            foreach ($notifications as $row) {
-
-                                $category = $row['category'];
-                                $iconMapping = [
-                                    "Order update" => "fa-solid fa-bell",
-                                    "Promotion" => "fa-solid fa-bullhorn",
-
-                                ];
-                                $defaultIcon = "bi bi-question"; // Adjust the default icon class name
-
-                                $icon = isset($iconMapping[$category]) ? $iconMapping[$category] : $defaultIcon;
-                                // Define an array that maps categories to their corresponding icons
 
 
-                                $dateString = $row['date_created']; // Your input date string
-                                $inputFormat = "Y-m-d"; // Format of the input date string
-                                $outputFormat = "F d, Y"; // Desired output format
-                                $timestamp = strtotime($dateString);
+    <!-- ENDING OF BODY -->
 
-                                // Format the timestamp into the desired output format
-                                $outputDate = date($outputFormat, $timestamp);
-                                $dateTime = $row['date_created'];
-                                $convertedDateTime = convertDateTimeFormat($dateTime);
+    <script>
+        <?php if (!$loggedIn) : ?>
+            document.getElementById('messagesLink').classList.add('disabled');
+            document.getElementById('orderLink').classList.add('disabled');
+        <?php endif; ?>
+    </script>
+    <script>
+        <?php if (!$loggedIn) : ?>
+            document.getElementById('messagesLink').classList.add('disabled');
+            document.getElementById('orderLink').classList.add('disabled');
+        <?php endif; ?>
+    </script>
 
-                                echo '<a class="notif" style="text-decoration:none; color:black;" href="view-archived.php?id=' . $row['msgID'] . '">
-                            <div class="' . $row['status'] . '" style = "padding:20px 20px 5px 20px; width:100%; border-bottom:1px solid #B6B6B6; border-radius:5px; margin-bottom:10px;">
-                                <div style = "float:left; margin-top:10px;"> 
-                                    
-                                    <i class="' . $icon . '" alt="Category Icon" style="font-size:35px; color:#605D5D;"></i>
-                                </div>
-                                <div style = "float:center; margin-left:60px;">
-                                    <h5>' . $row['title'] . '</h5>
-                                    <p style="overflow:hidden; white-space: nowrap; text-overflow: ellipsis;">' . $row['category'] . ': ' . $row['description'] . '</p>
-                                    <p style = "margin-top:-15px;">' . $outputDate . '</p>
-                                    </div>
-                            </div>
-                            </a>';
-                            }
-                        } else {
-                            echo '<h4 style="text-align:center; margin-top:300px;">No Archived Message Yet</h4>';
-                        }
-                        ?>
-                    </div>
-                </div>
-                <div class="col-md-7" style="">
-                    <h4 style="text-align:center; margin-top:400px;">No Message Selected</h4>
-                </div>
-            </div>
-        </div>
-        </div>
+    <script>
+        setTimeout(function() {
+            var messageBox = document.getElementById('message-box');
+            if (messageBox) {
+                messageBox.style.display = 'none';
+            }
+        }, 2000);
+    </script>
+    <script>
+        <?php if ($isCartEmpty && !$hasActiveOrders) : ?>
+            document.getElementById('orderLink').classList.add('disabled');
+        <?php endif; ?>
+    </script>
 
+</body>
 
-        <!-- ENDING OF BODY -->
-
-        <script>
-            <?php if (!$loggedIn) : ?>
-                document.getElementById('messagesLink').classList.add('disabled');
-                document.getElementById('orderLink').classList.add('disabled');
-            <?php endif; ?>
-        </script>
-        <script>
-            <?php if (!$loggedIn) : ?>
-                document.getElementById('messagesLink').classList.add('disabled');
-                document.getElementById('orderLink').classList.add('disabled');
-            <?php endif; ?>
-        </script>
-
-        <script>
-            setTimeout(function() {
-                var messageBox = document.getElementById('message-box');
-                if (messageBox) {
-                    messageBox.style.display = 'none';
-                }
-            }, 2000);
-        </script>
-        <script>
-            <?php if ($isCartEmpty && !$hasActiveOrders) : ?>
-                document.getElementById('orderLink').classList.add('disabled');
-            <?php endif; ?>
-        </script>
-
-    </body>
-
-    </html>
+</html>
 </body>
 
 </html>

@@ -93,6 +93,11 @@ include '../../connection/database.php';
         text-align: justify;
         margin-bottom: 30px;
     }
+
+    .address a {
+        text-decoration: none;
+        color: blue;
+    }
 </style>
 
 <div id="main-content">

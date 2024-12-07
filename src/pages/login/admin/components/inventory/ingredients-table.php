@@ -29,29 +29,33 @@ function getAverageOrdersPerDay($conn, $productName)
     return ($totalOrdersLastWeek > 0) ? round($totalOrdersLastWeek / 7) : 0;
 }
 
-// Get all products with search filtering
-$sql = "SELECT * FROM products WHERE name LIKE ?";
-$searchTerm = '%' . $search . '%';
+// Initialize an empty array for ingredient thresholds
+$ingredientThresholds = [];
+
+// Get all products and filter by ingredient names
+$sql = "SELECT * FROM products";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $searchTerm);
 $stmt->execute();
 $result = $stmt->get_result();
-
-$ingredientThresholds = [];
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         // Get product ingredients
         $ingredients = json_decode($row['ingredients'], true);
 
-        // Calculate the average orders per day and low stock threshold for the product
-        $averageOrdersPerDay = getAverageOrdersPerDay($conn, $row['name']);
-        $lowStockThreshold = $averageOrdersPerDay * 3;
-
+        // Filter ingredients by search term
         foreach ($ingredients as $ingredient) {
             $ingredientName = strtolower($ingredient['ingredient_name']); // Ensure consistent case
+            if ($search && strpos($ingredientName, strtolower($search)) === false) {
+                continue; // Skip if ingredient name doesn't match search term
+            }
+
             $ingredientQuantity = floatval($ingredient['quantity']);
             $ingredientMeasurement = $ingredient['measurement'];
+
+            // Calculate the average orders per day and low stock threshold for the product
+            $averageOrdersPerDay = getAverageOrdersPerDay($conn, $row['name']);
+            $lowStockThreshold = $averageOrdersPerDay * 3;
 
             // Calculate the total quantity needed for the ingredient based on the low stock threshold
             $totalQuantityNeeded = $ingredientQuantity * $lowStockThreshold;
@@ -100,14 +104,25 @@ $conn->close();
 <style>
     table {
         color: #343434;
+        width: 500px;
+        margin: 0 auto;
+        /* Center the table */
+        margin-bottom: 50px;
+    }
+
+    tr {
+        text-align: left;
+    }
+
+    tbody {
+        text-align: left;
     }
 </style>
-
 
 <table id="ingredientsTable">
     <thead>
         <tr>
-            <th>Item Name</th>
+            <th>Ingredient Name</th>
             <th>Low Stock Threshold</th>
         </tr>
     </thead>
@@ -141,8 +156,6 @@ $conn->close();
                         }
                         ?>
                     </strong></td>
-
-
             </tr>
         <?php endforeach; ?>
     </tbody>

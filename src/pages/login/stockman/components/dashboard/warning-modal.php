@@ -149,13 +149,13 @@ foreach ($ingredientThresholds as $ingredientName => $data) {
         if ($status === 'low stock') {
             $lowStockIngredients[] = [
                 'ingredient' => ucfirst($ingredientName),
-                'current_stock' => $currentStock . ' ' . $currentUom,
-                'threshold' => $threshold . ' ' . $measurement
+                'current_stock' => ($currentUom === 'kg' ? number_format($currentStock, 2) : $currentStock) . ' ' . $currentUom,
+                'quantity_to_order' => ($measurement === 'kg' ? number_format($threshold - $currentStock, 2) : $threshold - $currentStock) . ' ' . $measurement
             ];
         } elseif ($status === 'out of stock') {
             $outOfStockIngredients[] = [
                 'ingredient' => ucfirst($ingredientName),
-                'threshold' => $threshold . ' ' . $measurement
+                'quantity_to_order' => ($measurement === 'kg' ? number_format($threshold, 2) : $threshold) . ' ' . $measurement
             ];
         }
     }
@@ -214,7 +214,11 @@ if (count($lowStockIngredients) > 0 || count($outOfStockIngredients) > 0) {
                     // echo 'Email sent to ' . $email . '<br>';
 
                     // Insert the user UID and today's date into the notify_user table
-                    $insertSql = "INSERT INTO notify_user (uid) VALUES (?)";
+                    $insertSql = "
+                        INSERT INTO notify_user (uid, date_notified) 
+                        VALUES (?, NOW()) 
+                        ON DUPLICATE KEY UPDATE date_notified = NOW()
+                    ";
                     $insertStmt = $conn->prepare($insertSql);
                     $insertStmt->bind_param("i", $uid);
                     $insertStmt->execute();
@@ -408,27 +412,32 @@ $conn->close();
         // Show the low stock ingredients
         // Show the low stock ingredients
         const lowStockListElement = document.getElementById('low-stock-list');
+        // Render low stock ingredients
         if (lowStockIngredients.length > 0) {
             lowStockIngredients.forEach(ingredient => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>(Current Stock: ${ingredient.current_stock}, <strong>Reorder: ${ingredient.threshold})</strong>`;
+                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>
+                              (Current Stock: ${ingredient.current_stock}, 
+                              <strong>Order: ${ingredient.quantity_to_order})</strong>`;
                 lowStockListElement.appendChild(listItem);
             });
         } else {
             document.getElementById('low-stock-section').style.display = 'none';
         }
 
-        // Show the out-of-stock ingredients
-        const outOfStockListElement = document.getElementById('out-of-stock-list');
+        // Render out-of-stock ingredients
         if (outOfStockIngredients.length > 0) {
             outOfStockIngredients.forEach(ingredient => {
                 const listItem = document.createElement('li');
-                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>(Out of stock, <strong>Reorder: ${ingredient.threshold})</strong>`;
+                listItem.innerHTML = `<strong>- ${ingredient.ingredient}</strong><br>
+                              (Out of stock, 
+                              <strong>Reorder: ${ingredient.quantity_to_order})</strong>`;
                 outOfStockListElement.appendChild(listItem);
             });
         } else {
             document.getElementById('out-of-stock-section').style.display = 'none';
         }
+
 
 
         // Display the unavailable count message

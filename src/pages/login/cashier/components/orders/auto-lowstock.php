@@ -75,7 +75,7 @@ foreach ($ingredientThresholds as $ingredientName => $data) {
     $updateInventoryStatusSql = "
         UPDATE daily_inventory
         SET status = CASE
-            WHEN ending = 0 THEN 'out of stock'
+            WHEN ending <= 0 THEN 'out of stock'
             WHEN ending > 0 AND ending <= ? THEN 'low stock'
             WHEN ending > ? THEN 'in stock'
             ELSE status

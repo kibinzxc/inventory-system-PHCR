@@ -148,7 +148,21 @@ $result = $stmt->get_result();
                 echo "<td class='$status_class' style='$status_style'>" . strtoupper(htmlspecialchars($row["status"])) . "</td>";
 
                 // Format the last update date
-                $formatted_date = date("F j, Y g:i A", strtotime($row["last_update"]));
+                $last_update = strtotime($row["last_update"]);
+                $time_diff = time() - $last_update;
+                if ($time_diff < 60) {
+                    $formatted_date = $time_diff . " seconds ago";
+                } elseif ($time_diff < 3600) {
+                    $minutes = floor($time_diff / 60);
+                    $formatted_date = $minutes . " minute" . ($minutes > 1 ? "s" : "") . " ago";
+                } elseif ($time_diff < 86400) {
+                    $hours = floor($time_diff / 3600);
+                    $formatted_date = $hours . " hour" . ($hours > 1 ? "s" : "") . " ago";
+                } else {
+                    $days = floor($time_diff / 86400);
+                    $formatted_date = $days . " day" . ($days > 1 ? "s" : "") . " ago";
+                }
+
                 echo "<td>" . $formatted_date . "</td>";
 
                 echo "<td>" . htmlspecialchars($row["updated_by"]) . "</td>";

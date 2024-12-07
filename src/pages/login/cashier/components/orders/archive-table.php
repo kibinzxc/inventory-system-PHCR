@@ -65,6 +65,11 @@ if ($result->num_rows === 0) {
         echo '<p><strong>Invoice #</strong> ' . $invID . '</p>';
         echo '</div>';
 
+
+        if ($mop == '0') {
+            $mop = 'Cash';
+        }
+
         echo '<div class="invoice-info">';
         echo '<p><strong>Order Type:</strong> ' . strtoupper($order_type) . '</p>';
         echo '<p><strong>Method of Payment:</strong> ' . strtoupper($mop) . '</p>';

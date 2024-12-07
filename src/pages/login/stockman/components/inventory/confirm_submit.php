@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="Confirm_submit.css">
+<link rel="stylesheet" href="confirm_submit.css">
 <div class="confirmation-modal" id="uniqueSubmitModal">
     <div class="confirmation-modal-content1">
         <div class="confirmation-modal-header">

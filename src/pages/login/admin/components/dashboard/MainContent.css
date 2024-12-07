@@ -412,12 +412,13 @@ a.btn2.disabled:hover {
     box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
     margin: 10px 0;
     transition: all 0.3s ease;
-    width: 23rem;
     height: auto;
     text-align: left;
     padding: 20px 30px 5px 30px;
     flex-grow: 1;
     cursor: default;
+    width: 20rem;
+    /* Adjust the card width to 20rem for smaller screens */
 }
 
 .card:hover {
@@ -560,6 +561,7 @@ h5 {
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 0;
+    width: 100%;
 
 }
 
@@ -781,6 +783,77 @@ h3 {
     text-align: center;
 }
 
+/* Adjust card size on smaller screens */
+@media (max-width: 1590px) {
+    .card {
+        width: 20rem;
+        /* Adjust the card width to 20rem for smaller screens */
+        padding: 15px 25px 5px 25px;
+        /* Adjust the padding to maintain balance */
+    }
+
+    .inventory-cards {
+        flex-wrap: wrap;
+        /* Allow the cards to wrap on smaller screens */
+        justify-content: center;
+        /* Align items to the left */
+    }
+
+    .card-body {
+        flex-direction: column;
+        /* Stack items vertically for a more compact layout */
+        text-align: center;
+        /* Center text within the card */
+    }
+
+    .sales-amount {
+        font-size: 1.8rem;
+        /* Reduce font size for sales amount on smaller screens */
+    }
+
+    .card-footer {
+        font-size: 0.9rem;
+        /* Adjust footer font size */
+    }
+
+    .daily_sales {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+    .recent_orders {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+    .daily_sales2 {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+    .recent_orders2 {
+        max-width: 100%;
+        flex-grow: 1;
+    }
+
+
+
+    .custom-card-body {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        text-align: center;
+        align-items: center;
+        flex-grow: 1;
+    }
+
+    .custom-invoice-info {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+}
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
@@ -858,76 +931,4 @@ h3 {
         width: auto;
         margin-right: 10px;
     }
-}
-
-/* Adjust card size on smaller screens */
-@media (max-width: 1559px) {
-    .card {
-        width: 20rem;
-        /* Adjust the card width to 20rem for smaller screens */
-        padding: 15px 25px 5px 25px;
-        /* Adjust the padding to maintain balance */
-    }
-
-    .inventory-cards {
-        flex-wrap: wrap;
-        /* Allow the cards to wrap on smaller screens */
-        justify-content: center;
-        /* Align items to the left */
-    }
-
-    .card-body {
-        flex-direction: column;
-        /* Stack items vertically for a more compact layout */
-        text-align: center;
-        /* Center text within the card */
-    }
-
-    .sales-amount {
-        font-size: 1.8rem;
-        /* Reduce font size for sales amount on smaller screens */
-    }
-
-    .card-footer {
-        font-size: 0.9rem;
-        /* Adjust footer font size */
-    }
-
-    .daily_sales {
-        max-width: 100%;
-        flex-grow: 1;
-    }
-
-    .recent_orders {
-        max-width: 100%;
-        flex-grow: 1;
-    }
-
-    .daily_sales2 {
-        max-width: 100%;
-        flex-grow: 1;
-    }
-
-    .recent_orders2 {
-        max-width: 100%;
-        flex-grow: 1;
-    }
-
-
-
-    .custom-card-body {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        text-align: center;
-        align-items: center;
-        flex-grow: 1;
-    }
-
-    .custom-invoice-info {
-        display: flex;
-        justify-content: flex-start;
-        gap: 10px;
-    }
-
 }

@@ -111,29 +111,7 @@ if (isset($_SESSION['user_id'])) {
                         <h5>Total Sales Today</h5>
                         <p class="sales-amount"><?php echo '₱' . number_format($totalSales, 2); ?></p>
                     </div>
-                    <div class="percentage-box">
-                        <div class="percentage-body">
-                            <?php if ($percentageChange > 0) { ?>
-                                <div class="up">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/graph" title="graph icons">Graph icons created by Icon Hubs - Flaticon</a> -->
-                                    <img src="../../assets/up.png" alt="" srcset="" style="width:25px;margin-right:5px;">
-                                    <p class="percentage-up">+<?php echo number_format($percentageChange, 2); ?>%</p>
-                                </div>
-                            <?php } elseif ($percentageChange < 0) { ?>
-                                <div class="down">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/trend" title="trend icons">Trend icons created by Amazona Adorada - Flaticon</a> -->
-                                    <img src="../../assets/down.png" alt="" srcset="" style="width:25px; margin-right:5px;">
-                                    <p class="percentage-down"><?php echo number_format($percentageChange, 2); ?>%</p>
-                                </div>
-                            <?php } else { ?>
-                                <div class="neutral">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/growth" title="growth icons">Growth icons created by Prosymbols Premium - Flaticon</a> -->
-                                    <img src="../../assets/neutral.png" alt="" srcset="" style="width:25px; margin-right:5px;">
-                                    <p class="percentage-neutral"> 0.00%</p>
-                                </div>
-                            <?php } ?>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="card-footer">
                     <p><?php echo 'As of ' . date('F d, Y g:i A'); ?></p>

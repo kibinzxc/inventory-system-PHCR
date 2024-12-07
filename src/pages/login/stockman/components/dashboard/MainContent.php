@@ -1,6 +1,7 @@
 <?php
 include 'warning-modal.php';
 error_reporting(0);
+
 // Set the timezone to Asia/Manila
 date_default_timezone_set('Asia/Manila');
 
@@ -113,28 +114,11 @@ if (isset($_SESSION['user_id'])) {
                     </div>
                     <div class="percentage-box">
                         <div class="percentage-body">
-                            <?php if ($percentageChange > 0) { ?>
-                                <div class="up">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/graph" title="graph icons">Graph icons created by Icon Hubs - Flaticon</a> -->
-                                    <img src="../../assets/up.png" alt="" srcset="" style="width:25px;margin-right:5px;">
-                                    <p class="percentage-up">+<?php echo number_format($percentageChange, 2); ?>%</p>
-                                </div>
-                            <?php } elseif ($percentageChange < 0) { ?>
-                                <div class="down">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/trend" title="trend icons">Trend icons created by Amazona Adorada - Flaticon</a> -->
-                                    <img src="../../assets/down.png" alt="" srcset="" style="width:25px; margin-right:5px;">
-                                    <p class="percentage-down"><?php echo number_format($percentageChange, 2); ?>%</p>
-                                </div>
-                            <?php } else { ?>
-                                <div class="neutral">
-                                    <!-- <a href="https://www.flaticon.com/free-icons/growth" title="growth icons">Growth icons created by Prosymbols Premium - Flaticon</a> -->
-                                    <img src="../../assets/neutral.png" alt="" srcset="" style="width:25px; margin-right:5px;">
-                                    <p class="percentage-neutral"> 0.00%</p>
-                                </div>
-                            <?php } ?>
+                            <div style="height:30px;"></div>
                         </div>
                     </div>
                 </div>
+
                 <div class="card-footer">
                     <p><?php echo 'As of ' . date('F d, Y g:i A'); ?></p>
                 </div>
@@ -372,31 +356,32 @@ if (isset($_SESSION['user_id'])) {
                     <p><?php echo 'From ' . $last_week_sd . ' - ' . $last_week_ed; ?></p>
                 </div>
             </div>
+        </div>
 
 
-            <div class="same-column-container">
-                <div class="same-column">
-                    <div class="table_container daily_sales">
-                        <?php include 'daily_sales.php'; ?>
-                    </div>
-                    <div class="table_container recent_orders">
-                        <h3>Recent Orders</h3>
-                        <?php include 'recent_orders.php'; ?>
-                    </div>
+        <div class="same-column-container">
+            <div class="same-column">
+                <div class="table_container daily_sales">
+                    <?php include 'daily_sales.php'; ?>
                 </div>
-
-                <div class="same-column">
-                    <div class="table_container daily_sales2">
-                        <h3 class="h3-header"> Recent Inventory Updates</h3>
-                        <?php include 'recent_updates.php'; ?>
-                    </div>
-                    <div class="table_container recent_orders2">
-                        <h3>Current Week Top Products</h3>
-                        <?php include 'top_products.php'; ?>
-                    </div>
-
+                <div class="table_container recent_orders">
+                    <h3>Recent Orders</h3>
+                    <?php include 'recent_orders.php'; ?>
                 </div>
             </div>
 
+            <div class="same-column">
+                <div class="table_container daily_sales2">
+                    <h3 class="h3-header"> Recent Inventory Updates</h3>
+                    <?php include 'recent_updates.php'; ?>
+                </div>
+                <div class="table_container recent_orders2">
+                    <h3>Current Week Top Products</h3>
+                    <?php include 'top_products.php'; ?>
+                </div>
+
+            </div>
         </div>
+
     </div>
+</div>

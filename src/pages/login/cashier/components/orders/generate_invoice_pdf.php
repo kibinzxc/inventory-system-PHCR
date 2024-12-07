@@ -21,6 +21,31 @@ if (isset($_GET['invID'])) {
     foreach ($orders as $order) {
         $totalItems += $order['quantity'];
     }
+    $transactionDate = new DateTime($invoice['transaction_date']);
+    $formattedDate = $transactionDate->format('m/d/Y g:i A');
+
+    // Walk-in == dine in
+    if ($invoice['order_type'] == 'walk-in') {
+        $invoice['order_type'] = 'dine in';
+        $staff = 'Cashier';
+        $title = 'Transaction Date';
+        $formattedOrderPlacedDate = $formattedDate;
+    } elseif ($invoice['order_type'] == 'delivery') {
+        $staff = 'Delivery Rider';
+
+        //fetch the orderPlaced date from success_orders table 
+        $query = "SELECT orderPlaced FROM success_orders WHERE orderID = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param('i', $invoice['orderID']);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $orderPlaced = $result->fetch_assoc();
+
+        $orderPlacedDate = new DateTime($orderPlaced);
+        $formattedOrderPlacedDate = $orderPlacedDate->format('m/d/Y g:i A');
+        $title = 'Order Placed';
+        $title2 = 'Delivery';
+    }
 
     // Create the receipt-sized PDF
     $pdf = new FPDF('P', 'mm', array(80, 200)); // Receipt size
@@ -34,24 +59,27 @@ if (isset($_GET['invID'])) {
     $pdf->Cell(0, 5, 'Sales Invoice', 0, 1, 'C');
 
     // Format the transaction date to "11/25/2024 5:30 PM"
-    $transactionDate = new DateTime($invoice['transaction_date']);
-    $formattedDate = $transactionDate->format('m/d/Y g:i A');
+
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(0, 5, 'Invoice # ' . $invoice['invID'], 0, 1, 'C');
     $pdf->SetFont('Arial', 'B', 9);
-    $pdf->Cell(0, 5, 'Transaction Date: ' . $formattedDate, 0, 1, 'L');
+    $pdf->Cell(0, 5, $title . ': ' . $formattedOrderPlacedDate, 0, 1, 'L');
+
+    if ($invoice['order_type'] == 'delivery') {
+        $pdf->Cell(0, 5, $title2 . ': ' . $formattedDate, 0, 1, 'L');
+    }
 
     // Invoice Number below the transaction date
 
     $pdf->SetFont('Arial', '', 8);
     $pdf->Ln(1);
 
-    // Walk-in == dine in
-    if ($invoice['order_type'] == 'walk-in') {
-        $invoice['order_type'] = 'dine in';
-    }
+    //if method of payment == 0 show 'cash' 
+    if ($invoice['mop'] == '0') {
+        $invoice['mop'] = 'Cash';
+    };
     // Cashier and Order Type
-    $pdf->Cell(0, 5, 'Cashier: ' . $invoice['cashier'], 0, 1);
+    $pdf->Cell(0, 5, $staff . ': ' . $invoice['cashier'], 0, 1);
     $pdf->Cell(0, 5, 'Transaction Type: ' . strtoupper($invoice['order_type']), 0, 1);
     $pdf->Cell(0, 5, 'Method of Payment: ' . strtoupper($invoice['mop']), 0, 1);
     $pdf->Ln(2);
@@ -65,10 +93,13 @@ if (isset($_GET['invID'])) {
     $pdf->Cell(40, 6, 'Qty  Item Description', 0, 0);
     $pdf->Cell(50, 6, 'Amount', 0, 1, 'L');
     $pdf->SetFont('Arial', '', 8);
-
     foreach ($orders as $order) {
+        // Replace 'with' with 'w/' and remove extra spaces around the item name
+        $itemName = str_replace(' with ', 'w/', $order['name']);
+        $itemName = preg_replace('/\s+/', '', $itemName);  // Remove all spaces
+
         // Item name and size
-        $itemDetails = $order['quantity'] . 'x ' . $order['name'];
+        $itemDetails = $order['quantity'] . 'x ' . $itemName;
         $size = '(' . $order['size'] . ')';
         $price = 'PHP ' . number_format($order['price'], 2);
 
@@ -77,6 +108,8 @@ if (isset($_GET['invID'])) {
         $pdf->Cell(50, 1, $size, 0, 1); // Reduced height to 4 for tighter spacing
         $pdf->Ln(3);
     }
+
+
 
     // Draw a straight line
     $pdf->Line(10, $pdf->GetY(), 70, $pdf->GetY());
@@ -116,7 +149,7 @@ if (isset($_GET['invID'])) {
     $vat = $invoice['total_amount'] - $vatable; // VAT (12%)
 
     $financialDetails = [
-        'Vatable Sales' => 'PHP ' . number_format($invoice['total_amount'], 2),
+        'Vatable Sales' => 'PHP ' . number_format($vatable, 2),
         'VAT (12%)' => 'PHP ' . number_format($vat, 2),
         'VAT Exempt Sales' => 'PHP ' . number_format(0, 2),
         'Zero Rated Sales' => 'PHP ' . number_format(0, 2),

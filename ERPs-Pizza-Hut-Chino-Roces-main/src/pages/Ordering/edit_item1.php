@@ -174,7 +174,7 @@ if (isset($_POST["confirmation"])) {
     $dish_id = $_GET['edit_item'];
     $updateQuery = "UPDATE cart SET qty = '$selectedQty' WHERE dish_id = '$dish_id'";
     $_SESSION['success']  = "Bag updated successfully";
-    header("Location:menu-pasta.php");
+    header("Location:menu.php");
     // Execute the update query
     $result = mysqli_query($conn, $updateQuery);
 
@@ -414,7 +414,7 @@ if (isset($_POST['checkout'])) {
                                         echo '
                             </select>
                         <input type = "hidden" id = "hiddenField" name = "size" value = "' . $row['size'] . '">
-                        <input type="submit" class="addtobag" id="confirmation" value="Add to Bag - ₱' . $row['price'] . '" name="addtobag">
+                        <input type="submit" class="addtobag" id="confirmation" value="Add to Bag - ₱' . $row['price'] . '" name="addtobag" ' . ($hasActiveOrders ? 'disabled' : '') . '>
                             
                 </div>  
                 </div>
@@ -444,7 +444,7 @@ if (isset($_POST['checkout'])) {
                 <!-- Add the fill-remaining class -->
                 <div class="container" style="margin:0;padding:0;">
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-12" style="<?php echo (!$loggedIn) ? 'margin-bottom:150px;' : ''; ?>">
                             <h3 style="margin-top:35px;margin-left:10px; color:#404040;">My Bag</h3>
                         </div>
 
@@ -471,7 +471,7 @@ if (isset($_POST['checkout'])) {
 
                                             <div class="add-address" style="text-align:center;margin-top:10px;">
                                                 <div class="address-btn">
-                                                    <a href=" add-address">Add New Address</a>
+                                                    <a href="addresses.php" onclick="window.open('addresses.php', 'newwindow', 'width=450,height=700'); return false;">Add New Address</a>
                                                 </div>
                                             </div>
                                             <input type="text" id="addressInput" name="address"
@@ -482,7 +482,7 @@ if (isset($_POST['checkout'])) {
 
 
                                 <div class="col-sm-12 cart"
-                                    style="margin:0 0 -25px 0; padding:0; height:45vh; overflow-y: scroll; overflow:auto; ">
+                                    style="margin:0 0 -25px 0; padding:0; height:43.5vh; overflow-y: scroll; overflow:auto; ">
 
                                     <?php
                                     if ($loggedIn) {
@@ -547,10 +547,14 @@ if (isset($_POST['checkout'])) {
                                             }
                                         } else {
 
-                                            echo '<p style="text-align:center; margin-top:50px;">Add Items to your Bag</p> ';
+                                            if ($hasActiveOrders) {
+                                                echo '<p style="text-align:center; margin-top:50px;">You have an active order</p>';
+                                            } else {
+                                                echo '<p style="text-align:center; margin-top:50px;">Add Items to your Bag</p>';
+                                            }
                                         }
                                     } else {
-                                        echo '<p style="text-align:center; margin-top:50px;">Please Login to Continue</p> ';
+                                        echo '<p style="text-align:center; margin-top:150px;">Please Login to Continue</p> ';
                                     }
                                     $isCartEmpty = true;
 
@@ -564,7 +568,6 @@ if (isset($_POST['checkout'])) {
                                     }
 
                                     ?>
-
 
                                 </div>
 
@@ -630,35 +633,39 @@ if (isset($_POST['checkout'])) {
 
                                 }
                             </script>
-                            <div class="linebreak" style="margin:15px 15px 0 5px;">
-                                <hr style="height:2px;">
+
+
+                            <div class="col-sm-12" style="margin: 30px 0 0 0; <?php echo ($hasActiveOrders) ? 'visibility: hidden;' : ''; ?>">
+                                <div class=" linebreak" style="margin:0 15px 0 5px;">
+                                    <hr style="height:2px;">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm-6" style="padding:0; margin:0; <?php echo ($hasActiveOrders) ? 'visibility: hidden;' : ''; ?>">
+                                            <p style=" font-weight:550">Vatable Sales</p>
+                                            <p style="font-weight:550">Vat (12%)</p>
+                                            <p style="font-weight:550">Delivery Fee</p>
+                                        </div>
+                                        <div class="col-sm-6" style="padding:0; margin:0;">
+                                            <p id="vatable" style="margin-left: 30px; font-weight:bold;"></p>
+                                            <p id="vat" style="margin-left:30px; font-weight:bold;"></p>
+                                            <p id="delivery_fee" style="margin-left:30px; font-weight:bold;"></p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                     </div>
                     <div class="col-sm-12">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-6" style="padding:0; margin:0;">
-                                    <p style="font-weight:550">Vatable Sales</p>
-                                    <p style="font-weight:550">Vat (12%)</p>
-                                    <p style="font-weight:550">Delivery Fee</p>
-                                </div>
-                                <div class="col-sm-6" style="padding:0; margin:0;">
-                                    <p id="vatable" style="margin-left: 30px; font-weight:bold;"></p>
-                                    <p id="vat" style="margin-left:30px; font-weight:bold;"></p>
-                                    <p id="delivery_fee" style="margin-left:30px; font-weight:bold;"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-12">
-                        <div class="linebreak" style="margin:0 15px 0 5px;">
+                        <div class="linebreak" style="margin:0 15px 0 5px; <?php echo ($hasActiveOrders) ? 'visibility: hidden;' : ''; ?>">
                             <hr style="height:2px;">
                         </div>
                     </div>
                     <div class="col-sm-12">
                         <div class="container">
                             <div class="row">
-                                <div class="col-sm-6" style="padding:0; margin:0;">
+                                <div class="col-sm-6" style="padding:0; margin:0;<?php echo ($hasActiveOrders) ? 'visibility: hidden;' : ''; ?>">
                                     <p style="font-weight:550">Total</p>
                                 </div>
                                 <div class="col-sm-6" style="padding:0; margin:0;">
@@ -669,113 +676,49 @@ if (isset($_POST['checkout'])) {
                     </div>
 
                     <div class="col-sm-12" style="padding:0 20px 0 20px; ">
-                        <?php if ($isCartEmpty || !$loggedIn) : ?>
-                            <input type="submit" value="Checkout" class="checkout" name="checkout" disabled>
-                            <?php if (!$loggedIn) : ?>
-                            <?php elseif ($isCartEmpty) : ?>
+                        <?php if (!$hasActiveOrders): ?>
+                            <?php if ($isCartEmpty || !$loggedIn): ?>
+                                <input type="submit" value="Checkout" class="checkout" name="checkout" disabled>
+                            <?php else: ?>
+                                <input type="submit" value="Checkout" class="checkout" name="checkout">
                             <?php endif; ?>
                         <?php else : ?>
-                            <input type="submit" value="Checkout" class="checkout" name="checkout">
+                            <input type="submit" value="View Order Status" class="checkout" name="view-order">
                         <?php endif; ?>
+
                         </form>
                     </div>
                 </div>
 
             <?php else: ?>
                 <div class="col-sm-12">
-                    <button id="deliveryBtn" class="active" style="font-weight:550; cursor:auto;" disabled>Over the
-                        Counter</button>
+
+                    ?>
+
                 </div>
-                <div id="counterContent" style="display: block;">
-                    <form method="post">
-                        <div class="col-sm-12"><br>
-                        </div>
-                        <div class="col-sm-12 cart"
-                            style="margin:0 0 -25px 0; padding:0; height:61.8vh; overflow-y: scroll; overflow:auto; ">
 
-                            <?php
-                            if ($loggedIn) {
-                                $sql3 = "SELECT * FROM cart WHERE uid = $currentUserId";
-                                $result3 = $db->query($sql3);
-                                $newrow3 = mysqli_fetch_array($result);
-                                if ($result3->num_rows > 0) {
-                                    $cart3 = array();
-                                    // Display events
-                                    while ($row3 = $result3->fetch_assoc()) {
-                                        $cart3[] = $row3;
-                                    }
-                                    $cart3 = array_reverse($cart3);
-                                    foreach ($cart3 as $row3) {
-                                        echo '
-                                            <div class = "box" style = "padding: 10px;border-radius:10px; margin: 10px 10px 10px 5px; position:relative; margin-left:10px;">
-                                                <div class = "container" style="margin:0; padding:0;">
-                                                    <div class ="row">
-                                                        <div class = "col-sm-3">
-                                                            <div class = "image" style="height:100%; width:100%">
-                                                                <img src="../../../src/assets/img/menu/' . $row3['img'] . '" alt="notif pic" style="width:100%; max-width:100%; min-width:100px; height:auto; overflow:hidden; border-radius:10px;">
-                                                            </div>
-                                                        </div>
-                                                        <div class = "col-sm-6">
-                                                            <div class = "caption">
-                                                                <p>' . $row3['namesize'] . '</p>
-                                                            </div>
-                                                            <div class="remove-btn">
-                                                                <a  href="#" class="remove-btn"><i class="fa-solid fa-xmark" style="font-size:25px;"></i></a> 
-                                                            </div>    
-                                                        </div>
-                                                        <div class = "col-sm-2">
-                                                            <div class = "price">
-                                                                <p><span class="price-display" data-id="' . $row3['cart_id'] . '">₱' . $row3['price'] . '</span></p>
-                                                                <input type="hidden" class="price" name="price" data-id="' . $row3['cart_id'] . '" value="' . $row3['price'] . '">
-                                                            <div class = "quantity1">
-                                                            <select class="quantity" name="quantity" data-id="' . $row3['cart_id'] . '">';
-                                        for ($i = 1; $i <= 10; $i++) {
-                                            echo '<option value="' . $i . '">' . $i . '</option>';
-                                        }
-                                        echo '</select>
+                <div class="col-sm-12" style="margin: 30px 0 0 0;">
+                    <div class="linebreak" style="margin:0 15px 0 5px;">
+                        <hr style="height:2px;">
+                    </div>
+                </div>
 
-                                                            </div>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
 
-                                            </div>';
-                                    }
-                                } else {
-
-                                    echo '<p style="text-align:center; margin-top:100px;">Add items to your bag</p> ';
-                                }
-                            } else {
-                                echo '<p style="text-align:center; margin-top:100px;">Please Login to Continue</p> ';
-                            }
-
-                            ?>
-
-                        </div>
-
-                        <div class="col-sm-12" style="margin: 30px 0 0 0;">
-                            <div class="linebreak" style="margin:0 15px 0 5px;">
-                                <hr style="height:2px;">
+                <div class="col-sm-12">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-6" style="padding:0; margin:0;">
+                                <p style="font-weight:550">Total</p>
+                            </div>
+                            <div class="col-sm-6" style="padding:0; margin:0;">
+                                <p id="total_amount1" style="margin-left:30px; font-weight:bold;">₱ 0
+                                </p>
                             </div>
                         </div>
-
-
-                        <div class="col-sm-12">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-sm-6" style="padding:0; margin:0;">
-                                        <p style="font-weight:550">Total</p>
-                                    </div>
-                                    <div class="col-sm-6" style="padding:0; margin:0;">
-                                        <p id="total_amount1" style="margin-left:30px; font-weight:bold;">₱ 0
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-12" style="padding:0 20px 0 20px; margin-top:20px;">
-                            <input type="submit" value="Checkout" class="checkout" name="checkout">
+                    </div>
+                </div>
+                <div class="col-sm-12" style="padding:0 20px 0 20px; margin-top:20px;">
+                    <input type="submit" value="Checkout" class="checkout" name="checkout">
                     </form>
                 </div>
             </div>
@@ -789,7 +732,6 @@ if (isset($_POST['checkout'])) {
     <!-- ENDING OF My Bag -->
     </div>
     </div>
-
 
     <script>
         <?php if (!$loggedIn) : ?>

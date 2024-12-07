@@ -87,6 +87,10 @@ if (isset($_GET['logout'])) {
     exit();
 }
 
+if (isset($_POST['view-order'])) {
+    header("Location: order.php");
+}
+
 if (isset($_POST['addtobag'])) {
     $uid = $_SESSION['uid'];
     $name = $_POST['name'];
@@ -392,7 +396,7 @@ if (isset($_POST['checkout'])) {
                                         echo '
                             </select>
                         <input type = "hidden" id = "hiddenField" name = "size" value = "' . $row['size'] . '">
-                        <input type="submit" class="addtobag" id="confirmation" value="Add to Bag - ₱' . $row['price'] . '" name="addtobag">
+                        <input type="submit" class="addtobag" id="confirmation" value="Add to Bag - ₱' . $row['price'] . '" name="addtobag" ' . ($hasActiveOrders ? 'disabled' : '') . '>
                             
                 </div>  
                 </div>
@@ -525,7 +529,11 @@ if (isset($_POST['checkout'])) {
                                             }
                                         } else {
 
-                                            echo '<p style="text-align:center; margin-top:50px;">Add Items to your Bag</p> ';
+                                            if ($hasActiveOrders) {
+                                                echo '<p style="text-align:center; margin-top:50px;">You have an active order</p>';
+                                            } else {
+                                                echo '<p style="text-align:center; margin-top:50px;">Add Items to your Bag</p>';
+                                            }
                                         }
                                     } else {
                                         echo '<p style="text-align:center; margin-top:150px;">Please Login to Continue</p> ';
@@ -544,16 +552,17 @@ if (isset($_POST['checkout'])) {
                                     ?>
 
                                 </div>
-                                <div class="col-sm-12" style="margin: 30px 0 0 0;">
-                                    <div class="linebreak" style="margin:0 15px 0 5px;">
+
+                                <div class="col-sm-12" style="margin: 30px 0 0 0; <?php echo ($hasActiveOrders) ? 'visibility: hidden;' : ''; ?>">
+                                    <div class=" linebreak" style="margin:0 15px 0 5px;">
                                         <hr style="height:2px;">
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="container">
                                         <div class="row">
-                                            <div class="col-sm-6" style="padding:0; margin:0;">
-                                                <p style="font-weight:550">Vatable Sales</p>
+                                            <div class="col-sm-6" style="padding:0; margin:0; <?php echo ($hasActiveOrders) ? 'visibility: hidden;' : ''; ?>">
+                                                <p style=" font-weight:550">Vatable Sales</p>
                                                 <p style="font-weight:550">Vat (12%)</p>
                                                 <p style="font-weight:550">Delivery Fee</p>
                                             </div>
@@ -565,34 +574,37 @@ if (isset($_POST['checkout'])) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12">
-                                    <div class="linebreak" style="margin:0 15px 0 5px;">
-                                        <hr style="height:2px;">
-                                    </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="linebreak" style="margin:0 15px 0 5px; <?php echo ($hasActiveOrders) ? 'visibility: hidden;' : ''; ?>">
+                            <hr style="height:2px;">
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-6" style="padding:0; margin:0;<?php echo ($hasActiveOrders) ? 'visibility: hidden;' : ''; ?>">
+                                    <p style="font-weight:550">Total</p>
                                 </div>
-                                <div class="col-sm-12">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-sm-6" style="padding:0; margin:0;">
-                                                <p style="font-weight:550">Total</p>
-                                            </div>
-                                            <div class="col-sm-6" style="padding:0; margin:0;">
-                                                <p id="total_amount" style="margin-left:30px; font-weight:bold;"></p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-6" style="padding:0; margin:0;">
+                                    <p id="total_amount" style="margin-left:30px; font-weight:bold;"></p>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                <div class="col-sm-12" style="padding:0 20px 0 20px; ">
-                                    <?php if ($isCartEmpty || !$loggedIn) : ?>
-                                        <input type="submit" value="Checkout" class="checkout" name="checkout" disabled>
-                                        <?php if (!$loggedIn) : ?>
-                                        <?php elseif ($isCartEmpty) : ?>
-                                        <?php endif; ?>
-                                    <?php else : ?>
-                                        <input type="submit" value="Checkout" class="checkout" name="checkout">
-                                    <?php endif; ?>
-                            </form>
+                    <div class="col-sm-12" style="padding:0 20px 0 20px; ">
+                        <?php if (!$hasActiveOrders): ?>
+                            <?php if ($isCartEmpty || !$loggedIn): ?>
+                                <input type="submit" value="Checkout" class="checkout" name="checkout" disabled>
+                            <?php else: ?>
+                                <input type="submit" value="Checkout" class="checkout" name="checkout">
+                            <?php endif; ?>
+                        <?php else : ?>
+                            <input type="submit" value="View Order Status" class="checkout" name="view-order">
+                        <?php endif; ?>
+
+                        </form>
                     </div>
                 </div>
 

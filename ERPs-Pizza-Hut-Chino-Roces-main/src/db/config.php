@@ -5,11 +5,13 @@ $dbPassword =  'Kevin0405!';
 $dbName = 'u560143421_phcr_db';
 
 // $host = 'localhost';
-// $dbUsername = 'root';
+// $dbUsername = 'root';g
 // $dbPassword =  '';
 // $dbName = 'phcr_db';
 
 $conn = new mysqli($host, $dbUsername, $dbPassword, $dbName);
+
+//checking
 
 // Check connection
 if ($conn->connect_error) {

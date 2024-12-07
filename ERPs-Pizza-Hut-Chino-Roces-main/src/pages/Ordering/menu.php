@@ -76,6 +76,11 @@ if (isset($_SESSION['uid'])) {
     $hasActiveOrders = false; // Non-logged-in users won't have active orders
 }
 
+//check if there is an active order, if there is not the unset the session form_submitted 
+if (!$hasActiveOrders) {
+    unset($_SESSION['form_submitted']);
+}
+
 
 if (isset($_GET['logout'])) {
     if (isset($_SESSION['uid'])) {
@@ -167,23 +172,29 @@ function haversineDistance($lat1, $lon1, $lat2, $lon2)
 
     return $distance; // distance in kilometers
 }
-
 if (isset($_POST['checkout'])) {
-    // Get the selected address ID from the form
+    // Check if the form has already been submitted
+    if (isset($_SESSION['form_submitted']) && $_SESSION['form_submitted'] === true) {
+        $_SESSION['error'] = "Form already submitted. Please wait.";
+        header("Location: menu.php"); // Redirect to prevent re-submission
+        exit;
+    }
+
+    // Mark the form as submitted
+    $_SESSION['form_submitted'] = true;
+
     $selectedAddressId = $_POST['address'] ?? null;
 
     if ($selectedAddressId) {
-        // Query the database to get the user's address data
         $sql = "SELECT address FROM customerInfo WHERE uid = $currentUserId";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            $userAddressJson = $row['address']; // Assuming the address is stored as JSON in the database
-            $addresses = json_decode($userAddressJson, true); // Decode JSON into an associative array
+            $userAddressJson = $row['address'];
+            $addresses = json_decode($userAddressJson, true);
 
             if (json_last_error() === JSON_ERROR_NONE) {
-                // Loop through the addresses and find the selected one
                 $selectedAddress = null;
                 foreach ($addresses as $address) {
                     if ((int)$address['address'] === (int)$selectedAddressId) {
@@ -193,7 +204,7 @@ if (isset($_POST['checkout'])) {
                 }
 
                 if ($selectedAddress) {
-                    $apiKey = '9f368e104b744ddab127fb3cbcf84673'; // Replace with your actual API key
+                    $apiKey = '9f368e104b744ddab127fb3cbcf84673';
                     $fixedAddress = '2116 Chino Roces Ave, Cor Dela Rosa Street, Pio, Makati, Metro Manila, Philippines';
                     $selectedAddress2 = $selectedAddress['address'] . ', Philippines';
 
@@ -212,7 +223,10 @@ if (isset($_POST['checkout'])) {
                             $_SESSION['error'] = "The delivery address is outside the maximum delivery range.";
                         } else {
                             $_SESSION['selectedAddress'] = $selectedAddress2;
+                            // Clear form submission flag for future use
+                            unset($_SESSION['form_submitted']);
                             header("Location: order.php");
+                            exit;
                         }
                     } else {
                         $_SESSION['error'] = "Could not retrieve coordinates for one or both addresses.";
@@ -229,6 +243,9 @@ if (isset($_POST['checkout'])) {
     } else {
         $_SESSION['error'] = "No address selected.";
     }
+
+    // Clear the submission flag if an error occurs
+    unset($_SESSION['form_submitted']);
 }
 
 

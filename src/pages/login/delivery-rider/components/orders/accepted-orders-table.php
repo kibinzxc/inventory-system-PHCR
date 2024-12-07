@@ -243,6 +243,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
         $row = $result->fetch_assoc();
         $stmt->close();
 
+
+
         $orderID = $row['orderID'];
         $uid = $row['uid'];
         $name = $row['name'];
@@ -278,6 +280,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
             foreach ($items as $item) {
                 $productName = $item['name'];
                 $orderQty = $item['quantity'];
+                $productSize = $item['size'];
+                $productPrice = $item['price'];
+
+
+                //insert into usage_reports for the product name size price quantity 
+                $insertUsageReportsSql = "INSERT INTO usage_reports (invID, name, size, price, quantity) VALUES (?, ?, ?, ?, ?)";
+                $stmtUsageReports = $conn->prepare($insertUsageReportsSql);
+                $stmtUsageReports->bind_param("issds", $orderID, $productName, $productSize, $productPrice, $orderQty);
+                $stmtUsageReports->execute();
+
+
 
                 $ingredientsSql = "SELECT ingredients FROM products WHERE name = ?";
                 $stmtIngredients = $conn->prepare($ingredientsSql);
@@ -316,6 +329,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
                                 $stmtUpdateStock = $conn->prepare($updateStockSql);
                                 $stmtUpdateStock->bind_param("dds", $requiredQty, $requiredQty, $ingredientName);
                                 if ($stmtUpdateStock->execute()) {
+                                    // insert the ingredient name, quantity and measurement to item_reports
+                                    $insertItemReportsSql = "INSERT INTO item_reports (invID, name, qty, uom) VALUES (?, ?, ?, ?)";
+                                    $stmtItemReports = $conn->prepare($insertItemReportsSql);
+                                    $stmtItemReports->bind_param("ssds", $orderID, $ingredientName, $requiredQty, $stock['uom']);
+                                    $stmtItemReports->execute();
+
                                     error_log("Stock updated for $ingredientName: -$requiredQty from ending, +$requiredQty to usage.");
                                 } else {
                                     error_log("Failed to update stock for $ingredientName.");

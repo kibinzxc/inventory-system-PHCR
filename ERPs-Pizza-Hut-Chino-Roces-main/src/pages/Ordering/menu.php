@@ -90,8 +90,12 @@ if (isset($_GET['logout'])) {
 if (isset($_POST['view-order'])) {
     header("Location: order.php");
 }
-
 if (isset($_POST['addtobag'])) {
+    if (!isset($_SESSION['uid'])) {
+        header("Location: ../../../login.php");
+        exit();
+    }
+
     $uid = $_SESSION['uid'];
     $name = $_POST['name'];
     $price = $_POST['price'];
@@ -270,7 +274,7 @@ if (isset($_POST['checkout'])) {
                         <i class="fa-solid fa-receipt"></i>
                         <span>Orders</span>
                     </a>
-                    <a href="order-history.php" class="item">
+                    <a href="order-history.php" class="item <?php echo ($loggedIn) ? '' : 'disabled'; ?>">
                         <i class="fa-solid fa-file-lines"></i>
                         <span>Records</span>
                     </a>

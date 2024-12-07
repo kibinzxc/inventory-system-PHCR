@@ -421,7 +421,7 @@ while ($row = $result->fetch_assoc()) {
 
     echo '<form method="POST" enctype="multipart/form-data" class="order-actions">';
     echo '<label for="image-' . $orderID . '" style="font-size: 1.2rem; color: #343434; display: block; margin-bottom: 10px;">Proof of Delivery</label>';
-    echo '<input type="file" name="image" id="image-' . $orderID . '" accept="image/*" required onchange="handleFileChange(event, \'' . $orderID . '\')">';
+    echo '<input type="file" name="image" id="image-' . $orderID . '" accept="image/*" capture="camera" required onchange="handleFileChange(event, \'' . $orderID . '\')">';
     echo '<br>';
     echo '<img id="image-preview-' . $orderID . '" src="#" alt="Image Preview" style="display:none; margin-top: 15px; max-width: 100%; max-height: 200px; border: 1px solid #ccc; border-radius: 5px;">';
     echo '<input type="hidden" name="orderID" value="' . htmlspecialchars($orderID) . '">';

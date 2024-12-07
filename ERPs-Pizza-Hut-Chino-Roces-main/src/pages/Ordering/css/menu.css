@@ -718,6 +718,11 @@ button:not(.active) {
 
 }
 
+.disabled {
+
+  pointer-events: none;
+  opacity: 0.5;
+}
 
 @media (max-width: 1590px) {
   .col-sm-9 {

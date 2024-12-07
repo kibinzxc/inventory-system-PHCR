@@ -88,6 +88,10 @@ include '../../connection/database.php';
     .mg-card-content li {
         margin-bottom: 10px;
     }
+
+    .address {
+        text-align: justify;
+    }
 </style>
 
 <div id="main-content">
@@ -147,7 +151,7 @@ include '../../connection/database.php';
                         <div class='mg-card' data-order-id='$orderID'>
                             <div class='mg-card-title'>Order ID: $orderID</div>
                             <div class='mg-card-content'>$orderDetails</div>
-                            <div class='mg-card-content'>Address: $address</div>
+                            <div class='mg-card-content address'>Address: $address</div>
                             <div class='mg-card-total-price'>Total w/ Delivery: ₱$totalAmount</div>
                             <div class='mg-card-actions'>
                                 <button class='mg-button mg-remove-button' onclick='updateOrderStatus($orderID, \"declined\")'>Decline</button>

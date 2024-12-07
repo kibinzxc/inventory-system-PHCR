@@ -137,11 +137,17 @@ include '../../connection/database.php';
                         }
                         $orderDetails .= "</ul>";
 
+                        //get the address using orderID get it from orders table 
+                        $query = "SELECT address FROM orders where orderID = $orderID";
+                        $result = mysqli_query($conn, $query);
+                        $row = mysqli_fetch_assoc($result);
+                        $address = $row['address'];
                         // Card HTML
                         echo "
                         <div class='mg-card' data-order-id='$orderID'>
                             <div class='mg-card-title'>Order ID: $orderID</div>
                             <div class='mg-card-content'>$orderDetails</div>
+                            <div class='mg-card-content'>Address: $address</div>
                             <div class='mg-card-total-price'>Total w/ Delivery: ₱$totalAmount</div>
                             <div class='mg-card-actions'>
                                 <button class='mg-button mg-remove-button' onclick='updateOrderStatus($orderID, \"declined\")'>Decline</button>

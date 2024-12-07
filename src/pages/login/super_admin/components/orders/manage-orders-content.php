@@ -142,11 +142,13 @@ include '../../connection/database.php';
                         }
                         $orderDetails .= "</ul>";
                         // Get the address using orderID from the orders table 
+                        // Get the address using orderID from the orders table 
                         $query = "SELECT address FROM orders WHERE orderID = $orderID";
                         $result = mysqli_query($conn, $query);
                         $row = mysqli_fetch_assoc($result);
                         $address = $row['address'];
-                        $encodedAddress = urlencode($address); // URL encode the address for use in the Google Maps link
+                        $encodedAddress = urlencode($address); // URL encode the destination address
+                        $encodedOrigin = urlencode("Pizza Hut, Caltex Service Station, 2130 Chino Roces Ave, Makati, Metro Manila"); // URL encode the fixed origin
 
                         // Card HTML
                         echo "
@@ -155,7 +157,7 @@ include '../../connection/database.php';
                         <div class='mg-card-content'>$orderDetails</div>
                         <div class='mg-card-content address'>
                             Address: 
-                            <a href='https://www.google.com/maps/dir/?api=1&destination=$encodedAddress' target='_blank'>
+                            <a href='https://www.google.com/maps/dir/?api=1&origin=$encodedOrigin&destination=$encodedAddress' target='_blank'>
                                 $address
                             </a>
                         </div>

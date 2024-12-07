@@ -91,7 +91,7 @@ include '../../connection/database.php';
 
     .address {
         text-align: justify;
-        margin-bottom: 10px;
+        margin-bottom: 30px;
     }
 </style>
 
@@ -141,24 +141,30 @@ include '../../connection/database.php';
                             $orderDetails .= "<li>{$order['quantity']}x {$order['name']} ({$order['size']})</li>";
                         }
                         $orderDetails .= "</ul>";
-
-                        //get the address using orderID get it from orders table 
-                        $query = "SELECT address FROM orders where orderID = $orderID";
+                        // Get the address using orderID from the orders table 
+                        $query = "SELECT address FROM orders WHERE orderID = $orderID";
                         $result = mysqli_query($conn, $query);
                         $row = mysqli_fetch_assoc($result);
                         $address = $row['address'];
+                        $encodedAddress = urlencode($address); // URL encode the address for use in the Google Maps link
+
                         // Card HTML
                         echo "
-                        <div class='mg-card' data-order-id='$orderID'>
-                            <div class='mg-card-title'>Order ID: $orderID</div>
-                            <div class='mg-card-content'>$orderDetails</div>
-                            <div class='mg-card-content address'>Address: $address</div>
-                            <div class='mg-card-total-price'>Total w/ Delivery: ₱$totalAmount</div>
-                            <div class='mg-card-actions'>
-                                <button class='mg-button mg-remove-button' onclick='updateOrderStatus($orderID, \"declined\")'>Decline</button>
-                                <button class='mg-button mg-accept-button' onclick='updateOrderStatus($orderID, \"preparing\")'>Accept</button>
-                            </div>
-                        </div>";
+                    <div class='mg-card' data-order-id='$orderID'>
+                        <div class='mg-card-title'>Order ID: $orderID</div>
+                        <div class='mg-card-content'>$orderDetails</div>
+                        <div class='mg-card-content address'>
+                            Address: 
+                            <a href='https://www.google.com/maps/dir/?api=1&destination=$encodedAddress' target='_blank'>
+                                $address
+                            </a>
+                        </div>
+                        <div class='mg-card-total-price'>Total w/ Delivery: ₱$totalAmount</div>
+                        <div class='mg-card-actions'>
+                            <button class='mg-button mg-remove-button' onclick='updateOrderStatus($orderID, \"declined\")'>Decline</button>
+                            <button class='mg-button mg-accept-button' onclick='updateOrderStatus($orderID, \"preparing\")'>Accept</button>
+                        </div>
+                    </div>";
                     }
                 } else {
                     echo "No orders found.";

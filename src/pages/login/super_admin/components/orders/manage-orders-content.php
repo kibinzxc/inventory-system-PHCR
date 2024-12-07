@@ -91,6 +91,7 @@ include '../../connection/database.php';
 
     .address {
         text-align: justify;
+        margin-bottom: 10px;
     }
 </style>
 

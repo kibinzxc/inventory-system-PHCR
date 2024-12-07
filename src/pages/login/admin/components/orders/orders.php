@@ -24,7 +24,7 @@ include 'auto-lowstock.php';
 
 
 
-    <?php include 'MainContent.php'; ?>
+    <?php include 'manage-orders.php'; ?>
 
 
 </body>

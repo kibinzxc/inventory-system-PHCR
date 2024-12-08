@@ -17,7 +17,7 @@ $order = in_array($order, $valid_order_directions) ? $order : 'asc'; // Validate
 $sql = "SELECT uid, name, email, userType 
         FROM accounts 
         WHERE (name LIKE ? OR email LIKE ? OR uid LIKE ? OR userType LIKE ?)
-        AND userType != 'super_admin' 
+        AND userType NOT IN ('super_admin', 'admin') 
         ORDER BY $sort $order"; // Exclude "super_admin" userType and include order
 
 $stmt = $conn->prepare($sql);

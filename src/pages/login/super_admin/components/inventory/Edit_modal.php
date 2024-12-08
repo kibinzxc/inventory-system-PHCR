@@ -87,7 +87,7 @@
                 <!-- Row 8: Ending -->
                 <div class="form-row">
                     <label for="edit-ending">Ending Inventory</label>
-                    <input type="number" id="edit-ending" name="ending" step="0.01" oninput="calculateUsage()">
+                    <input type="number" id="edit-ending" name="ending" step="0.001" oninput="calculateUsage()">
                     <span id="usage-error-message" style="color: red; display: none; font-size: 12px;"></span> <!-- Error message container -->
 
                 </div>

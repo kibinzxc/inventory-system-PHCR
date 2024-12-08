@@ -12,7 +12,7 @@
 <body>
     <div class="LoginForm">
         <div class="LoginForm_header">
-            <h1>Forgot Password</h1>
+            <h3 class="forgot">Forgot Password</h3>
         </div>
 
         <?php if (isset($_GET['error'])): ?>

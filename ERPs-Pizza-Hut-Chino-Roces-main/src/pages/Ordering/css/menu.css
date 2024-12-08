@@ -749,6 +749,26 @@ button:not(.active) {
 
 }
 
+@media (max-width: 1550px) {
+  .col-sm-9 {
+    width: 70%;
+    /* Adjust to your desired width */
+    /* Other adjustments based on 1536px breakpoint */
+  }
+
+  .scroll {
+    height: 60vh !important;
+  }
+
+  .sidebar .item-last {
+    margin-bottom: 250px;
+  }
+
+  .item-login {
+    margin-top: 0 !important;
+  }
+}
+
 @media (max-width: 1280px) {
   .col-sm-9 {
     width: 65%;

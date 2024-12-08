@@ -361,7 +361,17 @@ if ($loggedIn) {
                                                     <tbody>
                                                         <tr class="subtotal">
                                                             <td>Mode of Payment</td>
-                                                            <td>Cash on Delivery</td>
+                                                            <td>
+                                                                <?php
+                                                                if ($rowz['payment'] === 'COD') {
+                                                                    echo 'Cash on Delivery';
+                                                                } elseif ($rowz['payment'] === 'credit card') {
+                                                                    echo 'Credit Card';
+                                                                } else {
+                                                                    echo $rowz['payment'];
+                                                                }
+                                                                ?>
+                                                            </td>
                                                         </tr>
                                                         <tr class="subtotal">
                                                             <td>Vatable</td>

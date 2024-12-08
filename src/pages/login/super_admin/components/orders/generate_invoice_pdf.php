@@ -135,7 +135,7 @@ if (isset($_GET['invID'])) {
 
         // Prepare the financial details in the desired format
         $financialDetails = [
-            'Subtotal amount' => 'PHP ' . number_format($subtotalAmount, 2),
+            $totalItems . ' Item(s) Total AMOUNT' => 'PHP '  . number_format($subtotalAmount, 2),
             'Delivery Fee' => 'PHP ' . number_format($deliveryFee, 2),
             'Amount Tendered Cash' => 'PHP ' . number_format($invoice['amount_received'], 2),
             'CHANGE' => 'PHP ' . number_format($invoice['amount_change'], 2),
@@ -155,11 +155,22 @@ if (isset($_GET['invID'])) {
     $amountWidth = 30; // Fixed width for amounts
 
     foreach ($financialDetails as $label => $value) {
-        if ($label == 'Amount Tendered Cash' || $label == 'CHANGE' || $label == $totalItems . ' Item(s) Total AMOUNT') {
-            $pdf->SetFont('Arial', 'B', 8); // Set font to bold for specific labels and values
+
+        if ($invoice['order_type'] == 'delivery') {
+            //put here the subtotal, delivery fee, amount tendered, change, total amount
+            if ($label == 'Amount Tendered Cash' || $label == 'CHANGE' || $label == $totalItems . ' Item(s) Total AMOUNT' || $label == 'Delivery Fee' || $label == 'Total Amount') {
+                $pdf->SetFont('Arial', 'B', 8); // Set font to bold for specific labels and values
+            } else {
+                $pdf->SetFont('Arial', '', 8); // Set font to regular for other labels and values
+            }
         } else {
-            $pdf->SetFont('Arial', '', 8); // Set font to regular for other labels and values
+            if ($label == 'Amount Tendered Cash' || $label == 'CHANGE' || $label == $totalItems . ' Item(s) Total AMOUNT') {
+                $pdf->SetFont('Arial', 'B', 8); // Set font to bold for specific labels and values
+            } else {
+                $pdf->SetFont('Arial', '', 8); // Set font to regular for other labels and values
+            }
         }
+
 
         $pdf->Cell($labelWidth, 5, $label, 0, 0); // Label with the chosen font
         $pdf->Cell($amountWidth, 5, $value, 0, 1, 'L'); // Value with the chosen font, aligned to the right

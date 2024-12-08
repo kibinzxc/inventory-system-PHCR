@@ -23,11 +23,8 @@
         <?php endif; ?>
 
         <form action="reset-password-query.php" method="POST" class="LoginForm_Contents">
-            <div class="email_input">
-                <label for="email">Email</label>
-                <input type="email" name="email" id="email" placeholder="Email">
-            </div>
-
+            <input type="hidden" name="token" value="<?php echo $_GET['token']; ?>">
+            <input type="hidden" name="email" value="<?php echo $_GET['email']; ?>">
             <div class="password_input">
                 <label for="new_password">New Password</label>
                 <input type="password" name="new_password" id="new_password" placeholder="New Password">

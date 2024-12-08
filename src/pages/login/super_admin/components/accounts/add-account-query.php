@@ -3,7 +3,7 @@ include '../../connection/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Capitalize all characters in the name and make the email lowercase
-    $name = strtoupper($_POST['name']);
+    $name = ucwords(strtolower($_POST['name']));
     $email = strtolower($_POST['email']);
     $userType = $_POST['userType'];
     $password = $_POST['password'];

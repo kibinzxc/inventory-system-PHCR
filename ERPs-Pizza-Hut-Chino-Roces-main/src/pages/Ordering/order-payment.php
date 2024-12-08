@@ -114,122 +114,6 @@ if ($result41) {
 
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $payment = $_POST['flexRadioDefault'];
-
-    // Check for a session token to prevent double submission
-    if (!isset($_SESSION['form_token'])) {
-        echo "Invalid or duplicate form submission.";
-        exit;
-    }
-
-    // Invalidate the token after the form is processed to prevent reuse
-    unset($_SESSION['form_token']);
-
-    // Redirect to `order.php` if the payment method is "credit-card"
-    if ($payment === 'credit-card') {
-        header("Location: order-payment.php");
-        exit;
-    }
-
-    // If the payment method is "COD," proceed with the order placement process
-    if ($payment === 'COD') {
-        // Fetch cart details
-        $sqlCart = "SELECT * FROM cart WHERE uid = $currentUserId";
-        $resultCart = $db->query($sqlCart);
-
-        $del_instruct = $_POST['del_instruct'];
-
-        if ($resultCart) {
-            // Fetch user details
-            $sqlUser = "SELECT * FROM customerInfo WHERE uid = $currentUserId";
-            $resultUser = $db->query($sqlUser);
-            $userDetails = mysqli_fetch_assoc($resultUser);
-
-            // Initialize variables
-            $totalPrice = 0;
-            $deliveryFee = 65;
-            $cartItems = [];
-
-            // Iterate through cart items to calculate total price
-            while ($row = mysqli_fetch_assoc($resultCart)) {
-                $cartItems[] = [
-                    'name' => $row['name'],
-                    'size' => $row['size'],
-                    'quantity' => $row['qty'],
-                    'price' => $row['price'],
-                ];
-            }
-
-            // Calculate total price
-            foreach ($cartItems as $item) {
-                $totalPrice += $item['price'] * $item['quantity'];
-            }
-            $totalPrice += $deliveryFee;
-
-            // Convert cart items to JSON
-            $cartItemsJSON = json_encode($cartItems);
-
-            // Start database transaction
-            $db->begin_transaction();
-
-            try {
-                // Check if there's already an unprocessed order for the user
-                $checkOrderSql = "SELECT uid FROM orders WHERE uid = $currentUserId AND status = 'placed'";
-                $existingOrder = $db->query($checkOrderSql);
-                if ($existingOrder && $existingOrder->num_rows > 0) {
-                    throw new Exception("You already have a pending order.");
-                }
-
-                // Step 1: Insert the order into the 'orders' table
-                $insertOrderSql = "INSERT INTO `orders` (uid, name, address, items, totalPrice, payment, del_instruct, status)
-                                   VALUES ('$currentUserId', '{$userDetails['name']}', '$selectedAddress', '$cartItemsJSON', '$totalPrice', '$payment', '$del_instruct', 'placed')";
-                if (!$db->query($insertOrderSql)) {
-                    throw new Exception("Error inserting order: " . $db->error);
-                }
-
-                // Step 2: Retrieve the 'orderID' of the newly inserted order
-                $orderID = $db->insert_id;
-                if (!$orderID) {
-                    throw new Exception("Error retrieving order ID");
-                }
-
-                // Step 3: Insert into the 'float_orders' table
-                $insertFloatOrderSql = "INSERT INTO `float_orders` (orderID, orders, total_amount, amount_received, amount_change, order_type, mop, status)
-                                        VALUES ('$orderID', '$cartItemsJSON', '$totalPrice', '$totalPrice', 0, 'online', '$payment', 'placed')";
-                if (!$db->query($insertFloatOrderSql)) {
-                    throw new Exception("Error inserting into float_orders: " . $db->error);
-                }
-
-                // Step 4: Delete the cart items
-                $deleteCartSql = "DELETE FROM cart WHERE uid = $currentUserId";
-                if (!$db->query($deleteCartSql)) {
-                    throw new Exception("Error deleting cart items: " . $db->error);
-                }
-
-                // Commit transaction
-                $db->commit();
-
-                // Redirect to success page
-                header("Location: order-placed.php");
-                exit;
-            } catch (Exception $e) {
-                // Rollback transaction on error
-                $db->rollback();
-                echo "Failed to place order: " . $e->getMessage();
-                header("location: menu.php");
-                exit;
-            }
-        } else {
-            echo "Error fetching cart: " . $db->error;
-            exit;
-        }
-    } else {
-        echo "Invalid payment method selected.";
-        exit;
-    }
-}
-
 ?>
 
 
@@ -245,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../../../src/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="../../../src/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/order.css">
+    <link rel="stylesheet" href="css/orders.css">
     <script src="../../../src/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../../src/bootstrap/js/bootstrap.js"></script>
     <script src="https://kit.fontawesome.com/0d118bca32.js" crossorigin="anonymous"></script>
@@ -253,6 +137,129 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="js/menu.js"></script>
     <script src="js/search-index.js"></script>
 </head>
+<style>
+    .pay-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .pay-card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+        padding: 20px 40px;
+    }
+
+    .pay-card h2 {
+        margin-bottom: 30px;
+        font-size: 24px;
+        color: #333;
+    }
+
+    label {
+        font-size: 14px;
+        color: #555;
+        margin-top: 10px;
+        text-align: left;
+        display: block;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #4CAF50;
+        outline: none;
+    }
+
+    .pay-submit-btn button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        order: 2;
+    }
+
+    .pay-submit-btn button:hover {
+        background-color: #45a049;
+    }
+
+    .pay-error-message {
+        color: red;
+        margin-top: 10px;
+    }
+
+    .pay-success-message {
+        color: green;
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+
+    /* Card Type Selection */
+    .pay-card-type-selector {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+
+    .pay-card-icons {
+        display: flex;
+        margin-left: 10px;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .pay-card-icon {
+        width: 50px;
+        height: auto;
+        opacity: 0.3;
+        /* Hide images initially */
+        pointer-events: none;
+    }
+
+    .pay-card-icon.visible {
+        opacity: 1;
+        /* Show the selected card image */
+    }
+
+    .btn-secondary {
+        font-size: 1rem;
+        text-align: center;
+        justify-content: center;
+        height: auto;
+        display: flex;
+        align-items: center;
+        order: 1;
+    }
+
+
+    .pay-submit-btn {
+        display: flex;
+        justify-content: flex-end;
+        gap: 20px;
+    }
+</style>
 
 <body>
 
@@ -448,102 +455,182 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="col-sm-7" style=" height:85vh; padding:20px 30px 20px 30px;">
                                     <div class="deliveryInfo" style="height:80vh; width:100%;">
                                         <div class="col-sm-12">
-                                            <h3>Delivery Information</h3>
-                                            <hr>
+                                            <div class="pay-container">
+                                                <div class="pay-card">
+                                                    <form id="pay-form" action="submit-online.php" method="POST">
+                                                        <h2>Payment Details</h2>
+                                                        <label for="card_type">Card Type</label>
+                                                        <div class="pay-card-type-selector">
+                                                            <select id="card_type" name="card_type" required>
+                                                                <option value="">Select Card Type</option>
+                                                                <option value="visa">Visa</option>
+                                                                <option value="mastercard">MasterCard</option>
+                                                                <option value="amex">American Express</option>
+                                                                <option value="discover">Discover</option>
+                                                            </select>
+                                                            <div class="pay-card-icons">
+                                                                <img src="../../assets/img/visa.png" alt="Visa" id="visa" class="pay-card-icon" />
+                                                                <img src="../../assets/img/card.png" alt="MasterCard" id="mastercard" class="pay-card-icon" />
+                                                                <img src="../../assets/img/american-express.png" alt="American Express" id="amex" class="pay-card-icon" />
+                                                                <img src="../../assets/img/discover.png" alt="Discover" id="discover" class="pay-card-icon" />
+                                                            </div>
+                                                        </div>
+                                                        <label for="card_number">Card Number</label>
+                                                        <input type="text" id="card_number" name="card_number" placeholder="Enter your card number" maxlength="19" required>
+
+
+
+                                                        <label for="expiry_date">Expiry Date (MM/YY)</label>
+                                                        <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY" maxlength="5" required>
+
+
+                                                        <label for="security_code">Security Code (CVV)</label>
+                                                        <input type="text" id="security_code" name="security_code" placeholder="Enter CVV" required maxlength="4">
+                                                        <label for="name">Cardholder Name</label>
+                                                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+                                                        <div class="pay-submit-btn">
+                                                            <button type="submit">Confirm</button>
+                                                            <a href="order.php" class="btn btn-secondary">Cancel</a>
+                                                        </div>
+
+                                                        <div class="pay-error-message" id="error-message" style="display:none;"></div>
+                                                        <div class="pay-success-message" id="success-message" style="display:none;"></div>
+                                                    </form>
+                                                </div>
+                                            </div>
+
                                         </div>
-                                        <?php
-                                        $sql = "SELECT * FROM customerInfo WHERE uid = $currentUserId";
-                                        $result = $db->query($sql);
 
-                                        if ($result->num_rows > 0) {
-                                            $row = $result->fetch_assoc();
-                                            $fullName = $row['name'];
-                                            $fullAddress = $row['address'];
-                                            // Explode the full name using the comma as a delimiter
 
-                                        }
-                                        ?><form action="" method="post">
-                                            <div class="col-sm-12">
-                                                <div class="container">
-                                                    <div class="row">
-                                                        <div class="col-sm-3"
-                                                            style="padding:0 0 0 20px; margin:0 0 20px 0;">
-                                                            <p style="font-weight:550; margin-bottom:30px">Name:</p>
-                                                            <p style="font-weight:550; margin-bottom:60px;">Address:</p>
-                                                            <p style="font-weight:550; margin-bottom:30px;">Contact
-                                                                Number:
-                                                            </p>
-                                                        </div>
-                                                        <div class="col-sm-9" style="padding:0 0 0 20px; margin:0;">
-                                                            <p id="name"
-                                                                style=" margin-left: 30px; margin-bottom:30px;">
-                                                                <?php echo $fullName ?></p>
-                                                            </p>
-                                                            <p id="address"
-                                                                style="margin-left: 30px; margin-bottom:30px;">
-                                                                <?php echo $selectedAddress; ?>
-                                                            </p>
-
-                                                            <p id="contact_number"
-                                                                style="margin-left: 30px;margin-bottom:30px;">
-                                                                <?php echo $row['contactNum']; ?>
-                                                            </p>
-                                                        </div>
-                                                        <div class="col-sm-3" style="padding:0 0 0 20px; margin:0;">
-                                                            <p style="font-weight:550; margin-bottom:30px">Mode of
-                                                                Payment:
-                                                            </p>
-                                                        </div>
-                                                        <div class="col-sm-9"
-                                                            style="padding:0 0 0 20px; margin:0 0 50px 0;">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    name="flexRadioDefault" id="flexRadioDefault1"
-                                                                    style="margin-left: 5px" value="COD" checked>
-                                                                <label class="form-check label" for="flexRadioDefault1">
-                                                                    Cash on Delivery
-                                                                </label>
-                                                                <input class="form-check-input" type="radio"
-                                                                    name="flexRadioDefault" id="flexRadioDefault2"
-                                                                    style="margin-left: 5px" value="credit-card">
-                                                                <label class="form-check label" for="flexRadioDefault2">
-                                                                    Credit Card </label>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-sm-3" style="padding:0 0 0 20px; margin:0;">
-                                                            <p style="font-weight:550; margin-bottom:30px">Delivery
-                                                                Instructions:</p>
-                                                        </div>
-                                                        <div class="col-sm-9" style="padding:0 60px 0 20px; margin:0;">
-                                                            <textarea class="form-control"
-                                                                id="exampleFormControlTextarea1" rows="6"
-                                                                style="margin-left: 30px; margin-bottom:30px;"
-                                                                name="del_instruct"></textarea>
-                                                            <div class="edit">
-                                                                <button type="submit" class="btn btn-primary"
-                                                                    style="margin-left: 30px; margin-bottom:30px;">
-                                                                    <i class="fas fa-solid fa-check"></i> Confirm Order
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                        </form>
                                     </div>
-
-
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
+                    <!-- ENDING OF BODY -->
                 </div>
-                <!-- ENDING OF BODY -->
             </div>
         </div>
     </div>
     </div>
     </div>
-    </div>
+    <script>
+        document.getElementById("pay-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission to handle validation
+
+            // Clear any previous messages
+            document.getElementById("error-message").style.display = "none";
+            document.getElementById("success-message").style.display = "none";
+
+            // Get form values
+            const name = document.getElementById("name").value;
+            const cardType = document.getElementById("card_type").value;
+            const cardNumber = document.getElementById("card_number").value.replace(/\s+/g, '');
+            const expiryDate = document.getElementById("expiry_date").value;
+            const securityCode = document.getElementById("security_code").value;
+
+            // Simple validation
+            if (!name || !cardType || !cardNumber || !expiryDate || !securityCode) {
+                showError("All fields are required.");
+                return;
+            }
+
+            if (!/^\d{13,16}$/.test(cardNumber)) {
+                showError("Invalid Card Number");
+                return;
+            }
+
+
+
+            // Validate expiry date (MM/YY)
+            const expiryParts = expiryDate.split("/");
+            if (expiryParts.length !== 2 || !/^\d{2}$/.test(expiryParts[0]) || !/^\d{2}$/.test(expiryParts[1])) {
+                showError("Invalid expiry date. Use MM/YY format.");
+                return;
+            }
+
+            //invalid month on expiry date 
+            if (parseInt(expiryParts[0]) > 12 || parseInt(expiryParts[0]) < 1) {
+                showError("Invalid Card");
+                return;
+            }
+
+            //check if the expiry date is valid
+            const currentYear = new Date().getFullYear().toString().slice(-2);
+            const currentMonth = new Date().getMonth() + 1;
+            const expiryYear = parseInt(expiryParts[1], 10);
+            const expiryMonth = parseInt(expiryParts[0], 10);
+            if (expiryYear < currentYear || (expiryYear === currentYear && expiryMonth < currentMonth)) {
+                showError("Card has expired. Please use a valid card.");
+                return;
+            }
+            showSuccess("Payment details are valid. Processing payment...");
+
+            setTimeout(function() {
+                document.getElementById("pay-form").submit();
+            }, 2000);
+
+
+        });
+
+        function showError(message) {
+            const errorMessage = document.getElementById("error-message");
+            errorMessage.textContent = message;
+            errorMessage.style.display = "block";
+        }
+
+        function showSuccess(message) {
+            const successMessage = document.getElementById("success-message");
+            successMessage.textContent = message;
+            successMessage.style.display = "block"; // Show success message if needed
+        }
+
+
+        // Show the correct card image based on selection
+        document.getElementById("card_type").addEventListener("change", function() {
+            const selectedCard = this.value;
+            const cardImages = document.querySelectorAll('.pay-card-icon');
+
+            // Hide all card images
+            cardImages.forEach(img => img.classList.remove('visible'));
+
+            // Show the selected card type image
+            if (selectedCard) {
+                document.getElementById(selectedCard).classList.add('visible');
+            }
+
+
+
+        });
+        document.getElementById("expiry_date").addEventListener("input", function(event) {
+            let input = event.target.value.replace(/\D/g, ""); // Remove all non-numeric characters
+            if (input.length >= 2) {
+                input = input.substring(0, 2) + "/" + input.substring(2); // Add slash after the second digit
+            }
+            if (input.length > 5) {
+                input = input.substring(0, 5); // Limit input to 5 characters (MM/YY)
+            }
+            event.target.value = input; // Update the input field value
+        });
+        document.getElementById("card_number").addEventListener("input", function(event) {
+            let input = event.target.value.replace(/\D/g, ""); // Remove all non-numeric characters
+            input = input.match(/.{1,4}/g)?.join(" ") || input; // Group digits in sets of 4 and join with space
+            event.target.value = input; // Update the input field value
+        });
+
+        document.getElementById("name").addEventListener("input", function(event) {
+            let input = event.target.value.replace(/\d/g, ""); // Remove all numeric characters
+            event.target.value = input; // Update the input field value
+        });
+
+        //dont let the user input letters on security code 
+        document.getElementById("security_code").addEventListener("input", function(event) {
+            let input = event.target.value.replace(/\D/g, ""); // Remove all non-numeric characters
+            event.target.value = input; // Update the input field value
+        });
+    </script>
     <script>
         setTimeout(function() {
             var messageBox = document.getElementById('message-box');

@@ -18,6 +18,7 @@ $(document).ready(function () {
 
         $('#vatable').text('₱' + vatable.toFixed(2));
         $('#vat').text('₱' + vat.toFixed(2));
+        $('#sub_total').text('₱' + subtotal.toFixed(2));
         $('#delivery_fee').text('₱' + deliveryFee.toFixed(2));
         $('#total_amount').text('₱' + total.toFixed(2));
 

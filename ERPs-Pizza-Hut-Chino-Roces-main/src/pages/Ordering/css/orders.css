@@ -145,20 +145,7 @@ body::-webkit-scrollbar-thumb {
   margin: 30px 10px 10px 10px;
 }
 
-input[type="text"] {
-  padding: 10px 30px 10px 10px;
-  /* Adjust padding to accommodate the icon */
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-  outline: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23676767" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-color: #ddd;
-}
+
 
 ul {
   list-style: none;
@@ -263,7 +250,6 @@ input[type="text"]:focus {
   background: #FFF;
   box-shadow: 2px 2px 4px 5px rgba(0, 0, 0, 0.10);
   padding: 35px 40px 20px 40px;
-  font-weight: bold;
   border-radius: 15px;
 }
 

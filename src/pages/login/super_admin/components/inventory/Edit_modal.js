@@ -62,7 +62,7 @@ function calculateEnding() {
     }
 
     // Update the ending field with the calculated value
-    document.getElementById('edit-ending').value = ending.toFixed(3);  // Fix to two decimal places
+    document.getElementById('edit-ending').value = ending.toFixed(3);  // Fix to three decimal places
 }
 
 

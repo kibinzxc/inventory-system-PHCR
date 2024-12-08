@@ -2,6 +2,9 @@
 session_start();
 include 'super_admin/connection/database.php';
 
+//set timezone to manila 
+date_default_timezone_set('Asia/Manila');
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 

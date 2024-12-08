@@ -40,7 +40,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($result->num_rows > 0) {
             // Token is valid, update the password
-            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+            $hashedPassword = md5($newPassword);
             $sql = "UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?";
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ss", $hashedPassword, $token);

@@ -10,6 +10,10 @@ require 'phpmailer/src/Exception.php';
 require 'phpmailer/src/PHPMailer.php';
 require 'phpmailer/src/SMTP.php';
 
+//set timezone
+date_default_timezone_set('Asia/Manila');
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check connection
     if ($conn->connect_error) {
@@ -36,6 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Email exists, proceed with password reset process
             // Generate a unique token
             $token = bin2hex(random_bytes(50));
+
 
             // Store the token in the database with an expiration time
             $expiry = date("Y-m-d H:i:s", strtotime("+1 hour"));

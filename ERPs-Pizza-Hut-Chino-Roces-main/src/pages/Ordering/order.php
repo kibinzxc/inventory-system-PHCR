@@ -480,7 +480,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                                 <?php echo $fullName ?></p>
                                                             </p>
                                                             <p id="address"
-                                                                style="margin-left: 30px; margin-bottom:30px;">
+                                                                style="margin-left: 60px; margin-bottom:30px;">
                                                                 <?php echo $selectedAddress; ?>
                                                             </p>
 

@@ -401,14 +401,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
                 echo '<p>Insufficient stock for: ' . implode(', ', $insufficientStocks) . '</p>';
                 exit;
             }
+            //get the payment from invoice_temp 
+            $getPaymentSql = "SELECT payment FROM invoice_temp WHERE invID = ?";
+            $stmtPayment = $conn->prepare($getPaymentSql);
+            $stmtPayment->bind_param("i", $orderID);
+            $stmtPayment->execute();
+            $resultPayment = $stmtPayment->get_result();
 
+            if ($resultPayment->num_rows === 0) {
+                throw new Exception('Payment details not found.');
+            }
+            $payment = $resultPayment->fetch_assoc();
+            $totalPrice = $payment['payment'];
             $insertInvoiceSql = "INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) 
                                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtInvoice = $conn->prepare($insertInvoiceSql);
             $orderItems = json_encode($items);
             $cashier = $currentUsername;
             $orderType = 'delivery';
-            $mop = $order['payment'];
+            $mop = $payment;
             $amountChange = 0; // Use a variable for the constant value
             $stmtInvoice->bind_param("ssddssss", $orderID, $orderItems, $totalPrice, $totalPrice, $amountChange, $orderType, $mop, $cashier);
             if ($stmtInvoice->execute()) {

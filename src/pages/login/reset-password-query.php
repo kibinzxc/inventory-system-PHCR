@@ -1,6 +1,6 @@
 <?php
-// Include database connection
-include_once 'db_connection.php';
+session_start();
+include 'super_admin/connection/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $token = $_POST['token'];

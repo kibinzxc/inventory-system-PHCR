@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 
-    $sql = "SELECT * FROM users WHERE reset_token = ? AND reset_token_expiry > NOW()";
+    $sql = "SELECT * FROM accounts WHERE reset_token = ? AND reset_token_expiry > NOW()";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $token);
     $stmt->execute();
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Token is valid, update the password
 
         $hashedPassword = md5($newPassword);
-        $sql = "UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?";
+        $sql = "UPDATE accounts SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("ss", $hashedPassword, $token);
         $stmt->execute();

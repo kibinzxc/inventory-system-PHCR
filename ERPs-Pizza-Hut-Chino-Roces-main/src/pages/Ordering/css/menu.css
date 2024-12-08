@@ -724,6 +724,10 @@ button:not(.active) {
   opacity: 0.5;
 }
 
+.item-login {
+  margin-top: 40px;
+}
+
 @media (max-width: 1590px) {
   .col-sm-9 {
     width: 70%;

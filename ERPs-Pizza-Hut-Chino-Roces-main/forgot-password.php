@@ -48,6 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             sendResetEmail($email, $token);
 
             $_SESSION['successMessage'] = "A password reset link has been sent to your email.";
+            //after sending the email, redirect to the login page
+            header("Location: login.php");
         } else {
             $_SESSION['errorMessage1'] = "Email not found";
         }

@@ -103,7 +103,15 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
                 $stmt->bind_param('isssssssss', $orderID, $uid, $name, $address, $items, $totalPrice, $payment, $del_instruct, $orderPlaced, $status);
                 $stmt->execute();
                 $stmt->close();
-
+                //delete the data from orders table
+                $query = "DELETE FROM orders WHERE orderID = ?";
+                $stmt = $conn->prepare($query);
+                if (!$stmt) {
+                    die("Prepare failed: " . $conn->error);
+                }
+                $stmt->bind_param('i', $orderID);
+                $stmt->execute();
+                $stmt->close();
 
 
 

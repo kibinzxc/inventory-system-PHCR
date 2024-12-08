@@ -770,6 +770,11 @@ button:not(.active) {
 }
 
 @media (max-width: 1280px) {
+
+  .container-fluid {
+    height: 100vh !important;
+  }
+
   .col-sm-9 {
     width: 65%;
     height: auto;

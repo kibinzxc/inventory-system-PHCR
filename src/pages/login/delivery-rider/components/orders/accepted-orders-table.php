@@ -408,7 +408,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
             $orderItems = json_encode($items);
             $cashier = $currentUsername;
             $orderType = 'delivery';
-            $mop = 'cod';
+            $mop = $order['payment'];
             $amountChange = 0; // Use a variable for the constant value
             $stmtInvoice->bind_param("ssddssss", $orderID, $orderItems, $totalPrice, $totalPrice, $amountChange, $orderType, $mop, $cashier);
             if ($stmtInvoice->execute()) {

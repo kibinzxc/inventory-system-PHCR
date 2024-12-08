@@ -458,12 +458,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
     }
 }
 
+//get the name of the user 
+$userQuery = "SELECT name FROM accounts WHERE uid = ?";
+$stmtUser = $conn->prepare($userQuery);
+$stmtUser->bind_param("i", $currentUid);
+$stmtUser->execute();
+$userResult = $stmtUser->get_result();
 
+if ($userResult->num_rows === 0) {
+    echo "<p>Error: Current user not found in accounts table.</p>";
+    exit;
+}
+
+$user = $userResult->fetch_assoc();
+$currentUsername = $user['name'];
 
 
 // Fetch and display orders with 'ready for pickup' status
-$query = "SELECT orderID, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status FROM orders WHERE status = 'delivery' ORDER BY orderPlaced DESC";
+$query = "SELECT orderID, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status FROM orders WHERE status = 'delivery' AND cashier = ? ORDER BY orderPlaced DESC LIMIT 1";
 $stmt = $conn->prepare($query);
+$stmt->bind_param("s", $currentUsername);
 $stmt->execute();
 $result = $stmt->get_result();
 

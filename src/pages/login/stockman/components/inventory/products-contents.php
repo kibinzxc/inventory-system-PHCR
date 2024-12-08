@@ -17,11 +17,11 @@
 
         <!-- Action Buttons Section -->
         <br>
-        <div class="btn-wrapper2">
+        <!-- <div class="btn-wrapper2">
             <a href="add-product.php" class="btn2" onclick="window.open('add-product.php', '_blank', 'width=550px,height=700px'); return false;">
                 <img src="../../assets/plus-circle.svg" alt=""> Add New Product
             </a>
-        </div>
+        </div> -->
 
         <div class="table_container">
             <?php include 'inventoryCards.php'; ?>

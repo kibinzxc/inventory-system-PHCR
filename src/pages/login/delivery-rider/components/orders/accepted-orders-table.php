@@ -412,7 +412,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
                 throw new Exception('Payment details not found.');
             }
             $payment = $resultPayment->fetch_assoc();
-            $totalPrice = $payment['payment'];
+            $payment = $payment['mop'];
+
             $insertInvoiceSql = "INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) 
                                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtInvoice = $conn->prepare($insertInvoiceSql);
@@ -475,13 +476,8 @@ $user = $userResult->fetch_assoc();
 
 
 // Fetch and display orders with 'ready for pickup' status
-$query = "SELECT o.orderID, o.name, o.address, o.items, o.totalPrice, o.payment, o.del_instruct, o.orderPlaced, o.status 
-          FROM orders o 
-          JOIN float_orders f ON o.orderID = f.orderID 
-          WHERE o.status = 'delivery' AND f.cashier = ? 
-          ORDER BY o.orderPlaced DESC";
+$query = "SELECT orderID, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status FROM orders WHERE status = 'delivery' AND cashier = $currentUsername ORDER BY orderPlaced DESC";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("s", $currentUsername);
 $stmt->execute();
 $result = $stmt->get_result();
 

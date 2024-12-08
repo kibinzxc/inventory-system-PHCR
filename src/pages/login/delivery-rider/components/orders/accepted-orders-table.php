@@ -84,25 +84,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['not-yet'])) {
         $uidRow = $uidResult->fetch_assoc();
         $uid = $uidRow['uid'];
 
+        // Handle the image upload for the proof image
         if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-            // Define the upload directory
-            $uploadDir = '../../../super_admin/assets/pod/';
+            // Define the upload directories
+            $uploadDirs = [
+                '../../../super_admin/assets/pod/',
+                '../../../admin/assets/pod/',
+                '../../../stockman/assets/pod/',
+                '../../../cashier/assets/pod/'
+            ];
 
-            $imgExt = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+            $imgName = 'proof' . $orderID . '.' . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION); // 'proofORDERID.extension'
+            $fileTmpName = $_FILES['image']['tmp_name'];
+            $fileType = $_FILES['image']['type'];
 
-            $imgName = 'proof' . $orderID . '.' . $imgExt; // 'proofORDERID.extension'
+            // Ensure only image files are uploaded
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (in_array($fileType, $allowedTypes)) {
+                // Move the uploaded image to the first directory
+                $firstDir = $uploadDirs[0];
+                $imgPath = $firstDir . $imgName;
+                if (!move_uploaded_file($fileTmpName, $imgPath)) {
+                    echo json_encode(['status' => 'error', 'message' => "Error uploading the image to $firstDir."]);
+                    exit;
+                }
 
-            $imgPath = $uploadDir . $imgName;
-
-
-            // Move the uploaded image to the server
-            if (!move_uploaded_file($_FILES['image']['tmp_name'], $imgPath)) {
-                throw new Exception('Error uploading the image.');
+                // Copy the image to the other directories
+                foreach (array_slice($uploadDirs, 1) as $uploadDir) {
+                    $imagePath = $uploadDir . $imgName;
+                    if (!copy($imgPath, $imagePath)) {
+                        echo json_encode(['status' => 'error', 'message' => "Error copying the image to $uploadDir."]);
+                        exit;
+                    }
+                }
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Only image files are allowed.']);
+                exit;
             }
         } else {
-            // If no image was uploaded, ensure imgPath is set to null
-            $imgPath = null;
+            echo json_encode(['status' => 'error', 'message' => 'No image uploaded or an error occurred.']);
+            exit;
         }
+
 
         $title = "Order ID#$orderID Status Update";
         $category = "Order status";
@@ -200,24 +223,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
         $uidRow = $uidResult->fetch_assoc();
         $uid = $uidRow['uid'];
 
+        // Handle the image upload for the proof image
         if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
-            // Define the upload directory
-            $uploadDir = '../../../super_admin/assets/pod/';
+            // Define the upload directories
+            $uploadDirs = [
+                '../../../super_admin/assets/pod/',
+                '../../../admin/assets/pod/',
+                '../../../stockman/assets/pod/',
+                '../../../cashier/assets/pod/'
+            ];
 
-            $imgExt = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+            $imgName = 'proof' . $orderID . '.' . pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION); // 'proofORDERID.extension'
+            $fileTmpName = $_FILES['image']['tmp_name'];
+            $fileType = $_FILES['image']['type'];
 
-            $imgName = 'proof' . $orderID . '.' . $imgExt; // 'proofORDERID.extension'
+            // Ensure only image files are uploaded
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (in_array($fileType, $allowedTypes)) {
+                // Move the uploaded image to the first directory
+                $firstDir = $uploadDirs[0];
+                $imgPath = $firstDir . $imgName;
+                if (!move_uploaded_file($fileTmpName, $imgPath)) {
+                    echo json_encode(['status' => 'error', 'message' => "Error uploading the image to $firstDir."]);
+                    exit;
+                }
 
-            $imgPath = $uploadDir . $imgName;
-
-            // Move the uploaded image to the server
-            if (!move_uploaded_file($_FILES['image']['tmp_name'], $imgPath)) {
-                throw new Exception('Error uploading the image.');
+                // Copy the image to the other directories
+                foreach (array_slice($uploadDirs, 1) as $uploadDir) {
+                    $imagePath = $uploadDir . $imgName;
+                    if (!copy($imgPath, $imagePath)) {
+                        echo json_encode(['status' => 'error', 'message' => "Error copying the image to $uploadDir."]);
+                        exit;
+                    }
+                }
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Only image files are allowed.']);
+                exit;
             }
         } else {
-            // If no image was uploaded, ensure imgPath is set to null
-            $imgPath = null;
+            echo json_encode(['status' => 'error', 'message' => 'No image uploaded or an error occurred.']);
+            exit;
         }
+
 
         $title = "Order ID#$orderID Status Update";
         $category = "Order status";
@@ -255,6 +302,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
         $del_instruct = $row['del_instruct'];
         $orderPlaced = $row['orderPlaced'];
         $status = $row['status'];
+
+
 
         // Insert into success_orders table
         $query = "INSERT INTO success_orders (orderID, uid, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status, img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -415,6 +464,9 @@ while ($row = $result->fetch_assoc()) {
     $totalPrice = $row['totalPrice'];
     $orderPlaced = $row['orderPlaced'];
 
+    $encodedAddress = urlencode($address); // URL encode the destination address
+    $encodedOrigin = urlencode("Pizza Hut, Caltex Service Station, 2130 Chino Roces Ave, Makati, Metro Manila"); // URL encode the fixed origin
+
     echo '<div class="order-card">';
     echo '<div class="order-header">';
     echo '<h2>Order #' . htmlspecialchars($orderID) . '</h2>';
@@ -434,7 +486,9 @@ while ($row = $result->fetch_assoc()) {
 
     echo '<div class="order-body">';
     echo '<p><strong>Name:</strong> ' . htmlspecialchars($name) . '</p>';
-    echo '<p><strong>Address:</strong> ' . htmlspecialchars($address) . '</p>';
+    echo '<p><strong>Address:</strong><a href="https://www.google.com/maps/dir/?api=1&destination=' . $encodedAddress . '" target="_blank">' .
+        htmlspecialchars($address) .
+        '</a></p>';
     echo '<p><strong>Total Price:</strong> ₱' . number_format($totalPrice, 2) . '</p>';
     echo '</div>';
 

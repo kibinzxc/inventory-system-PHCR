@@ -124,6 +124,9 @@ while ($row = $result->fetch_assoc()) {
     $items = json_decode($row['items'], true);
     $totalPrice = $row['totalPrice'];
     $orderPlaced = $row['orderPlaced'];
+    $encodedAddress = urlencode($address); // URL encode the destination address
+    $encodedOrigin = urlencode("Pizza Hut, Caltex Service Station, 2130 Chino Roces Ave, Makati, Metro Manila"); // URL encode the fixed origin
+
 
     echo '<div class="order-card">';
     echo '<div class="order-header">';
@@ -144,7 +147,9 @@ while ($row = $result->fetch_assoc()) {
 
     echo '<div class="order-body">';
     echo '<p><strong>Name:</strong> ' . htmlspecialchars($name) . '</p>';
-    echo '<p><strong>Address:</strong> ' . htmlspecialchars($address) . '</p>';
+    echo '<p><strong>Address:</strong><a href="https://www.google.com/maps/dir/?api=1&destination=' . $encodedAddress . '" target="_blank">' .
+        htmlspecialchars($address) .
+        '</a></p>';
     echo '<p><strong>Total Price:</strong> ₱' . number_format($totalPrice, 2) . '</p>';
     echo '</div>';
 

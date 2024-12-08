@@ -244,6 +244,11 @@ label {
     margin-bottom: 0;
 }
 
+p a {
+    color: #006D6D;
+}
+
+
 /*mobile responsive*/
 @media screen and (max-width: 768px) {
     .container {

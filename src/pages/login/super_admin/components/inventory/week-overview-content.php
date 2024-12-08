@@ -1,51 +1,53 @@
 <?php
-// Get the current date
-$currentDate = new DateTime();
+date_default_timezone_set('Asia/Manila');
+$currentDate = new DateTime('now', new DateTimeZone('Asia/Manila'));
 
 // Get the first day of the current month
-$firstDayOfMonth = new DateTime("first day of this month");
+$firstDayOfMonth = new DateTime("first day of this month", new DateTimeZone('Asia/Manila'));
 
 // Find the first Monday of the month
 $firstMonday = clone $firstDayOfMonth;
-$firstMonday->modify('next monday');
+if ($firstMonday->format('N') != 1) { // If not Monday (1 is Monday)
+    $firstMonday->modify('next monday');
+}
 
 // Function to calculate the start and end date for each week, starting from the first Monday
 function getWeekRange($weekNumber, $firstMonday)
 {
-    // Get the starting date of the first week (first Monday)
     $firstWeekStartDate = clone $firstMonday;
-
-    // Calculate the start date of the given week
     $startDate = clone $firstWeekStartDate;
-    $startDate->modify('+' . ($weekNumber - 1) . ' week'); // Move to the correct week
-
-    // Calculate the end date (6 days after the start date)
+    $startDate->modify('+' . ($weekNumber - 1) . ' week');
     $endDate = clone $startDate;
     $endDate->modify('+6 days');
 
-    // Format the dates to display in a readable format (e.g., "November 4 - November 10")
     return [
-        'start' => $startDate->format('F j, Y'),  // e.g. "November 4, 2024"
-        'end' => $endDate->format('F j, Y')       // e.g. "November 10, 2024"
+        'start' => $startDate->format('F j, Y'),
+        'end' => $endDate->format('F j, Y')
     ];
 }
 
-// Get the current week number by calculating the difference between the current date and the first Monday of the month
-$weekNumber = ceil(($currentDate->format('d') + $firstMonday->format('N') - 1) / 7);
-
-// Check if the 'week' parameter is in the URL
-if (!isset($_GET['week'])) {
-    // If 'week' is not in the URL, set the current week as the default week
-    header("Location: ?week=$weekNumber");
-    exit; // Make sure to call exit after header to prevent further code execution
+// Calculate the current week number
+$diffFromFirstMonday = $currentDate->diff($firstMonday)->days; // Days between first Monday and today
+if ($currentDate < $firstMonday) {
+    $weekNumber = 1; // Before the first Monday of the month
+} else {
+    $weekNumber = ceil(($diffFromFirstMonday + 1) / 7);
 }
 
-// Retrieve the 'week' parameter from the URL
+// Redirect to add the current week number if not provided in the URL
+if (!isset($_GET['week'])) {
+    header("Location: ?week=$weekNumber");
+    exit;
+}
+
+// Retrieve the week from the URL
 $currentWeekFromUrl = isset($_GET['week']) ? (int)$_GET['week'] : $weekNumber;
 
-// Get the range for the selected week
+// Get the date range for the selected week
 $weekRange = getWeekRange($currentWeekFromUrl, $firstMonday);
+
 ?>
+
 
 <link rel="stylesheet" href="week-overview.css">
 

@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['accept'])) {
 }
 
 // Fetch and display orders with 'ready for pickup' status
-$query = "SELECT orderID, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status FROM orders WHERE status = 'ready for pickup' ORDER BY orderPlaced DESC";
+$query = "SELECT orderID, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status FROM orders WHERE status = 'ready for pickup' ORDER BY orderPlaced ASC";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $result = $stmt->get_result();

@@ -77,6 +77,6 @@ if ($result->num_rows > 0) {
             </div>";
     }
 } else {
-    echo "<p style='text-align:center;'>No orders yet</p> $currentDate";
+    echo "<p style='text-align:center;'>No recent updates yet</p>";
 }
 echo "</div>";

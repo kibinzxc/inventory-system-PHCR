@@ -148,13 +148,13 @@ include '../../connection/database.php';
                         $orderDetails .= "</ul>";
                         // Get the address using orderID from the orders table 
                         // Get the address using orderID from the orders table 
-                        $query = "SELECT address FROM orders WHERE orderID = $orderID";
+                        $query = "SELECT address, del_instruct FROM orders WHERE orderID = $orderID";
                         $result = mysqli_query($conn, $query);
                         $row = mysqli_fetch_assoc($result);
                         $address = $row['address'];
                         $encodedAddress = urlencode($address); // URL encode the destination address
                         $encodedOrigin = urlencode("Pizza Hut, Caltex Service Station, 2130 Chino Roces Ave, Makati, Metro Manila"); // URL encode the fixed origin
-
+                        $del_instruct = $row['del_instruct'];
                         // Card HTML
                         echo "
                     <div class='mg-card' data-order-id='$orderID'>
@@ -166,6 +166,7 @@ include '../../connection/database.php';
                                 $address
                             </a>
                         </div>
+                        <div class='mg-card-content address'>Del. Instruction: $del_instruct </div>
                         <div class='mg-card-total-price'>Total w/ Delivery: ₱$totalAmount</div>
                         <div class='mg-card-actions'>
                             <button class='mg-button mg-remove-button' onclick='updateOrderStatus($orderID, \"declined\")'>Decline</button>

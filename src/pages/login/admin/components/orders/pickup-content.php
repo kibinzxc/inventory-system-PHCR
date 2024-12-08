@@ -98,7 +98,7 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
         <div class="header">
             <h2 style="color:#343434">All Orders | Ready for Pickup</h2>
             <div class="btn-wrapper">
-                <a href="orders.php" class="btn"><img src="../../assets/external-link.svg" alt=""> Point-of-Sale</a>
+                <!-- <a href="orders.php" class="btn"><img src="../../assets/external-link.svg" alt=""> Point-of-Sale</a> -->
                 <a href="order-logs.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Logs</a>
             </div>
         </div>

@@ -112,7 +112,6 @@ include '../../connection/database.php';
         <div class="header">
             <h2 style="color:#343434">All Orders | New Orders</h2>
             <div class="btn-wrapper">
-                <a href="orders.php" class="btn"><img src="../../assets/external-link.svg" alt=""> Point-of-Sale</a>
                 <a href="order-logs.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Logs</a>
             </div>
         </div>

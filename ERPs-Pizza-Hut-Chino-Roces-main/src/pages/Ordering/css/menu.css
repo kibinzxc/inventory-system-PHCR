@@ -796,6 +796,10 @@ button:not(.active) {
     height: auto;
   }
 
+  .notification-count {
+    top: 430px;
+  }
+
 }
 
 @media (max-width: 1280px) {

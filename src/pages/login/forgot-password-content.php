@@ -12,7 +12,7 @@
 <body>
     <div class="LoginForm">
         <div class="LoginForm_header">
-            <h3 class="forgot">Forgot Password</h3>
+            <h1 class="forgot">Forgot Password</h1>
         </div>
 
         <?php if (isset($_GET['error'])): ?>
@@ -28,7 +28,7 @@
             </div>
         <?php endif; ?>
 
-        <form action="forgot_password_query.php" method="POST" class="LoginForm_Contents">
+        <form action="forgot_query.php" method="POST" class="LoginForm_Contents">
             <div class="username_input">
                 <label for="email">Email</label>
                 <input type="email" name="email" id="email" placeholder="Email" required>

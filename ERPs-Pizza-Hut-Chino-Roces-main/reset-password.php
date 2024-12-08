@@ -15,30 +15,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmPassword = $_POST['confirm_password'];
 
     // Validate inputs
-    $errors = [];
+    // Validate inputs
     if (empty($newPassword) || empty($confirmPassword)) {
-        $errors[] = "All fields are required.";
-    }
-    if ($newPassword !== $confirmPassword) {
-        $errors[] = "Passwords do not match.";
-    }
-    if (strlen($newPassword) < 8) {
-        $errors[] = "Password must be at least 8 characters long.";
-    }
-    if (!preg_match('/[A-Z]/', $newPassword)) {
-        $errors[] = "Password must include at least one uppercase letter.";
-    }
-    if (!preg_match('/[a-z]/', $newPassword)) {
-        $errors[] = "Password must include at least one lowercase letter.";
-    }
-    if (!preg_match('/[0-9]/', $newPassword)) {
-        $errors[] = "Password must include at least one number.";
-    }
-    if (!preg_match('/[\W]/', $newPassword)) {
-        $errors[] = "Password must include at least one special character.";
-    }
-    if (!empty($errors)) {
-        $_SESSION['errorMessage'] = implode('<br>', $errors);
+        $_SESSION['errorMessage'] = "All fields are required.";
+    } elseif ($newPassword !== $confirmPassword) {
+        $_SESSION['errorMessage'] = "Passwords do not match.";
+    } elseif (strlen($newPassword) < 8) {
+        $_SESSION['errorMessage'] = "Password must be at least 8 characters long.";
+    } elseif (!preg_match('/[A-Z]/', $newPassword)) {
+        $_SESSION['errorMessage'] = "Password must include at least one uppercase letter.";
+    } elseif (!preg_match('/[a-z]/', $newPassword)) {
+        $_SESSION['errorMessage'] = "Password must include at least one lowercase letter.";
+    } elseif (!preg_match('/[0-9]/', $newPassword)) {
+        $_SESSION['errorMessage'] = "Password must include at least one number.";
+    } elseif (!preg_match('/[\W]/', $newPassword)) {
+        $_SESSION['errorMessage'] = "Password must include at least one special character.";
     } else {
         // Check if the token is valid and not expired
         $sql = "SELECT * FROM users WHERE reset_token = ? AND reset_token_expiry > NOW()";
@@ -56,6 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->execute();
 
             $_SESSION['successMessage'] = "Your password has been reset successfully.";
+
+            // Redirect to the login page
+            header("Location: login.php");
+            exit();
         } else {
             $_SESSION['errorMessage'] = "Invalid or expired token.";
         }

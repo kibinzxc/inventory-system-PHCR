@@ -50,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['successMessage'] = "A password reset link has been sent to your email.";
             //after sending the email, redirect to the login page
             header("Location: login.php");
+            exit();
         } else {
             $_SESSION['errorMessage1'] = "Email not found";
         }

@@ -31,7 +31,7 @@ $recordExists = $row['recordCount'] > 0;
     <!-- Header Section -->
     <div class="container">
         <div class="header">
-            <h1>Daily Inventory </h1>
+            <h1>Daily Inventory 2</h1>
             <div class="btn-wrapper">
                 <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Inventory Overview</a>
                 <a href="product-preview.php" class="btn"><img src="../../assets/instagram.svg" alt=""> Product Details</a>

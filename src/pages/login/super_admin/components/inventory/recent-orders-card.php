@@ -1,6 +1,6 @@
 <?php
 include '../../connection/database.php';
-error_reporting(E_ALL);
+
 // Set the timezone
 date_default_timezone_set('Asia/Manila');
 // Get the current date in the format YYYY-MM-DD

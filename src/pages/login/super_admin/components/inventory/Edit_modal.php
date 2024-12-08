@@ -79,7 +79,7 @@
                 <!-- Row 7: Ending -->
                 <div class=" form-row">
                     <label for="edit-usage">Usage</label>
-                    <input type="number" id="edit-usage_count" name="usage_count" step="0.01" oninput="calculateEnding();">
+                    <input type="number" id="edit-usage_count" name="usage_count" step="0.001" oninput="calculateEnding();">
                     <span id="ending-error-message" style="color: red; display: none; font-size: 12px;"></span> <!-- Error message container -->
 
                 </div>

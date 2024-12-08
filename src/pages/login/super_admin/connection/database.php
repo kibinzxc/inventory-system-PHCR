@@ -3,6 +3,7 @@
 // $dbUsername = 'u560143421_kibinzxc';
 // $dbPassword =  'Kevin0405!';
 // $dbName = 'u560143421_phcr_db';
+
 $host = 'localhost';
 $dbUsername = 'root';
 $dbPassword =  '';

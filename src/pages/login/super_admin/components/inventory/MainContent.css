@@ -383,6 +383,42 @@ a.btn2.disabled:hover {
     /* Retain original text color */
 }
 
+.table-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.table-wrapper h3 {
+    margin-bottom: 0;
+    color: #343434;
+}
+
+.first-table {
+    margin-bottom: 0;
+}
+
+.second-table {
+    padding-bottom: 20px;
+}
+
+
+@media (max-width: 1550px) {
+    .table-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .last-table {
+        margin-top: 5px;
+    }
+
+    .second-table {
+        margin-bottom: 0;
+    }
+
+}
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {

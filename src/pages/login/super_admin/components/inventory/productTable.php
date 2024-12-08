@@ -48,7 +48,6 @@ $result = $stmt->get_result();
                 // Decode the JSON ingredients
                 $ingredients = json_decode($row["ingredients"], true);
 
-
                 $ingredient_list = '';
                 if (is_array($ingredients)) {
                     foreach ($ingredients as $ingredient) {
@@ -57,12 +56,17 @@ $result = $stmt->get_result();
                         $quantity = isset($ingredient['quantity']) ? $ingredient['quantity'] : 'N/A';
                         $measurement = isset($ingredient['measurement']) ? $ingredient['measurement'] : '';
 
+                        // Convert quantity from grams to kilograms if the measurement is "grams"
+                        if ($measurement == 'grams' && is_numeric($quantity)) {
+                            $quantity = $quantity / 1000; // Convert grams to kilograms
+                            $measurement = 'kg'; // Update the measurement to kg
+                        }
+
                         $ingredient_list .= "<li>" . htmlspecialchars($ingredient_name) . ": " . htmlspecialchars($quantity) . " " . htmlspecialchars($measurement) . "</li>";
                     }
                 } else {
                     $ingredient_list = "<li>Error decoding ingredients</li>";
                 }
-
 
                 echo "<tr>";
                 echo "<td>" . $count++ . "</td>";
@@ -71,11 +75,10 @@ $result = $stmt->get_result();
                 echo "<td>" . $row["slogan"] . "</td>";
                 echo "<td>" . $row["size"] . "</td>";
                 echo "<td><strong>₱" . number_format($row["price"], 2) . "</strong></td>";
-
                 echo "</tr>";
             }
         } else {
-            echo "<tr><td colspan='4'>No products found</td></tr>";
+            echo "<tr><td colspan='6'>No products found</td></tr>";
         }
         ?>
     </tbody>

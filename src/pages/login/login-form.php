@@ -38,7 +38,7 @@
             </div>
 
             <div class="LoginForm_Contents_footer">
-                <a href="#">Forgot Password?</a>
+                <a href="forgot-password.php">Forgot Password?</a>
             </div>
         </form>
     </div>

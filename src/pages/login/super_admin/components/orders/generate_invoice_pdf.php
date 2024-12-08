@@ -138,8 +138,9 @@ if (isset($_GET['invID'])) {
             $totalItems . ' Item(s) Total AMOUNT' => 'PHP '  . number_format($subtotalAmount, 2),
             'Delivery Fee' => 'PHP ' . number_format($deliveryFee, 2),
             'Amount Tendered Cash' => 'PHP ' . number_format($invoice['amount_received'], 2),
-            'CHANGE' => 'PHP ' . number_format($invoice['amount_change'], 2),
-            'Total Amount' => 'PHP ' . number_format($totalAmountAfterDelivery, 2) // Total amount after adding the delivery fee back
+            'Total Amount' => 'PHP ' . number_format($totalAmountAfterDelivery, 2), // Total amount after adding the delivery fee back
+            'CHANGE' => 'PHP ' . number_format($invoice['amount_change'], 2)
+
         ];
     } else {
         $financialDetails = [

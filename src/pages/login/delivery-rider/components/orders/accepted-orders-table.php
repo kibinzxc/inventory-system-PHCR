@@ -402,7 +402,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['done'])) {
                 exit;
             }
             //get the payment from invoice_temp 
-            $getPaymentSql = "SELECT payment FROM invoice_temp WHERE invID = ?";
+            $getPaymentSql = "SELECT mop FROM invoice_temp WHERE invID = ?";
             $stmtPayment = $conn->prepare($getPaymentSql);
             $stmtPayment->bind_param("i", $orderID);
             $stmtPayment->execute();

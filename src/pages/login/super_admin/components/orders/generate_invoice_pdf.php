@@ -122,11 +122,34 @@ if (isset($_GET['invID'])) {
     $vat = $invoice['total_amount'] - $vatable; // VAT (12%)
 
 
-    $financialDetails = [
-        $totalItems . ' Item(s) Total AMOUNT' => 'PHP ' . number_format($invoice['total_amount'], 2),
-        'Amount Tendered Cash' => 'PHP -' . number_format($invoice['amount_received'], 2),
-        'CHANGE' => 'PHP ' . number_format($invoice['amount_change'], 2)
-    ];
+
+    if ($invoice['order_type'] == 'delivery') {
+        // Define the delivery fee
+        $deliveryFee = 65;
+
+        // Subtract the delivery fee from the total amount to get the subtotal
+        $subtotalAmount = $invoice['total_amount'] - $deliveryFee;
+
+        // Calculate the total amount after adding the delivery fee back
+        $totalAmountAfterDelivery = $subtotalAmount + $deliveryFee;
+
+        // Prepare the financial details in the desired format
+        $financialDetails = [
+            'Subtotal amount' => 'PHP ' . number_format($subtotalAmount, 2),
+            'Delivery Fee' => 'PHP ' . number_format($deliveryFee, 2),
+            'Amount Tendered Cash' => 'PHP ' . number_format($invoice['amount_received'], 2),
+            'CHANGE' => 'PHP ' . number_format($invoice['amount_change'], 2),
+            'Total Amount' => 'PHP ' . number_format($totalAmountAfterDelivery, 2) // Total amount after adding the delivery fee back
+        ];
+    } else {
+        $financialDetails = [
+            $totalItems . ' Item(s) Total AMOUNT' => 'PHP ' . number_format($invoice['total_amount'], 2),
+            'Amount Tendered Cash' => 'PHP -' . number_format($invoice['amount_received'], 2),
+            'CHANGE' => 'PHP ' . number_format($invoice['amount_change'], 2)
+        ];
+    }
+
+
 
     $labelWidth = 40; // Fixed width for labels
     $amountWidth = 30; // Fixed width for amounts

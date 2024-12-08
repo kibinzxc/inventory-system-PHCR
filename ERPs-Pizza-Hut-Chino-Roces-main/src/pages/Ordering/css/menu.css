@@ -772,8 +772,12 @@ button:not(.active) {
     height: 50vh !important;
   }
 
-  .sidebar .item-last {
+  .sidebar .item-last:disabled {
     margin-bottom: 200px;
+  }
+
+  .sidebar .item-last {
+    margin-bottom: 180px;
   }
 
   .item-login {
@@ -786,6 +790,10 @@ button:not(.active) {
 
   .cart {
     height: 40vh !important;
+  }
+
+  .checkout {
+    height: auto;
   }
 
 }

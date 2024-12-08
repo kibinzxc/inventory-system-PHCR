@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    $sql = "SELECT * FROM users WHERE email = ?";
+    $sql = "SELECT * FROM accounts WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Store the token in the database with an expiration time
         $expiry = date("Y-m-d H:i:s", strtotime("+1 hour"));
-        $sql = "UPDATE users SET reset_token = ?, reset_token_expiry = ? WHERE email = ?";
+        $sql = "UPDATE accounts SET reset_token = ?, reset_token_expiry = ? WHERE email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sss", $token, $expiry, $email);
         $stmt->execute();

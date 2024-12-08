@@ -17,7 +17,7 @@ $order = in_array($order, $valid_order_directions) ? $order : 'asc'; // Validate
 $sql = "SELECT uid, name, email, userType 
         FROM accounts 
         WHERE (name LIKE ? OR email LIKE ? OR uid LIKE ? OR userType LIKE ?)
-        AND userType != 'super_admin' AND userType != 'admin' 
+        AND userType != 'super_admin' 
         ORDER BY $sort $order"; // Exclude "super_admin" userType and include order
 
 $stmt = $conn->prepare($sql);
@@ -50,7 +50,13 @@ $result = $stmt->get_result();
                 echo "<td>" . $row["uid"] . "</td>";
                 echo "<td>" . htmlspecialchars($row["name"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["email"]) . "</td>";
-                echo "<td>" . htmlspecialchars($row["userType"]) . "</td>";
+                $userType = htmlspecialchars($row["userType"]);
+                if ($userType == 'rider') {
+                    $userType = 'Delivery Rider';
+                } else {
+                    $userType = ucfirst($userType);
+                }
+                echo "<td>" . $userType . "</td>";
                 echo "<td>
                         <div class='actions_icon'>
                             <a href='#' onclick=\"openEditModal('" . $row['uid'] . "', '" . addslashes($row['name']) . "', '" . addslashes($row['email']) . "', '" . addslashes($row['userType']) . "')\" data-icon-tooltip='Edit'>

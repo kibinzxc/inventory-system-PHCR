@@ -98,13 +98,22 @@ if ($result->num_rows > 0) {
 
                 if ($ingredientMeasurement == 'pcs' && $availableStockInPieces >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
-                } elseif ($ingredientMeasurement = 'grams' && $availableStockInKg >= ($ingredientQuantity / 1000)) {
+                } elseif ($ingredientMeasurement == 'grams' && $availableStockInKg >= ($ingredientQuantity / 1000)) {
                     $isIngredientAvailable = true;
-                } elseif ($ingredientMeasurement = 'bottle' && $availableStockInBottle >= $ingredientQuantity) {
+                } elseif ($ingredientMeasurement == 'bottle' && $availableStockInBottle >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
-                } elseif ($ingredientMeasurement = 'pc' && $availableStockInPieces >= $ingredientQuantity) {
+                } elseif ($ingredientMeasurement == 'pc' && $availableStockInPieces >= $ingredientQuantity) {
                     $isIngredientAvailable = true;
                 }
+            }
+
+            if ($ingredientMeasurement == 'grams') {
+                $ingredientQuantity = $ingredientQuantity / 1000;
+                $ingredientMeasurement = 'kg';
+            } elseif ($ingredientMeasurement == 'pc') {
+                $ingredientMeasurement = $ingredientQuantity == 1 ? 'pc' : 'pcs';
+            } elseif ($ingredientMeasurement == 'bt') {
+                $ingredientMeasurement = $ingredientQuantity == 1 ? 'bottle' : 'bottles';
             }
 
             $crossClass = '';
@@ -114,7 +123,7 @@ if ($result->num_rows > 0) {
             }
 
             echo '<li class="' . $crossClass . '">';
-            echo ucwords($ingredientName) . ' ' . htmlspecialchars($ingredient['quantity']) . ' ' . htmlspecialchars($ingredient['measurement']);
+            echo ucwords($ingredientName) . ' ' . htmlspecialchars($ingredientQuantity) . ' ' . htmlspecialchars($ingredientMeasurement);
             echo '</li>';
         }
         echo '</ul>';

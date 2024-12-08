@@ -121,6 +121,11 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
                                 $stmtEnding->execute();
 
 
+                                //insert the ingredient name, qty and measurement to item_reports 
+                                $insertItemReports = "INSERT INTO item_reports (invID, name, qty, uom) VALUES (?, ?, ?, ?)";
+                                $stmtItemReports = $conn->prepare($insertItemReports);
+                                $stmtItemReports->bind_param("isds", $invID, $ingredientName, $ingredientQuantity, $inventoryMeasurement);
+                                $stmtItemReports->execute();
 
                                 //get the data from invoice_temp and insert into invoice
                                 $query = "SELECT * FROM invoice_temp WHERE invID = ?";

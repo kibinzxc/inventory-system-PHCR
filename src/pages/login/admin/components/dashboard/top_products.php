@@ -54,7 +54,7 @@ if ($result->num_rows === 0) {
         $image = $row['img'];
 
         // Inside your PHP loop for displaying the top 3 products
-        echo '<a href="../inventory/product-preview.php" class="usage-product-card-link">';  // Add link
+        echo '<a href="../orders/order-count.php" class="usage-product-card-link">';  // Add link
         echo '<div class="usage-product-card">';
         // Product Image
         echo '<div class="usage-product-image-container">';

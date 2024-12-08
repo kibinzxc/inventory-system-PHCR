@@ -31,6 +31,11 @@ document.addEventListener('click', function (e) {
     }
 });
 
+function scrollToBottom() {
+    const panelCardsContainer = document.querySelector('.panel-cards');
+    panelCardsContainer.scrollTop = panelCardsContainer.scrollHeight;
+}
+
 function renderPanel() {
     const panelCardsContainer = document.querySelector('.panel-cards');
     const totalPriceContainer = document.querySelector('#total-price');
@@ -42,8 +47,11 @@ function renderPanel() {
     let vatAmount = 0;
     let totalItems = 0; // Variable to track the total number of items
 
+
+
     // Clear the current panel
     panelCardsContainer.innerHTML = '';
+
 
     // Populate panel with items
     orders.forEach(order => {
@@ -84,7 +92,7 @@ function renderPanel() {
 
     updateItemLabel(totalItems); // Pass the updated totalItems count to the function
 
-
+    scrollToBottom();
 }
 
 
@@ -436,8 +444,8 @@ function generateInvoicePDF(invID) {
     var widthPx = width * 3.7795275591; // Convert mm to pixels (1mm = 3.7795275591px)
     var heightPx = height * 3.7795275591;
 
-    // Open the window with the specified size
-    var newWindow = window.open('generate_invoice_pdf.php?invID=' + invID, '_blank', 'width=' + widthPx + ',height=' + heightPx);
+    // Open the window with the specified size and invID
+    var newWindow = window.open('generate_inv.php?invID=' + invID, '_blank', 'width=' + widthPx + ',height=' + heightPx);
 
     // Focus on the new window
     if (newWindow) {

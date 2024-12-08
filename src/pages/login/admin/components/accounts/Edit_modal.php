@@ -24,6 +24,8 @@
                     <select id="edit-userType" name="userType">
                         <option value="" disabled selected hidden>Select user type</option>
                         <option value="admin">Admin</option>
+                        <option value="cashier">Cashier</option>
+                        <option value="rider">Delivery Rider</option>
                         <option value="stockman">Stockman</option>
                     </select>
                 </div>

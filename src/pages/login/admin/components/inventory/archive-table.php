@@ -80,7 +80,7 @@ $result = $stmt->get_result();
             <th>Ending Inv.</th>
             <th>Usage</th>
             <th>Submitted By</th>
-
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -102,11 +102,18 @@ $result = $stmt->get_result();
                 echo "<td>" . htmlspecialchars($row["usage_count"]) . "</td>";
                 echo "<td>" . htmlspecialchars($row["submitted_by"]) . "</td>";
 
+                echo "<td>
+                <div class='actions_icon'>";
 
+                echo "<a href='#' onclick=\"openArchiveModal('" . $row['recordID'] . "', '" . addslashes($row['itemID']) . "', '" . addslashes($row['name']) . "', '" . addslashes($row['uom']) . "', '" . addslashes($row['beginning']) . "', '" . addslashes($row['deliveries']) . "', '" . addslashes($row['transfers_in']) . "', '" . addslashes($row['transfers_out']) . "', '" . addslashes($row['spoilage']) . "', '" . addslashes($row['ending']) . "', '" . addslashes($row['usage_count']) . "', event); return false;\" data-icon-tooltip='Edit'>
+                            <img src='../../assets/edit.svg' alt='Edit' class='settings_icon'> Edit
+                          </a>";
+
+                echo "</div></td>";
                 echo "</tr>";
             }
         } else {
-            echo "<tr><td colspan='12'>No records found for the selected date</td></tr>";
+            echo "<tr><td colspan='13'>No records found for the selected date</td></tr>";
         }
         ?>
     </tbody>

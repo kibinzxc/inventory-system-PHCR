@@ -51,9 +51,21 @@ $recordExists = $row['recordCount'] > 0;
             </a>
         </div>
 
-        <div class="table_container">
+        <div class="table_container first-table">
             <?php include 'inventoryCards.php'; ?>
         </div>
+
+        <div class="table-wrapper">
+            <div class="table_container second-table">
+                <h3> Recent Orders</h3>
+                <?php include 'recent-orders-card.php'; ?>
+            </div>
+            <div class="table_container last-table">
+                <h3> Recent Inventory Updates <span style="font-weight:500; font-size:1rem; color:gray;">(Usage)</span></h3>
+                <?php include 'recent-inv-card.php'; ?>
+            </div>
+        </div>
+
 
         <div class="btncontents">
             <a href="items.php" class="active"><img src="../../assets/inventory.png" class="img-btn-link">Daily Inventory</a>

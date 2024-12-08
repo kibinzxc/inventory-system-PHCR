@@ -5,6 +5,7 @@
         <div class="header">
             <h1>Order Logs</h1>
             <div class="btn-wrapper">
+                <a href="order-count.php" class="btn"><img src="../../assets/external-link.svg" alt=""> Check Order Count </a>
                 <a href="orders.php" class="btn"><img src="../../assets/arrow-left.svg" alt=""> Back</a>
             </div>
         </div>

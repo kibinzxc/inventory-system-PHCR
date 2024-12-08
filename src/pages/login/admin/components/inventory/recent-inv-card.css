@@ -1,0 +1,102 @@
+.inv-orders-card {
+    padding: 16px;
+    height: 300px;
+    overflow-y: auto;
+
+}
+
+
+.inv-orders-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+}
+
+.inv-orders-row:hover {
+    transform: translateY(-5px);
+    /* Slightly lifts the card when hovered */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* Adds a subtle shadow */
+}
+
+
+.inv-image img {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.inv-details {
+    flex: 1;
+    margin: 0 16px;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.inv-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    /* Adds spacing between the name and size */
+}
+
+.inv-qty {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+    margin-top: 10px;
+}
+
+.inv-time {
+    font-size: 16px;
+    color: #777;
+    margin-top: 4px;
+    margin-top: 10px;
+}
+
+.inv-name .name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.inv-name .size {
+    font-size: 14px;
+    color: #555;
+}
+
+.inv-type {
+    font-size: 16px;
+    color: #555;
+    margin-top: 4px;
+}
+
+.inv-type2 {
+    font-size: 14px;
+    color: #555;
+    margin-top: 4px;
+}
+
+.inv-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.inv-count {
+    font-size: 16px;
+    font-weight: bold;
+    color: #555;
+}
+
+.inv-date {
+    font-size: 14px;
+    color: #777;
+}

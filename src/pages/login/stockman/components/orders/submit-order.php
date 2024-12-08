@@ -1,4 +1,7 @@
 <?php
+
+date_default_timezone_set('Asia/Manila');
+
 Error_reporting(1);
 // Get the raw POST data (JSON format)
 $data = json_decode(file_get_contents("php://input"), true);
@@ -36,17 +39,28 @@ foreach ($orders as $order) {
 
 // Generate invID
 $today = date('mdY');
-$query = "SELECT invID FROM invoice WHERE invID LIKE '$today%' ORDER BY invID DESC LIMIT 1";
-$result = $conn->query($query);
+$query_invoice = "SELECT invID FROM invoice WHERE invID LIKE '$today%' ORDER BY invID DESC LIMIT 1";
+$query_invoice_temp = "SELECT invID FROM invoice_temp WHERE invID LIKE '$today%' ORDER BY invID DESC LIMIT 1";
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $last_invID = $row['invID'];
-    $last_number = (int)substr($last_invID, -3);
-    $next_number = str_pad($last_number + 1, 3, '0', STR_PAD_LEFT);
-} else {
-    $next_number = '001';
+$result_invoice = $conn->query($query_invoice);
+$result_invoice_temp = $conn->query($query_invoice_temp);
+
+$last_number_invoice = 0;
+$last_number_invoice_temp = 0;
+
+if ($result_invoice->num_rows > 0) {
+    $row_invoice = $result_invoice->fetch_assoc();
+    $last_invID_invoice = $row_invoice['invID'];
+    $last_number_invoice = (int)substr($last_invID_invoice, -3);
 }
+
+if ($result_invoice_temp->num_rows > 0) {
+    $row_invoice_temp = $result_invoice_temp->fetch_assoc();
+    $last_invID_invoice_temp = $row_invoice_temp['invID'];
+    $last_number_invoice_temp = (int)substr($last_invID_invoice_temp, -3);
+}
+
+$next_number = str_pad(max($last_number_invoice, $last_number_invoice_temp) + 1, 3, '0', STR_PAD_LEFT);
 $invID = $today . $next_number;
 
 // Start a transaction
@@ -54,14 +68,26 @@ $conn->begin_transaction();
 
 try {
     // Insert invoice data
-    $stmt = $conn->prepare("INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) 
+    $stmt = $conn->prepare("INSERT INTO float_orders (orderID, orders, total_amount, amount_received, amount_change, order_type, mop, status, cashier) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $orderJson = json_encode($orders);
+    $order_type = 'walk-in';
+    $mop = 'cash';
+    $cashier = $user_name;
+    $status = 'preparing';
+    $stmt->bind_param("ssddsssss", $invID, $orderJson, $total_amount, $cash, $change, $order_type, $mop, $status, $cashier);
+    $stmt->execute();
+
+    // Insert invoice data
+    $stmtInvoice = $conn->prepare("INSERT INTO invoice_temp (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $orderJson = json_encode($orders);
     $order_type = 'walk-in';
     $mop = 'cash';
     $cashier = $user_name;
-    $stmt->bind_param("ssddssss", $invID, $orderJson, $total_amount, $cash, $change, $order_type, $mop, $cashier);
-    $stmt->execute();
+    $stmtInvoice->bind_param("ssddssss", $invID, $orderJson, $total_amount, $cash, $change, $order_type, $mop, $cashier);
+    $stmtInvoice->execute();
+
 
     // Initialize an array to track insufficient stocks
     $insufficientStocks = [];
@@ -73,11 +99,11 @@ try {
         $itemSize = $order['size'];
 
         // Insert product usage data into the usage_reports table
-        $insertUsageQuery = "INSERT INTO usage_reports (invID, name, size, price, quantity, day_counted) 
-                         VALUES (?, ?, ?, ?, ?, NOW())";
-        $stmtUsage = $conn->prepare($insertUsageQuery);
-        $stmtUsage->bind_param("sssdi", $invID, $itemName, $itemSize, $itemPrice, $orderQuantity);
-        $stmtUsage->execute();
+        // $insertUsageQuery = "INSERT INTO usage_reports (invID, name, size, price, quantity, day_counted) 
+        //                  VALUES (?, ?, ?, ?, ?, NOW())";
+        // $stmtUsage = $conn->prepare($insertUsageQuery);
+        // $stmtUsage->bind_param("sssdi", $invID, $itemName, $itemSize, $itemPrice, $orderQuantity);
+        // $stmtUsage->execute();
 
         // Get ingredients JSON for the item
         $queryIngredients = "SELECT ingredients FROM products WHERE name = ?";
@@ -123,15 +149,15 @@ try {
                         ];
                     } else {
                         // Update usage and ending inventory if stock is sufficient
-                        $updateUsage = "UPDATE daily_inventory SET usage_count = usage_count + ? WHERE name = ?";
-                        $stmtUsage = $conn->prepare($updateUsage);
-                        $stmtUsage->bind_param("ds", $ingredientQuantity, $ingredientName);
-                        $stmtUsage->execute();
+                        // $updateUsage = "UPDATE daily_inventory SET usage_count = usage_count + ? WHERE name = ?";
+                        // $stmtUsage = $conn->prepare($updateUsage);
+                        // $stmtUsage->bind_param("ds", $ingredientQuantity, $ingredientName);
+                        // $stmtUsage->execute();
 
-                        $updateEnding = "UPDATE daily_inventory SET ending = ending - ? WHERE name = ?";
-                        $stmtEnding = $conn->prepare($updateEnding);
-                        $stmtEnding->bind_param("ds", $ingredientQuantity, $ingredientName);
-                        $stmtEnding->execute();
+                        // $updateEnding = "UPDATE daily_inventory SET ending = ending - ? WHERE name = ?";
+                        // $stmtEnding = $conn->prepare($updateEnding);
+                        // $stmtEnding->bind_param("ds", $ingredientQuantity, $ingredientName);
+                        // $stmtEnding->execute();
                     }
                 }
             }

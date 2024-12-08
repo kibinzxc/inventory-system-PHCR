@@ -65,6 +65,19 @@ if ($result->num_rows === 0) {
         echo '<p><strong>Invoice #</strong> ' . $invID . '</p>';
         echo '</div>';
 
+
+        if ($mop == '0') {
+            $mop = 'Cash';
+        }
+        //get the image from the successful orders using the invID 
+        $query2 = "SELECT * FROM success_orders WHERE orderID = ?";
+        $stmt2 = $conn->prepare($query2);
+        $stmt2->bind_param('s', $invID);
+        $stmt2->execute();
+        $result2 = $stmt2->get_result();
+        $row2 = $result2->fetch_assoc();
+        $image = isset($row2['img']) ? '../../assets/pod/' . $row2['img'] : '../../assets/pod/';
+
         echo '<div class="invoice-info">';
         echo '<p><strong>Order Type:</strong> ' . strtoupper($order_type) . '</p>';
         echo '<p><strong>Method of Payment:</strong> ' . strtoupper($mop) . '</p>';
@@ -74,6 +87,9 @@ if ($result->num_rows === 0) {
 
         echo '<div class="invoice-action">';
         echo '<button class="btn btn-invoice" onclick="generateInvoicePDF(' . $invID . ')">View Invoice <img src="../../assets/chevron-right.svg"></button>';
+        if ($order_type == 'delivery') {
+            echo '<button class="btn btn-proof" onclick="openImageWindow(\'' . $image . '\')">Proof of Delivery</button>';
+        }
         echo '</div>';
         echo '</div>';
         echo '</div>';
@@ -102,5 +118,11 @@ $conn->close();
         if (newWindow) {
             newWindow.focus();
         }
+    }
+</script>
+
+<script>
+    function openImageWindow(imageUrl) {
+        window.open(imageUrl, "_blank", "width=400,height=400");
     }
 </script>

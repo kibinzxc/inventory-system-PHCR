@@ -93,6 +93,18 @@ include '../../connection/database.php';
         text-align: justify;
         margin-bottom: 30px;
     }
+
+    .address a {
+        text-decoration: none;
+        color: blue;
+    }
+</style>
+<?php
+include '../../connection/database.php';
+?>
+<link rel="stylesheet" href="archive.css" />
+<style>
+    /* Your CSS styles here */
 </style>
 
 <div id="main-content">
@@ -106,11 +118,6 @@ include '../../connection/database.php';
         </div>
         <br>
         <div class="btncontents">
-            <!-- <a href="https://www.flaticon.com/free-icons/food-delivery" title="food delivery icons">Food delivery icons created by HAJICON - Flaticon</a>
-            <a href="https://www.flaticon.com/free-icons/submit" title="submit icons">Submit icons created by Vectors Tank - Flaticon</a>
-            <a href="https://www.flaticon.com/free-icons/cooking-time" title="cooking time icons">Cooking time icons created by Freepik - Flaticon</a>
-            <a href="https://www.flaticon.com/free-icons/delivery" title="delivery icons">Delivery icons created by monkik - Flaticon</a>
-            <a href="https://www.flaticon.com/free-icons/email" title="email icons">Email icons created by Dewi Sari - Flaticon</a> -->
             <a href="manage-orders.php" class="active"><img src="../../assets/order.png" class="img-btn-link"> New Orders</a>
             <a href="now-preparing.php"><img src="../../assets/cooking-time.png" class="img-btn-link"> Now Preparing</a>
             <a href="pickup.php"><img src="../../assets/delivery-man.png" class="img-btn-link"> Ready for Pickup</a>
@@ -126,7 +133,7 @@ include '../../connection/database.php';
                 }
 
                 // Query to fetch data
-                $query = "SELECT orderID, orders, total_amount FROM float_orders where status = 'placed' ORDER BY transaction_date ASC";
+                $query = "SELECT * FROM float_orders where status = 'placed' ORDER BY transaction_date ASC";
                 $result = mysqli_query($conn, $query);
 
                 if (mysqli_num_rows($result) > 0) {
@@ -141,14 +148,15 @@ include '../../connection/database.php';
                             $orderDetails .= "<li>{$order['quantity']}x {$order['name']} ({$order['size']})</li>";
                         }
                         $orderDetails .= "</ul>";
-                        // Get the address using orderID from the orders table 
-                        // Get the address using orderID from the orders table 
-                        $query = "SELECT address FROM orders WHERE orderID = $orderID";
-                        $result = mysqli_query($conn, $query);
-                        $row = mysqli_fetch_assoc($result);
-                        $address = $row['address'];
+
+                        // Get the address using orderID from the orders table
+                        $addressQuery = "SELECT address, del_instruct FROM orders WHERE orderID = $orderID";
+                        $addressResult = mysqli_query($conn, $addressQuery);
+                        $addressRow = mysqli_fetch_assoc($addressResult);
+                        $address = $addressRow['address'];
                         $encodedAddress = urlencode($address); // URL encode the destination address
                         $encodedOrigin = urlencode("Pizza Hut, Caltex Service Station, 2130 Chino Roces Ave, Makati, Metro Manila"); // URL encode the fixed origin
+                        $del_instruct = $addressRow['del_instruct'];
 
                         // Card HTML
                         echo "
@@ -161,6 +169,7 @@ include '../../connection/database.php';
                                 $address
                             </a>
                         </div>
+                        <div class='mg-card-content address'>Del. Instruction: $del_instruct </div>
                         <div class='mg-card-total-price'>Total w/ Delivery: ₱$totalAmount</div>
                         <div class='mg-card-actions'>
                             <button class='mg-button mg-remove-button' onclick='updateOrderStatus($orderID, \"declined\")'>Decline</button>

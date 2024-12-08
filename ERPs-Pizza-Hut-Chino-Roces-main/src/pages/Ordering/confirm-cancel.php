@@ -71,6 +71,15 @@ if ($result41) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //delete from float orders using the orderID of the order 
+    $sql2 = "SELECT orderID FROM orders WHERE uid = $currentUserId";
+    $result2 = $db->query($sql2);
+    $row2 = $result2->fetch_assoc();
+    $orderID = $row2['orderID'];
+
+    $sql3 = "DELETE FROM float_orders WHERE orderID = $orderID";
+    $db->query($sql3);
+
     $sql = "DELETE FROM orders WHERE uid = $currentUserId";
     if ($db->query($sql) === TRUE) {
         $_SESSION['success'] = "Order has been cancelled successfully";

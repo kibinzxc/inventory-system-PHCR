@@ -467,7 +467,11 @@ button:not(.active) {
 }
 
 .container-fluid {
-  overflow: hidden;
+  height: 100vh !important;
+}
+
+.row-flex {
+  height: 100vh !important;
 }
 
 .addtobag {
@@ -765,7 +769,7 @@ button:not(.active) {
   }
 
   .scroll {
-    height: 60vh !important;
+    height: 50vh !important;
   }
 
   .sidebar .item-last {
@@ -775,6 +779,11 @@ button:not(.active) {
   .item-login {
     margin-top: 0 !important;
   }
+
+  .col-sm-2 {
+    height: 100vh;
+  }
+
 }
 
 @media (max-width: 1280px) {

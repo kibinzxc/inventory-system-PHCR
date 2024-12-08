@@ -135,10 +135,10 @@ if (isset($_GET['invID'])) {
 
         // Prepare the financial details in the desired format
         $financialDetails = [
-            $totalItems . ' Item(s) Total AMOUNT' => 'PHP '  . number_format($subtotalAmount, 2),
+            $totalItems . ' Item(s) Subtotal AMOUNT' => 'PHP '  . number_format($subtotalAmount, 2),
             'Delivery Fee' => 'PHP ' . number_format($deliveryFee, 2),
-            'Amount Tendered Cash' => 'PHP ' . number_format($invoice['amount_received'], 2),
             'Total Amount' => 'PHP ' . number_format($totalAmountAfterDelivery, 2), // Total amount after adding the delivery fee back
+            'Amount Tendered Cash' => 'PHP ' . number_format($invoice['amount_received'], 2),
             'CHANGE' => 'PHP ' . number_format($invoice['amount_change'], 2)
 
         ];
@@ -180,15 +180,30 @@ if (isset($_GET['invID'])) {
     $pdf->Line(10, $pdf->GetY(), 70, $pdf->GetY());
     $pdf->Ln(3);
 
-    $vatable = $invoice['total_amount'] / 1.12; // Vatable amount
-    $vat = $invoice['total_amount'] - $vatable; // VAT (12%)
+    if ($invoice['order_type'] == 'delivery') {
+        $vatable = $subtotalAmount / 1.12; // Vatable amount
+        $vat = $subtotalAmount - $vatable; // VAT (12%)
+        $delfee = 65;
+        $financialDetails = [
+            'Vatable Sales' => 'PHP ' . number_format($vatable, 2),
+            'VAT (12%)' => 'PHP ' . number_format($vat, 2),
+            'VAT Exempt Sales' => 'PHP ' . number_format(0, 2),
+            'Zero Rated Sales' => 'PHP ' . number_format(0, 2),
+            'Delivery Fee' => 'PHP ' . number_format($delfee, 2),
+        ];
+    } else {
 
-    $financialDetails = [
-        'Vatable Sales' => 'PHP ' . number_format($vatable, 2),
-        'VAT (12%)' => 'PHP ' . number_format($vat, 2),
-        'VAT Exempt Sales' => 'PHP ' . number_format(0, 2),
-        'Zero Rated Sales' => 'PHP ' . number_format(0, 2),
-    ];
+        $vatable = $invoice['total_amount'] / 1.12; // Vatable amount
+        $vat = $invoice['total_amount'] - $vatable; // VAT (12%)
+
+        $financialDetails = [
+            'Vatable Sales' => 'PHP ' . number_format($vatable, 2),
+            'VAT (12%)' => 'PHP ' . number_format($vat, 2),
+            'VAT Exempt Sales' => 'PHP ' . number_format(0, 2),
+            'Zero Rated Sales' => 'PHP ' . number_format(0, 2),
+        ];
+    }
+
 
     foreach ($financialDetails as $label => $value) {
         if ($label == 'Amount Tendered Cash' || $label == 'CHANGE') {

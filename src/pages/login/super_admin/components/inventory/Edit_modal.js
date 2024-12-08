@@ -62,7 +62,7 @@ function calculateEnding() {
     }
 
     // Update the ending field with the calculated value
-    document.getElementById('edit-ending').value = ending.toFixed(2);  // Fix to two decimal places
+    document.getElementById('edit-ending').value = ending.toFixed(3);  // Fix to two decimal places
 }
 
 
@@ -90,7 +90,7 @@ function calculateUsage() {
     }
 
     // Update the usage_count field with the calculated value
-    document.getElementById('edit-usage_count').value = usage_count.toFixed(2);  // No rounding applied
+    document.getElementById('edit-usage_count').value = usage_count.toFixed(3);  // No rounding applied
 }
 
 function validateForm() {

@@ -566,7 +566,7 @@ if ($result41) {
                 showError("Card has expired. Please use a valid card.");
                 return;
             }
-            showSuccess("Payment details are valid. Processing payment...");
+            showSuccess("Payment details are confirmed. Processing order...");
 
             setTimeout(function() {
                 document.getElementById("pay-form").submit();

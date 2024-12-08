@@ -131,7 +131,7 @@ include '../../connection/database.php';
                 }
 
                 // Query to fetch data
-                $query = "SELECT orderID, orders, total_amount FROM float_orders where status = 'placed' ORDER BY transaction_date ASC";
+                $query = "SELECT * FROM float_orders where status = 'placed' ORDER BY transaction_date ASC  ";
                 $result = mysqli_query($conn, $query);
 
                 if (mysqli_num_rows($result) > 0) {

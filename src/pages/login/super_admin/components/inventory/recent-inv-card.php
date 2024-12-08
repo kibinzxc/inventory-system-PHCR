@@ -29,7 +29,7 @@ if ($result->num_rows > 0) {
         $currentTimestamp = time();
         $timeDifference = $currentTimestamp - $orderTimestamp;
 
-        if ($timeDifference < 60) {
+        if ($timeDifference < 120) {
             $formattedTime = "Just now";
         } elseif ($timeDifference < 3600) {
             $minutes = floor($timeDifference / 60);

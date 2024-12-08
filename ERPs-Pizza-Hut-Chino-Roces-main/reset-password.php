@@ -15,10 +15,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmPassword = $_POST['confirm_password'];
 
     // Validate inputs
+    $errors = [];
     if (empty($newPassword) || empty($confirmPassword)) {
-        $_SESSION['errorMessage'] = "All fields are required.";
-    } else if ($newPassword !== $confirmPassword) {
-        $_SESSION['errorMessage'] = "Passwords do not match.";
+        $errors[] = "All fields are required.";
+    }
+    if ($newPassword !== $confirmPassword) {
+        $errors[] = "Passwords do not match.";
+    }
+    if (strlen($newPassword) < 8) {
+        $errors[] = "Password must be at least 8 characters long.";
+    }
+    if (!preg_match('/[A-Z]/', $newPassword)) {
+        $errors[] = "Password must include at least one uppercase letter.";
+    }
+    if (!preg_match('/[a-z]/', $newPassword)) {
+        $errors[] = "Password must include at least one lowercase letter.";
+    }
+    if (!preg_match('/[0-9]/', $newPassword)) {
+        $errors[] = "Password must include at least one number.";
+    }
+    if (!preg_match('/[\W]/', $newPassword)) {
+        $errors[] = "Password must include at least one special character.";
+    }
+    if (!empty($errors)) {
+        $_SESSION['errorMessage'] = implode('<br>', $errors);
     } else {
         // Check if the token is valid and not expired
         $sql = "SELECT * FROM users WHERE reset_token = ? AND reset_token_expiry > NOW()";

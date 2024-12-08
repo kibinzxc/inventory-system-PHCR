@@ -5,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $uid = $_POST['uid'];
 
     // Capitalize all characters in the name and make the email lowercase
-    $name = strtoupper($_POST['name']);
+    $name = ucwords(strtolower($_POST['name']));
     $email = strtolower($_POST['email']);
     $userType = trim($_POST['userType']); // Capture userType without converting to uppercase
 

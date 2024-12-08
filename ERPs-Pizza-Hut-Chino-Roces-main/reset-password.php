@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("ss", $hashedPassword, $token);
             $stmt->execute();
 
-            $_SESSION['successMessage'] = "Your password has been reset successfully.";
+            $_SESSION['update'] = "Your password has been reset successfully.";
 
             // Redirect to the login page
             header("Location: login.php");

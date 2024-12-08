@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Send reset email (you need to implement the sendResetEmail function)
             sendResetEmail($email, $token);
 
-            $_SESSION['successMessage'] = "A password reset link has been sent to your email.";
+            $_SESSION['update'] = "A password reset link has been sent to your email.";
             //after sending the email, redirect to the login page
             header("Location: login.php");
             exit();

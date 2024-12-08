@@ -475,8 +475,13 @@ $user = $userResult->fetch_assoc();
 
 
 // Fetch and display orders with 'ready for pickup' status
-$query = "SELECT orderID, name, address, items, totalPrice, payment, del_instruct, orderPlaced, status FROM orders WHERE status = 'delivery' AND cashier = $currentUsername ORDER BY orderPlaced DESC";
+$query = "SELECT o.orderID, o.name, o.address, o.items, o.totalPrice, o.payment, o.del_instruct, o.orderPlaced, o.status 
+          FROM orders o 
+          JOIN float_orders f ON o.orderID = f.orderID 
+          WHERE o.status = 'delivery' AND f.cashier = ? 
+          ORDER BY o.orderPlaced DESC";
 $stmt = $conn->prepare($query);
+$stmt->bind_param("s", $currentUsername);
 $stmt->execute();
 $result = $stmt->get_result();
 

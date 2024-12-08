@@ -62,7 +62,7 @@ $recordExists = $row['recordCount'] > 0;
             </div>
             <div class="table_container last-table">
                 <h3> Recent Inventory Updates <span style="font-weight:500; font-size:1rem; color:gray;">(Usage)</span></h3>
-                <?php include 'recent-inv-card.php'; ?>
+
             </div>
         </div>
 

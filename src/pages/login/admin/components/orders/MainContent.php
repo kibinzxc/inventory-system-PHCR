@@ -9,7 +9,6 @@ include 'noStock.php'; ?>
         <div class="header">
             <h1>Orders</h1>
             <div class="btn-wrapper">
-                <a href="manage-orders.php" class="btn"><img src="../../assets/external-link.svg" alt=""> Manage Orders</a>
                 <a href="order-logs.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Logs</a>
             </div>
         </div>

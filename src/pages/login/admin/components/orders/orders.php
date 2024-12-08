@@ -19,12 +19,12 @@ include 'auto-lowstock.php';
 </head>
 
 <body>
+    <?php
+    header("Location: manage-orders.php");
+    exit();
+    ?>
 
-    <?php include '../../components/Sidebar/Sidebar.php'; ?>
 
-
-
-    <?php include 'MainContent.php'; ?>
 
 
 </body>

@@ -20,6 +20,11 @@
                 <img class="error_img" src=" super_admin/assets/alert-circle.svg" alt="">
                 <p><?php echo htmlspecialchars($_GET['error']); ?></p>
             </div>
+            <?php if (isset($_GET['success'])): ?>
+                <div class="success_message">
+                    <p><?php echo htmlspecialchars($_GET['success']); ?></p>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
 
         <form action=" login_query.php" method="POST" class="LoginForm_Contents">

@@ -165,6 +165,22 @@
     animation: fadeIn 0.3s ease-in-out;
 }
 
+.success_message {
+    background-color: #e6ffed;
+    color: black;
+    border: 1px solid #28a745;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+
 .error_img {
     filter: invert(27%) sepia(100%) saturate(1000%) hue-rotate(-50deg) brightness(90%) contrast(90%);
 

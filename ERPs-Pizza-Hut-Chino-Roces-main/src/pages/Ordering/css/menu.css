@@ -754,6 +754,10 @@ button:not(.active) {
     height: 100vh !important;
   }
 
+  .row-flex {
+    height: 100vh !important;
+  }
+
   .col-sm-9 {
     width: 70%;
     /* Adjust to your desired width */

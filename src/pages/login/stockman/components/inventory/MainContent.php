@@ -42,7 +42,6 @@ $recordExists = $row['recordCount'] > 0;
         <!-- Action Buttons Section -->
         <br>
         <div class="btn-wrapper2">
-            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add New Item</a>
             <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" onclick="openAddReport()"><img src="../../assets/edit-3.svg" alt=""> Submit Report</a>
             <!-- Disable the button if record exists -->
             <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" <?php echo $recordExists ? 'aria-disabled="true"' : ''; ?> onclick="openSubmitModal()">

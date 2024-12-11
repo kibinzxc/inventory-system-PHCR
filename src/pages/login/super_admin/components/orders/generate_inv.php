@@ -31,7 +31,7 @@ if (isset($_GET['invID'])) {
         $title = 'Transaction Date';
         $formattedOrderPlacedDate = $formattedDate;
     } elseif ($invoice['order_type'] == 'delivery') {
-        $staff = 'Delivery Rider';
+        $staff = 'Cashier';
 
         //fetch the orderPlaced date from success_orders table 
         $query = "SELECT orderPlaced FROM success_orders WHERE orderID = ?";

@@ -1,6 +1,6 @@
 # Inventory-PHCR
 Inventory System for Pizza Hut Chino Roces with Data analytics and Decision Support System
-
+>[!NOTE]
 > This project is primarily developed using PHP Vanilla
 
 ## Tech Stacks

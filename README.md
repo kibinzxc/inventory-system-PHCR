@@ -1,5 +1,13 @@
 # Inventory-PHCR
-Inventory System for Pizza Hut Chino Roces with Data analytics and Decision Support System
+Inventory System with Data Analytics and Decision Support System for Pizza Hut Chino Roces
+
+## Main Features
+- Data Analytics
+- Decision Support System
+- Inventory Management
+- POS
+- Online Ordering
+  
 >[!NOTE]
 > This project is primarily developed using PHP Vanilla
 
@@ -15,6 +23,9 @@ Inventory System for Pizza Hut Chino Roces with Data analytics and Decision Supp
   
 - ### Database
   - MySQL
+ 
+- ### API
+  - LocationIQ
 
 - ### Version Control
   - Git
@@ -22,6 +33,7 @@ Inventory System for Pizza Hut Chino Roces with Data analytics and Decision Supp
 
 - ### Project Management
   - Github Projects
+ 
  
 
 ## Roles

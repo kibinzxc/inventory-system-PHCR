@@ -27,13 +27,16 @@ Inventory System for Pizza Hut Chino Roces with Data analytics and Decision Supp
 ## Roles
 - Kevin Daniel C. Almirante
   - Project Manager
+  - UI/UX Designer
   - Full Stack Dev
 
 - Mark Anthony B. Basmayor
     - Front-end Dev
+    - QA Tester
     - Documentation
       
 - Maricar M. Glorioso
+  - UI/UX Designer
   - QA Tester
   - Documentation
 

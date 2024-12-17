@@ -95,7 +95,7 @@ if (isset($_SESSION['user_id'])) {
             <div class="intro-header">
                 <p class="headings">
                     <?php echo $greeting . '<span style="font-weight:bold;"> ' . $userName . '</span>'; ?>
-                    <img src="../../assets/wave.png" alt="" style="width: 30px;">
+                    <img src="../../assets/wave.png" alt="" style="width: 30px;" class="wave">
                 </p>
             </div>
             <!-- <div class="btn-wrapper">

@@ -899,7 +899,8 @@ h3 {
     }
 
     .container {
-        margin-right: 0;
+        margin: 0 10px 50px 10px;
+
     }
 
     .mobile-note {
@@ -927,8 +928,19 @@ h3 {
     }
 
     #main-content {
-        margin-left: 50px;
-        width: auto;
-        margin-right: 10px;
+        margin-left: 0;
+
+    }
+
+    .headings {
+        font-size: 25px;
+    }
+
+    .card:first-child .percentage-box {
+        display: none;
+    }
+
+    .sales-title {
+        text-align: center;
     }
 }

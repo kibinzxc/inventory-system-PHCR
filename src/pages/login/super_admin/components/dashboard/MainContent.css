@@ -964,4 +964,33 @@ h3 {
     .card-footer {
         text-align: center;
     }
+
+    h3 {
+        text-align: center;
+    }
+
+    /* recent orders card  */
+    .custom-card-body {
+        width: 100%;
+    }
+
+    .custom-invoice-id p {
+        font-size: 14px;
+    }
+
+    .custom-invoice-info p {
+        font-size: 14px;
+    }
+
+    .custom-invoice-info strong {
+        display: none;
+    }
+
+    .p1,
+    .p2 {
+        display: none;
+    }
+
+
+
 }

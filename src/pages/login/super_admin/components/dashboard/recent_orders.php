@@ -49,9 +49,9 @@ if ($result->num_rows === 0) {
         echo '</div>';
 
         echo '<div class="custom-invoice-info">';  // Updated class name
-        echo '<p><strong>Order Type:</strong> ' . strtoupper($order_type) . '</p>';
-        echo '<p><strong>Method of Payment:</strong> ' . strtoupper($mop) . '</p>';
-        echo '<p><strong>Transaction Date:</strong> ' . ($formattedTransactionDate) . '</p>';
+        echo '<p class = "p1"><strong>Order Type:</strong> ' . strtoupper($order_type) . '</p>';
+        echo '<p class = "p2" ><strong>Method of Payment:</strong> ' . strtoupper($mop) . '</p>';
+        echo '<p class = "p3" ><strong>Transaction Date:</strong> ' . ($formattedTransactionDate) . '</p>';
 
         echo '</div>';
 

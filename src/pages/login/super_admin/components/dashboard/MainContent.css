@@ -1015,5 +1015,13 @@ h3 {
         font-size: 14px;
     }
 
+    .same-column {
+        gap: 0;
+    }
+
+    .same-column-container {
+        gap: 0;
+    }
+
 
 }

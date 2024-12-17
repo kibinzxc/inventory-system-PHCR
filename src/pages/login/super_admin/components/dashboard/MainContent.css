@@ -899,7 +899,7 @@ h3 {
     }
 
     .container {
-        margin: 0 10px 50px 10px;
+        margin: 0 20px 50px 20px;
 
     }
 
@@ -933,7 +933,7 @@ h3 {
     }
 
     .headings {
-        font-size: 18px;
+        font-size: 17px;
     }
 
     .intro-header {
@@ -950,5 +950,18 @@ h3 {
 
     .wave {
         width: 20px !important;
+    }
+
+    .inventory-cards {
+        gap: 0;
+
+    }
+
+    .card {
+        margin: 5px 0;
+    }
+
+    .card-footer {
+        text-align: center;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 include '../../connection/database.php';
 
-//show all error reporting
+// Show all error reporting
 error_reporting(1);
 
 // Get the start and end of the current week
@@ -84,6 +84,17 @@ $conn->close();
     .sales-title {
         margin-top: 5px;
     }
+
+    @media (max-width: 768px) {
+        .sales-title {
+            font-size: 1.2em;
+        }
+
+        #chart-container {
+            height: 200px;
+        }
+
+    }
 </style>
 
 <h3 class="sales-title">Weekly Sales Forecasting</h3>
@@ -106,15 +117,15 @@ $conn->close();
     const formatSalesData = (salesData) => {
         return salesData.map(sale => {
             const numericSale = parseFloat(sale);
-            if (isNaN(numericSale)) return 0; // Default to 0 if NaN
-            return numericSale.toFixed(2); // Return formatted value to two decimal places
+            if (isNaN(numericSale)) return 0;
+            return numericSale.toFixed(2);
         });
     };
 
     // Function to format numbers with commas for thousands
     const formatNumberWithCommas = (number) => {
         const parts = number.toString().split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Add commas to the integer part
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return parts.join(".");
     };
 
@@ -128,12 +139,11 @@ $conn->close();
     // Chart.js configuration
     const ctx = document.getElementById('salesChart').getContext('2d');
 
-    // Check if canvas context is valid
     if (ctx) {
         const salesChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: days, // Display short day names
+                labels: days,
                 datasets: [{
                         label: 'Current Week',
                         data: formatSalesData(salesCurrent),
@@ -155,8 +165,8 @@ $conn->close();
                             const date = dates[context.dataIndex];
                             return (sale === 0 || isFutureDay(date)) ? 'transparent' : (dates[context.dataIndex] === currentDate ? '#006363' : '#009797');
                         },
-                        spanGaps: true, // Prevent connecting lines across null values
-                        tension: 0.4 // Smooth curve
+                        spanGaps: true,
+                        tension: 0.4
                     },
                     {
                         label: 'Previous Week',
@@ -164,10 +174,10 @@ $conn->close();
                         borderColor: '#DBAB03',
                         backgroundColor: 'rgba(219, 171, 3, 0.2)',
                         borderWidth: 2,
-                        pointRadius: 4, // Always show a point for previous week, even if sales is 0
-                        pointBackgroundColor: '#DBAB03', // Previous week circle color
-                        pointBorderColor: '#DBAB03', // Previous week border color
-                        tension: 0.4 // Smooth curve
+                        pointRadius: 4,
+                        pointBackgroundColor: '#DBAB03',
+                        pointBorderColor: '#DBAB03',
+                        tension: 0.4
                     }
                 ]
             },
@@ -175,23 +185,17 @@ $conn->close();
                 responsive: true,
                 maintainAspectRatio: false,
                 animation: {
-                    duration: 2000 // Slower animation
+                    duration: 2000
                 },
                 plugins: {
                     tooltip: {
-                        enabled: true, // Make sure tooltips are enabled
+                        enabled: true,
                         callbacks: {
                             label: function(tooltipItem) {
-                                let value = tooltipItem.raw; // Get the sales value from the hovered point
-
-                                // Ensure the value is a valid number before calling toFixed
+                                let value = tooltipItem.raw;
                                 value = parseFloat(value);
-
-                                if (isNaN(value)) {
-                                    value = 0; // Fallback to 0 if value is not a number
-                                }
-
-                                return '₱' + formatNumberWithCommas(value.toFixed(2)); // Add peso sign and formatted number
+                                if (isNaN(value)) value = 0;
+                                return '₱' + formatNumberWithCommas(value.toFixed(2));
                             }
                         }
                     },
@@ -205,6 +209,11 @@ $conn->close();
                         title: {
                             display: true,
                             text: 'Days of the Week'
+                        },
+                        ticks: {
+                            font: {
+                                size: window.innerWidth <= 768 ? 12 : 12
+                            }
                         }
                     },
                     y: {
@@ -215,9 +224,14 @@ $conn->close();
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                // Add peso sign and format the Y axis labels with commas for thousands
-                                return '₱' + formatNumberWithCommas(value.toFixed(2));
+                                if (window.innerWidth <= 768) {
+                                    return '₱' + (value >= 1000 ? (value / 1000) + 'k' : value.toFixed(2));
+                                } else {
+                                    return '₱' + formatNumberWithCommas(value.toFixed(2));
+                                }
                             }
+
+
                         }
                     }
                 }

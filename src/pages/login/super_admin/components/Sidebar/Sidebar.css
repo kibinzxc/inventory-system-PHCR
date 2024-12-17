@@ -237,7 +237,7 @@ body {
 }
 
 .bottom-nav a.active {
-    color: #007bff;
+    background-color: #495057;
 }
 
 /* Media Query: Show Bottom Nav on Small Screens */
@@ -250,5 +250,9 @@ body {
     .bottom-nav {
         display: flex !important;
         /* Show bottom navigation */
+    }
+
+    #bottom-nav-orders {
+        display: none;
     }
 }

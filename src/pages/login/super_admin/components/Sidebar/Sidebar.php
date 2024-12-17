@@ -41,22 +41,24 @@ $currentPage = basename($_SERVER['PHP_SELF']);
 
 <!-- Bottom Navigation for Mobile View -->
 <div class="bottom-nav">
-    <a href="../dashboard/Dashboard.php" class="<?= ($currentPage == 'Dashboard.php') ? 'active' : '' ?>">
-        <img src="../../assets/home.svg" alt="Dashboard">
-    </a>
-    <a href="../reports/reports.php" class="<?= ($currentPage == 'reports.php') ? 'active' : '' ?>">
+
+    <a id="bottom-nav-reports" href="../reports/reports.php" class="<?= ($currentPage == 'reports.php') ? 'active' : '' ?>">
         <img src="../../assets/bar-chart-2.svg" alt="Reports">
     </a>
-    <a href="../inventory/items.php" class="<?= ($currentPage == 'items.php') ? 'active' : '' ?>">
+    <a id="bottom-nav-inventory" href="../inventory/items.php" class="<?= ($currentPage == 'items.php') ? 'active' : '' ?>">
         <img src="../../assets/package.svg" alt="Inventory">
     </a>
-    <a href="../orders/orders.php" class="<?= ($currentPage == 'orders.php') ? 'active' : '' ?>">
+
+    <a id="bottom-nav-dashboard" href="../dashboard/Dashboard.php" class="<?= ($currentPage == 'Dashboard.php') ? 'active' : '' ?>">
+        <img src="../../assets/home.svg" alt="Dashboard">
+    </a>
+    <a id="bottom-nav-orders" href="../orders/orders.php" class="<?= ($currentPage == 'orders.php') ? 'active' : '' ?>">
         <img src="../../assets/file-plus.svg" alt="Orders">
     </a>
-    <a href="../accounts/accounts.php" class="<?= ($currentPage == 'accounts.php') ? 'active' : '' ?>">
+    <a id="bottom-nav-accounts" href="../accounts/accounts.php" class="<?= ($currentPage == 'accounts.php') ? 'active' : '' ?>">
         <img src="../../assets/user.svg" alt="Accounts">
     </a>
-    <a href="../../authentication/logout.php">
+    <a id="bottom-nav-logout" href="../../authentication/logout.php">
         <img src="../../assets/log-out.svg" class="logout-icon" alt="">
     </a>
 </div>

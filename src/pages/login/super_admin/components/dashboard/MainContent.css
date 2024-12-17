@@ -884,8 +884,8 @@ h3 {
     }
 
     .header {
-        flex-direction: column;
-        align-items: flex-start;
+        text-align: center;
+        justify-content: center;
     }
 
     h1 {
@@ -936,11 +936,19 @@ h3 {
         font-size: 18px;
     }
 
+    .intro-header {
+        align-items: center;
+    }
+
     .card:first-child .percentage-box {
         display: none;
     }
 
     .sales-title {
         text-align: center;
+    }
+
+    .wave {
+        width: 20px !important;
     }
 }

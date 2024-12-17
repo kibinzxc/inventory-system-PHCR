@@ -7,7 +7,6 @@ table {
     overflow: hidden;
     border: 1px solid #ddd;
     margin-bottom: 15px;
-    min-width: 600px;
     color: #343434;
 }
 
@@ -153,12 +152,28 @@ a.btn2.disabled:hover {
 @media (max-width: 768px) {
     table {
         width: 100%;
-        margin: 0;
+        min-width: none;
+        font-size: 12px;
     }
 
+    .h3-header {
+        margin-top: 20px;
+    }
+
+
+
+
+
     /* Hide Actions column */
-    table th:last-child,
-    table td:last-child {
+    table th:nth-child(2),
+    table td:nth-child(2),
+    table th:nth-child(4),
+    table td:nth-child(4),
+    table th:nth-child(5),
+    table td:nth-child(5) {
         display: none;
     }
+
+
+
 }

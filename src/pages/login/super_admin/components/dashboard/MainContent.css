@@ -876,9 +876,7 @@ h3 {
 
     .table_container {
         width: 100%;
-        overflow-x: auto;
         padding: 5px 10px;
-        -webkit-overflow-scrolling: touch;
         max-width: 100%;
 
     }
@@ -991,6 +989,31 @@ h3 {
         display: none;
     }
 
+    /* current week top products card  */
+    .usage-product-name-size {
+        font-size: 14px;
+    }
+
+    .usage-product-orders {
+        font-size: 14px;
+    }
+
+    .sales-title {
+        margin-top: 20px;
+    }
+
+    /* cards */
+    h5 {
+        font-size: 17px;
+    }
+
+    .sales-amount {
+        font-size: 1.5rem;
+    }
+
+    .card-footer {
+        font-size: 14px;
+    }
 
 
 }

@@ -1023,5 +1023,16 @@ h3 {
         gap: 0;
     }
 
+    /* Hide scrollbar for all elements */
+    * {
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    *::-webkit-scrollbar {
+        display: none;
+        /* Chrome, Safari, Opera */
+    }
+
 
 }

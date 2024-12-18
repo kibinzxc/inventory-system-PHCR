@@ -270,6 +270,25 @@ if (isset($_POST['checkout'])) {
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/menu.js"></script>
     <script src="js/search-index.js"></script>
+    <!-- HTML Meta Tags -->
+    <meta name="description" content="Online Ordering of Pizza Hut Chino Roces">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://order.phcr.online/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Menu | Pizza Hut Chino Roces">
+    <meta property="og:description" content="Online Ordering of Pizza Hut Chino Roces">
+    <meta property="og:image" content="https://opengraph.b-cdn.net/production/images/adcdaf0c-1cf8-405c-bfac-f7de9ccc4d7f.jpg?token=T2izEaWkIW2guq-HXEFYiAkJ4iSEuxcmfan0_4vF4n4&height=1080&width=1080&expires=33270533643">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="order.phcr.online">
+    <meta property="twitter:url" content="https://order.phcr.online/">
+    <meta name="twitter:title" content="Menu | Pizza Hut Chino Roces">
+    <meta name="twitter:description" content="Online Ordering of Pizza Hut Chino Roces">
+    <meta name="twitter:image" content="https://opengraph.b-cdn.net/production/images/adcdaf0c-1cf8-405c-bfac-f7de9ccc4d7f.jpg?token=T2izEaWkIW2guq-HXEFYiAkJ4iSEuxcmfan0_4vF4n4&height=1080&width=1080&expires=33270533643">
+
+    <!-- Meta Tags Generated via https://www.opengraph.xyz -->
 </head>
 
 <body>

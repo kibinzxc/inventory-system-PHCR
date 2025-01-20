@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
-$dbUsername = 'u560143421_kibinzxc';
+$dbUsername = 'u560143421_keybean';
 $dbPassword =  'Kevin0405!';
-$dbName = 'u560143421_phcr_db';
+$dbName = 'u560143421_phrc_db';
 
 // $host = 'localhost';
 // $dbUsername = 'root';

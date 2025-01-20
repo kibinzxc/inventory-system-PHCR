@@ -5,91 +5,91 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
 ?>
 <link rel="stylesheet" href="archive.css" />
 <style>
-    .content-wrapper {
-        margin-top: 20px;
-    }
+.content-wrapper {
+    margin-top: 20px;
+}
 
-    .mg-card-container {
-        display: flex;
-        gap: 30px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
+.mg-card-container {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-    .mg-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 16px;
-        width: 300px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        background-color: #fff;
-    }
+.mg-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #fff;
+}
 
-    .mg-card-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 8px;
-        color: #343434;
-    }
+.mg-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #343434;
+}
 
-    .mg-card-content {
-        font-size: 1.1rem;
-        color: #343434;
-        margin-bottom: 12px;
-        flex: 1;
+.mg-card-content {
+    font-size: 1.1rem;
+    color: #343434;
+    margin-bottom: 12px;
+    flex: 1;
 
-    }
+}
 
-    .mg-card-total-price {
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #343434;
-        margin-bottom: 15px;
-        text-align: left;
-    }
+.mg-card-total-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #343434;
+    margin-bottom: 15px;
+    text-align: left;
+}
 
-    .mg-card-actions {
-        display: flex;
-        justify-content: space-between;
-    }
+.mg-card-actions {
+    display: flex;
+    justify-content: space-between;
+}
 
-    .mg-button {
-        padding: 8px 12px;
-        font-size: 1rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
+.mg-button {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 
-    .mg-remove-button {
-        background-color: #d3d3d3;
-        color: #555;
-        border: 1px solid #ccc;
-    }
+.mg-remove-button {
+    background-color: #d3d3d3;
+    color: #555;
+    border: 1px solid #ccc;
+}
 
-    .mg-accept-button {
-        background-color: #006D6D;
-        color: #fff;
-        font-size: 1.2rem;
-    }
+.mg-accept-button {
+    background-color: #006D6D;
+    color: #fff;
+    font-size: 1.2rem;
+}
 
-    .mg-button:hover {
-        opacity: 0.9;
-    }
+.mg-button:hover {
+    opacity: 0.9;
+}
 
-    /* Styling for the unordered list */
-    .mg-card-content ul {
-        padding-left: 20px;
-        list-style-type: disc;
-    }
+/* Styling for the unordered list */
+.mg-card-content ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
 
-    .mg-card-content li {
-        margin-bottom: 10px;
-    }
+.mg-card-content li {
+    margin-bottom: 10px;
+}
 </style>
 
 <div id="main-content">
@@ -109,7 +109,8 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
             <a href="https://www.flaticon.com/free-icons/delivery" title="delivery icons">Delivery icons created by monkik - Flaticon</a>
             <a href="https://www.flaticon.com/free-icons/email" title="email icons">Email icons created by Dewi Sari - Flaticon</a> -->
             <a href="manage-orders.php"><img src="../../assets/order.png" class="img-btn-link"> New Orders</a>
-            <a href="now-preparing.php" class="active"><img src="../../assets/cooking-time.png" class="img-btn-link"> Now Preparing</a>
+            <a href="now-preparing.php" class="active"><img src="../../assets/cooking-time.png" class="img-btn-link">
+                Now Preparing</a>
             <a href="pickup.php"><img src="../../assets/delivery-man.png" class="img-btn-link"> Ready for Pickup</a>
             <a href="tbd.php"><img src="../../assets/delivery.png" class="img-btn-link"> To be Delivered</a>
         </div>
@@ -145,8 +146,9 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
                             <div class='mg-card-content'>$orderDetails</div>
                             <div class='mg-card-total-price'>Transaction: $orderType</div>
                             <div class='mg-card-actions'>
-                                <button class='mg-button mg-remove-button' onclick='updateOrderStatus($orderID, \"cancelled\")'>Cancel</button>
-                                <button class='mg-button mg-accept-button' onclick='updateOrderStatus($orderID, \"ready for pickup\")'>Done</button>
+                                <button class='mg-button mg-remove-button' onclick='updateOrderStatus(\"$orderID\", \"cancelled\")'>Cancel</button>
+                                <button class='mg-button mg-accept-button' onclick='updateOrderStatus(\"$orderID\", \"ready for pickup\")'>Done</button>
+
                             </div>
                         </div>";
                     }
@@ -163,27 +165,31 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
 <?php include 'SuccessErrorModal.php'; ?>
 <script src="SuccessErrorModal.js"></script>
 <script>
-    // JavaScript function to handle button clicks
-    function updateOrderStatus(orderID, status) {
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'update-preparing.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function() {
-            if (xhr.status == 200) {
-                var response = xhr.responseText;
-                if (response.includes("success")) {
-                    // Redirect to manage-orders.php on success
-                    window.location.href = 'now-preparing.php?action=success&message=Order status updated';
-                } else {
-                    // Redirect to manage-orders.php on failure
-                    alert("Error: " + response);
-                    window.location.href = 'now-preparing.php?action=error&reason=' + encodeURIComponent(response);
-                }
-            } else {
-                window.location.href = 'now-preparing.php?action=error&reason=server_error';
+// JavaScript function to handle button clicks
+function updateOrderStatus(orderID, status) {
+    console.log("orderID:", orderID, "status:", status); // Check if orderID is correct
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'update-preparing.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            var response = xhr.responseText.trim();
+            if (!response) {
+                alert("Empty response from server.");
+                window.location.href = 'now-preparing.php?action=error&reason=empty_response';
+                return;
             }
-        };
-        xhr.send('orderID=' + orderID + '&status=' + status);
-    }
+            if (response.includes("success")) {
+                window.location.href = 'now-preparing.php?action=success&message=Order status updated';
+            } else {
+                alert("Error: " + response);
+                window.location.href = 'now-preparing.php?action=error&reason=' + encodeURIComponent(response);
+            }
+        } else {
+            window.location.href = 'now-preparing.php?action=error&reason=server_error';
+        }
+
+    };
+    xhr.send('orderID=' + orderID + '&status=' + status);
+}
 </script>

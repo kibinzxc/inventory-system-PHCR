@@ -3,12 +3,12 @@ session_start();
 include '../../connection/database.php';
 error_reporting(E_ALL);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 if (isset($_POST['orderID']) && isset($_POST['status'])) {
     $orderID = $_POST['orderID'];
     $status = $_POST['status'];
-
-
     // Fetch order details, including order type and orders
     $query = "SELECT order_type, orders FROM float_orders WHERE orderID = ?";
     $stmt = $conn->prepare($query);

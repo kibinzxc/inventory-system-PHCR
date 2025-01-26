@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mail->Subject = 'Password Reset Request';
 
         // Constructing the message with a clickable reset link
-        $resetLink = "https://www.pizzahut-chinoroces.com/src/pages/login/reset-password.php?token=" . $token;
+        $resetLink = "https://phcr.online/src/pages/login/reset-password.php?token=" . $token;
         $message = '<p>Dear User,</p>';
         $message .= '<p>Click the following link to reset your password:</p>';
         $message .= '<p><a href="' . $resetLink . '" target="_blank">Reset your password</a></p>';

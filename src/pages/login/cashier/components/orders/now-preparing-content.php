@@ -109,7 +109,8 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
             <a href="https://www.flaticon.com/free-icons/delivery" title="delivery icons">Delivery icons created by monkik - Flaticon</a>
             <a href="https://www.flaticon.com/free-icons/email" title="email icons">Email icons created by Dewi Sari - Flaticon</a> -->
             <a href="manage-orders.php"><img src="../../assets/order.png" class="img-btn-link"> New Orders</a>
-            <a href="now-preparing.php" class="active"><img src="../../assets/cooking-time.png" class="img-btn-link"> Now Preparing</a>
+            <a href="now-preparing.php" class="active"><img src="../../assets/cooking-time.png" class="img-btn-link">
+                Now Preparing</a>
             <a href="pickup.php"><img src="../../assets/delivery-man.png" class="img-btn-link"> Ready for Pickup</a>
             <a href="tbd.php"><img src="../../assets/delivery.png" class="img-btn-link"> To be Delivered</a>
         </div>
@@ -145,8 +146,9 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
                             <div class='mg-card-content'>$orderDetails</div>
                             <div class='mg-card-total-price'>Transaction: $orderType</div>
                             <div class='mg-card-actions'>
-                                <button class='mg-button mg-remove-button' onclick='updateOrderStatus($orderID, \"cancelled\")'>Cancel</button>
-                                <button class='mg-button mg-accept-button' onclick='updateOrderStatus($orderID, \"ready for pickup\")'>Done</button>
+                                <button class='mg-button mg-remove-button' onclick='updateOrderStatus(\"$orderID\", \"cancelled\")'>Cancel</button>
+                                <button class='mg-button mg-accept-button' onclick='updateOrderStatus(\"$orderID\", \"ready for pickup\")'>Done</button>
+
                             </div>
                         </div>";
                     }
@@ -165,24 +167,28 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);  // Enable MySQLi err
 <script>
     // JavaScript function to handle button clicks
     function updateOrderStatus(orderID, status) {
-
+        console.log("orderID:", orderID, "status:", status); // Check if orderID is correct
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'update-preparing.php', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
             if (xhr.status == 200) {
-                var response = xhr.responseText;
+                var response = xhr.responseText.trim();
+                if (!response) {
+                    alert("Empty response from server.");
+                    window.location.href = 'now-preparing.php?action=error&reason=empty_response';
+                    return;
+                }
                 if (response.includes("success")) {
-                    // Redirect to manage-orders.php on success
                     window.location.href = 'now-preparing.php?action=success&message=Order status updated';
                 } else {
-                    // Redirect to manage-orders.php on failure
                     alert("Error: " + response);
                     window.location.href = 'now-preparing.php?action=error&reason=' + encodeURIComponent(response);
                 }
             } else {
                 window.location.href = 'now-preparing.php?action=error&reason=server_error';
             }
+
         };
         xhr.send('orderID=' + orderID + '&status=' + status);
     }

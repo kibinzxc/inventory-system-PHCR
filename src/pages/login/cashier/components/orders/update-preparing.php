@@ -3,12 +3,12 @@ session_start();
 include '../../connection/database.php';
 error_reporting(E_ALL);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 
 if (isset($_POST['orderID']) && isset($_POST['status'])) {
     $orderID = $_POST['orderID'];
     $status = $_POST['status'];
-
-
     // Fetch order details, including order type and orders
     $query = "SELECT order_type, orders FROM float_orders WHERE orderID = ?";
     $stmt = $conn->prepare($query);
@@ -130,7 +130,7 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
                                 //get the data from invoice_temp and insert into invoice
                                 $query = "SELECT * FROM invoice_temp WHERE invID = ?";
                                 $stmt = $conn->prepare($query);
-                                $stmt->bind_param('i', $orderID);
+                                $stmt->bind_param('s', $orderID);
                                 $stmt->execute();
                                 $result = $stmt->get_result();
                                 $row = $result->fetch_assoc();
@@ -148,7 +148,7 @@ if (isset($_POST['orderID']) && isset($_POST['status'])) {
 
                                     $query = "INSERT INTO invoice (invID, orders, total_amount, amount_received, amount_change, order_type, mop, cashier) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                                     $stmt = $conn->prepare($query);
-                                    $stmt->bind_param('isdddsss', $invID, $orders, $total_amount, $amount_receive, $amount_change, $order_type, $mop, $cashier);
+                                    $stmt->bind_param('ssdddsss', $invID, $orders, $total_amount, $amount_receive, $amount_change, $order_type, $mop, $cashier);
                                     if ($stmt->execute()) {
                                         //delete from invoice_temp
                                         $removeOrder = "DELETE FROM invoice_temp WHERE invID = ?";

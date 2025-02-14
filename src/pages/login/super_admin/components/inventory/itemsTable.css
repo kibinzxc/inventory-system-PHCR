@@ -148,8 +148,8 @@ a.btn2.disabled:hover {
     }
 
     /* Hide Actions column */
-    table th:nth-child(2),
-    table td:nth-child(2),
+    table th:nth-child(3),
+    table td:nth-child(3),
     table th:last-child,
     table td:last-child {
         display: none;

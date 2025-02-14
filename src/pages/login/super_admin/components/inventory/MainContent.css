@@ -466,6 +466,10 @@ a.btn2.disabled:hover {
 
     }
 
+    .main_table {
+        margin-top: 0;
+    }
+
     .first-table {
         margin-top: 0;
     }

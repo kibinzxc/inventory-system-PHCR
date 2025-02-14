@@ -88,7 +88,7 @@ $recordExists = $row['recordCount'] > 0;
 
         <br>
         <!-- Table Container Section -->
-        <div class="table_container">
+        <div class="table_container main_table">
             <!-- Utility Buttons and Sorting Options -->
             <div class="btns_container">
                 <a href="export-pdf.php" class="icon_btn"><img src="../../assets/save.svg" alt="Save"></a>

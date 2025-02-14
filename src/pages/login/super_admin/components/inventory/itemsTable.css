@@ -139,10 +139,17 @@ a.btn2.disabled:hover {
 @media (max-width: 768px) {
     table {
         width: 100%;
-        margin: 0;
+        min-width: none;
+        font-size: 12px;
+    }
+
+    .h3-header {
+        margin-top: 20px;
     }
 
     /* Hide Actions column */
+    table th:nth-child(2),
+    table td:nth-child(2),
     table th:last-child,
     table td:last-child {
         display: none;

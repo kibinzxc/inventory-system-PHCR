@@ -423,10 +423,18 @@ a.btn2.disabled:hover {
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     #main-content {
-        margin-left: 50px;
-        padding: 16px;
+        margin: 0;
 
     }
+
+    .header h1 {
+        margin: 0;
+    }
+
+    .container {
+        margin: 0 20px 50px 20px !important;
+    }
+
 
     .btns_container {
         display: none;
@@ -446,12 +454,16 @@ a.btn2.disabled:hover {
         font-size: 1.2rem;
     }
 
+
     .table_container {
         width: 100%;
-        overflow-x: auto;
         padding: 5px 10px;
-        -webkit-overflow-scrolling: touch;
         max-width: 100%;
+
+    }
+
+    .first-table {
+        margin-top: 0;
     }
 
     .header {
@@ -463,15 +475,16 @@ a.btn2.disabled:hover {
         align-self: center;
     }
 
+    .hidden {
+        display: none !important;
+    }
+
     .btn-container {
         margin-left: 0;
         margin: 0 0 10px 0;
         align-self: center;
     }
 
-    .container {
-        margin-right: 0;
-    }
 
     .mobile-note {
         display: block;

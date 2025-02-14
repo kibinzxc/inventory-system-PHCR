@@ -33,19 +33,25 @@ $recordExists = $row['recordCount'] > 0;
         <div class="header">
             <h1>Daily Inventory </h1>
             <div class="btn-wrapper">
-                <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Inventory Overview</a>
-                <a href="product-preview.php" class="btn"><img src="../../assets/instagram.svg" alt=""> Product Details</a>
-                <a href="archive.php" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg" alt=""> Archive</a>
+                <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg"
+                        alt=""> Inventory Overview</a>
+                <a href="product-preview.php" class="btn"><img src="../../assets/instagram.svg" alt=""> Product
+                    Details</a>
+                <a href="archive.php" class="btn" onclick="openArchiveModal()"><img src="../../assets/file-text.svg"
+                        alt=""> Archive</a>
             </div>
         </div>
 
         <!-- Action Buttons Section -->
         <br>
         <div class="btn-wrapper2">
-            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" onclick="openAddModal()"><img src="../../assets/plus-circle.svg" alt=""> Add New Item</a>
-            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" onclick="openAddReport()"><img src="../../assets/edit-3.svg" alt=""> Submit Report</a>
+            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" onclick="openAddModal()"><img
+                    src="../../assets/plus-circle.svg" alt=""> Add New Item</a>
+            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" onclick="openAddReport()"><img
+                    src="../../assets/edit-3.svg" alt=""> Submit Report</a>
             <!-- Disable the button if record exists -->
-            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>" <?php echo $recordExists ? 'aria-disabled="true"' : ''; ?> onclick="openSubmitModal()">
+            <a href="#" class="btn2 <?php echo $recordExists ? 'disabled' : ''; ?>"
+                <?php echo $recordExists ? 'aria-disabled="true"' : ''; ?> onclick="openSubmitModal()">
                 <img src="../../assets/check.svg" alt="">
                 <?php echo $recordExists ? 'Inventory Already Submitted ' : 'Submit End-of-Day Inventory'; ?>
             </a>
@@ -61,17 +67,22 @@ $recordExists = $row['recordCount'] > 0;
                 <?php include 'recent-orders-card.php'; ?>
             </div>
             <div class="table_container last-table">
-                <h3> Recent Inventory Updates <span style="font-weight:500; font-size:1rem; color:gray;">(Usage)</span></h3>
+                <h3> Recent Inventory Updates <span style="font-weight:500; font-size:1rem; color:gray;">(Usage)</span>
+                </h3>
                 <?php include 'recent-inv-card.php'; ?>
             </div>
         </div>
 
 
         <div class="btncontents">
-            <a href="items.php" class="active"><img src="../../assets/inventory.png" class="img-btn-link">Daily Inventory</a>
-            <a href="daily-summary.php"><img src="../../assets/text-file.png" class="img-btn-link">Daily Summary</a>
-            <a href="ingredients.php"><img src="../../assets/packaging.png" class="img-btn-link">Items</a>
-            <a href="products.php"><img src="../../assets/cutlery.png" class="img-btn-link">Product List</a>
+            <a href="items.php" class="active"><img src="../../assets/inventory.png" class="img-btn-link">Daily
+                Inventory</a>
+            <a href="daily-summary.php" class="hidden"><img src="../../assets/text-file.png" class="img-btn-link">Daily
+                Summary</a>
+            <a href="ingredients.php" class="hidden"><img src="../../assets/packaging.png"
+                    class="img-btn-link">Items</a>
+            <a href="products.php" class="hidden"><img src="../../assets/cutlery.png" class="img-btn-link">Product
+                List</a>
         </div>
 
         <br>
@@ -127,7 +138,8 @@ $recordExists = $row['recordCount'] > 0;
 
         <!-- Mobile View Access Note -->
         <blockquote class="mobile-note">
-            <strong>Note:</strong> On mobile devices, access is limited to viewing only. You cannot edit, add, or remove content.
+            <strong>Note:</strong> On mobile devices, access is limited to viewing only. You cannot edit, add, or remove
+            content.
         </blockquote>
     </div>
 

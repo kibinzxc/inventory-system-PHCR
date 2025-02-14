@@ -1019,7 +1019,7 @@ h5 {
         display: none;
     }
 
-
-
-
+    .inventory-cards a {
+        pointer-events: none !important;
+    }
 }

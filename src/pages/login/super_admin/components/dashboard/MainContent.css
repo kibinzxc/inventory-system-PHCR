@@ -1048,4 +1048,12 @@ h3 {
         font-size: 14px !important;
     }
 
+    .recent_orders,
+    .table_container {
+        pointer-events: none !important;
+        cursor: default !important;
+    }
+
+
+
 }

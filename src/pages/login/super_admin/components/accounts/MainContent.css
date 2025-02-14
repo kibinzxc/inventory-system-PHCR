@@ -254,6 +254,25 @@ a.btn {
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
+
+    #main-content {
+        margin: 0;
+    }
+
+    .header h2 {
+        font-size: 1.5rem;
+        text-align: left;
+        margin: 0 !important;
+        padding: 0 !important;
+        margin-bottom: 10px !important;
+        margin-top: 10px !important;
+    }
+
+    .container {
+        margin: 0 20px 50px 20px !important;
+    }
+
+
     .btns_container {
         display: none;
     }
@@ -269,7 +288,7 @@ a.btn {
     .table {
         width: 100%;
         /* Adjust table width to take full container */
-        font-size: 1.2rem;
+        font-size: 1rem !important;
     }
 
     .table_container {
@@ -282,6 +301,7 @@ a.btn {
         /* Smooth scrolling on mobile */
         max-width: 100%;
         /* Prevent exceeding viewport width */
+        margin-top: 5px !important;
     }
 
     /* Change header layout for mobile */

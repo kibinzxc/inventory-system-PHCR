@@ -43,7 +43,6 @@ Inventory System with Data Analytics and Decision Support System for Pizza Hut C
   - Full Stack Dev
 
 - Mark Anthony B. Basmayor
-    - Front-end Dev
     - QA Tester
     - Documentation
       

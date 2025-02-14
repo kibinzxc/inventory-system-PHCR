@@ -112,33 +112,34 @@ $lowStockThreshold = $averageOrderCountLastWeek * 3; // Minimum stock to last fo
 </select>
 
 <script>
-    function updateURL(event) {
-        event.preventDefault();
-        var product = document.getElementById('product_name').value;
-        if (product) {
-            history.pushState(null, null, "?product=" + encodeURIComponent(product));
-            location.reload(); // Reload the page to fetch and display the details
-        }
+function updateURL(event) {
+    event.preventDefault();
+    var product = document.getElementById('product_name').value;
+    if (product) {
+        history.pushState(null, null, "?product=" + encodeURIComponent(product));
+        location.reload(); // Reload the page to fetch and display the details
     }
+}
 </script>
 
 <!-- Product Details Section -->
 <?php if ($productDetails): ?>
-    <div class="analysis products-chart">
-        <?php include 'fetch_chart_date.php' ?>
-    </div>
-    <div class="analysis">
-        <div class="analysis_card">
-            <div class="analysis_image-container">
-                <img src="../../assets/products/<?php echo htmlspecialchars($productDetails['img']); ?>" alt="<?php echo htmlspecialchars($productDetails['name']); ?>" class="analysis_image">
+<div class="analysis products-chart">
+    <?php include 'fetch_chart_date.php' ?>
+</div>
+<div class="analysis">
+    <div class="analysis_card">
+        <div class="analysis_image-container">
+            <img src="../../assets/products/<?php echo htmlspecialchars($productDetails['img']); ?>"
+                alt="<?php echo htmlspecialchars($productDetails['name']); ?>" class="analysis_image">
+        </div>
+        <div class="analysis_info">
+            <h3 class="analysis_name"><?php echo htmlspecialchars($productDetails['name']); ?></h3>
+            <div class="analysis_meta">
+                <p><strong>Size:</strong> <?php echo htmlspecialchars($productDetails['size']); ?></p>
+                <p><strong>Price:</strong> ₱<?php echo number_format($productDetails['price'], 2); ?></p>
             </div>
-            <div class="analysis_info">
-                <h3 class="analysis_name"><?php echo htmlspecialchars($productDetails['name']); ?></h3>
-                <div class="analysis_meta">
-                    <p><strong>Size:</strong> <?php echo htmlspecialchars($productDetails['size']); ?></p>
-                    <p><strong>Price:</strong> ₱<?php echo number_format($productDetails['price'], 2); ?></p>
-                </div>
-                <?php
+            <?php
                 // Check if the category is not 'beverages' before displaying the ingredients section
                 if ($productDetails['category'] !== 'beverages') {
                     echo "<h4 class='analysis_ingredients-title'>Ingredients:</h4>";
@@ -158,12 +159,12 @@ $lowStockThreshold = $averageOrderCountLastWeek * 3; // Minimum stock to last fo
                     }
                 }
                 ?>
-            </div>
         </div>
+    </div>
 
-        <div class="analysis_details">
-            <div class="analysis-container">
-                <?php
+    <div class="analysis_details">
+        <div class="analysis-container">
+            <?php
                 // Format the start and end of last week
                 $startOfLastWeekFormatted = (new DateTime($startOfLastWeek))->format('F j, Y');
                 $endOfLastWeekFormatted = (new DateTime($endOfLastWeek))->format('F j, Y');
@@ -179,9 +180,9 @@ $lowStockThreshold = $averageOrderCountLastWeek * 3; // Minimum stock to last fo
                 // Now echo the output
                 echo "<p>Total Orders Last Week: <span style='font-weight: 600;'>$totalOrdersLastWeekText</span></p>";
                 ?>
-                <?php if ($totalOrdersWeekBeforeLast > 0): ?>
-                    <p>Comparison with Two Weeks Ago:
-                        <?php
+            <?php if ($totalOrdersWeekBeforeLast > 0): ?>
+            <p>Comparison with Two Weeks Ago:
+                <?php
                         // Check if the percentage change is positive or negative
                         if ($percentageChange > 0) {
                             echo '<span style="color: green; font-weight:600;">Went up by ' . number_format($percentageChange, 2) . '%</span>';
@@ -191,13 +192,15 @@ $lowStockThreshold = $averageOrderCountLastWeek * 3; // Minimum stock to last fo
                             echo '<span style="font-weight:600;"> No change in orders compared to two weeks ago</span>';
                         }
                         ?>
-                    </p>
-                <?php else: ?>
-                    <p><span style="font-weight:600;"> No orders in the previous week to compare</span></p>
-                <?php endif; ?>
+            </p>
+            <?php else: ?>
+            <p><span style="font-weight:600;"> No orders in the previous week to compare</span></p>
+            <?php endif; ?>
 
-                <p>Average Orders per Day Last Week: <span style="font-weight: 600;"><?php echo round($averageOrderCountLastWeek); ?> Order<?php echo (round($averageOrderCountLastWeek) > 1) ? 's' : ''; ?></span></p>
-                <?php
+            <p>Average Orders per Day Last Week: <span
+                    style="font-weight: 600;"><?php echo round($averageOrderCountLastWeek); ?>
+                    Order<?php echo (round($averageOrderCountLastWeek) > 1) ? 's' : ''; ?></span></p>
+            <?php
                 $status = $productDetails['status'];
                 if ($status == 'available') {
                     echo "<p>Product Status: <span style='color: green; font-weight: 600;'>Available</span></p>";
@@ -205,7 +208,7 @@ $lowStockThreshold = $averageOrderCountLastWeek * 3; // Minimum stock to last fo
                     echo "<p>Product Status: <span style='color: red; font-weight: 600;'>Not Available</span></p>";
                 }
                 ?>
-                <?php
+            <?php
 
                 // Get product details
                 if ($selectedProduct && $productDetails) {
@@ -292,7 +295,7 @@ $lowStockThreshold = $averageOrderCountLastWeek * 3; // Minimum stock to last fo
                     echo "<p>Unable to calculate availability.</p>";
                 }
                 ?>
-                <?php
+            <?php
                 // Query to get the top 5 fast-moving products from last week
                 $sqlFastMoving = "
                     SELECT name, SUM(quantity) AS total_quantity
@@ -343,21 +346,21 @@ $lowStockThreshold = $averageOrderCountLastWeek * 3; // Minimum stock to last fo
                 echo "<p>Low Stock Threshold: <span style='font-weight: 600;'>$lowStockThreshold orders</span> (to last for at least 3 days)</p>";
                 ?>
 
-            </div>
         </div>
     </div>
-    <h3 style="text-align: center;">Ingredients Needed for Low Stock Threshold</h3>
-    <div class="analysis">
+</div>
+<h3 class="hidden" style="text-align: center;">Ingredients Needed for Low Stock Threshold</h3>
+<div class="analysis">
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Ingredient Name</th>
-                    <th>Quantity Needed</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
+    <table class="hidden">
+        <thead>
+            <tr>
+                <th>Ingredient Name</th>
+                <th>Quantity Needed</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
                 if ($ingredients) {
                     foreach ($ingredients as $ingredient) {
                         $ingredientName = ucfirst(strtolower($ingredient['ingredient_name'])); // Capitalize the ingredient name
@@ -381,13 +384,13 @@ $lowStockThreshold = $averageOrderCountLastWeek * 3; // Minimum stock to last fo
                     echo "<tr><td colspan='2'>No ingredient data available.</td></tr>";
                 }
                 ?>
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
 
 
 <?php elseif ($selectedProduct): ?>
-    <p>Product not found or details unavailable.</p>
+<p>Product not found or details unavailable.</p>
 <?php endif; ?>
 
 <?php
@@ -397,168 +400,168 @@ $conn->close();
 
 <!-- Styles (could be in a separate CSS file) -->
 <style>
+.analysis {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 20px;
+    width: 100%;
+    padding: 20px 170px;
+    margin-bottom: 40px;
+}
+
+.analysis-container {
+    font-size: 1.2rem;
+}
+
+.analysis_details {
+    margin-left: 20px;
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    padding: 30px;
+    flex-grow: 1;
+    max-width: 70%;
+    justify-content: center;
+    flex-direction: column;
+    /* Make sure the image is on top of the name */
+    align-items: center;
+    height: 45vh;
+    overflow-y: auto;
+
+}
+
+.analysis_card {
+    display: flex;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
+    padding: 30px;
+    width: auto;
+    max-width: 100%;
+    justify-content: space-between;
+    flex-direction: column;
+    /* Make sure the image is on top of the name */
+    align-items: center;
+    height: 45vh;
+    overflow-y: auto;
+}
+
+.analysis_image-container {
+    flex-shrink: 0;
+    max-width: 300px;
+    margin-bottom: 5px;
+    /* Add some space between image and name */
+    text-align: center;
+}
+
+.analysis_image {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.analysis_info {
+    flex: 1;
+    text-align: center;
+    /* Center the text in the info section */
+}
+
+.analysis_name {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+
+.analysis_meta {
+    margin-top: 10px;
+}
+
+.analysis_meta p {
+    font-size: 1.1rem;
+    margin: 5px 0;
+    text-align: left;
+}
+
+.analysis_ingredients-title {
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+.analysis_ingredients-list {
+    list-style-type: none;
+    padding-left: 0;
+    text-align: left;
+}
+
+.analysis_ingredient {
+    font-size: 1rem;
+    margin: 8px 0;
+}
+
+.products-chart {
+    margin: 0;
+    margin-top: 10px;
+    height: 50vh;
+}
+
+
+
+
+/* Responsive Layout */
+@media (max-width: 768px) {
     .analysis {
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        margin-top: 20px;
-        width: 100%;
-        padding: 20px 170px;
-        margin-bottom: 40px;
-    }
-
-    .analysis-container {
-        font-size: 1.2rem;
-    }
-
-    .analysis_details {
-        margin-left: 20px;
-        display: flex;
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
-        padding: 30px;
-        flex-grow: 1;
-        max-width: 70%;
-        justify-content: center;
         flex-direction: column;
-        /* Make sure the image is on top of the name */
         align-items: center;
-        height: 45vh;
-        overflow-y: auto;
-
+        padding: 0;
     }
 
     .analysis_card {
-        display: flex;
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.25);
-        padding: 30px;
-        width: auto;
-        max-width: 100%;
-        justify-content: space-between;
         flex-direction: column;
-        /* Make sure the image is on top of the name */
         align-items: center;
-        height: 45vh;
-        overflow-y: auto;
+        text-align: center;
+        height: 100%;
     }
 
-    .analysis_image-container {
-        flex-shrink: 0;
-        max-width: 300px;
-        margin-bottom: 5px;
-        /* Add some space between image and name */
-        text-align: center;
-    }
 
     .analysis_image {
-        width: 100%;
-        max-width: 250px;
-        height: auto;
-        border-radius: 8px;
+        width: 200px;
+        margin-bottom: 20px;
     }
 
     .analysis_info {
-        flex: 1;
-        text-align: center;
-        /* Center the text in the info section */
-    }
-
-    .analysis_name {
-        margin-bottom: 15px;
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-top: 5px;
-    }
-
-
-    .analysis_meta {
-        margin-top: 10px;
-    }
-
-    .analysis_meta p {
-        font-size: 1.1rem;
-        margin: 5px 0;
-        text-align: left;
-    }
-
-    .analysis_ingredients-title {
-        font-size: 1.2rem;
-        margin-top: 20px;
-    }
-
-    .analysis_ingredients-list {
-        list-style-type: none;
         padding-left: 0;
-        text-align: left;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    .analysis {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px;
+
     }
 
-    .analysis_ingredient {
-        font-size: 1rem;
-        margin: 8px 0;
+
+    .analysis_card {
+        width: auto;
+        height: auto;
+    }
+
+    .analysis_details {
+        margin-top: 20px;
+        height: auto;
+        width: 100%;
     }
 
     .products-chart {
-        margin: 0;
-        margin-top: 10px;
-        height: 50vh;
+        height: auto;
+        padding-bottom: 0;
     }
-
-
-
-
-    /* Responsive Layout */
-    @media (max-width: 768px) {
-        .analysis {
-            flex-direction: column;
-            align-items: center;
-            padding: 0;
-        }
-
-        .analysis_card {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            height: 100%;
-        }
-
-
-        .analysis_image {
-            width: 200px;
-            margin-bottom: 20px;
-        }
-
-        .analysis_info {
-            padding-left: 0;
-        }
-    }
-
-    @media screen and (max-width: 1280px) {
-        .analysis {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 40px;
-
-        }
-
-
-        .analysis_card {
-            width: auto;
-            height: auto;
-        }
-
-        .analysis_details {
-            margin-top: 20px;
-            height: auto;
-            width: 100%;
-        }
-
-        .products-chart {
-            height: auto;
-            padding-bottom: 0;
-        }
-    }
+}
 </style>

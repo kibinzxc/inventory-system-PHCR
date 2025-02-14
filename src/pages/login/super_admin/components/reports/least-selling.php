@@ -26,7 +26,7 @@ $result = $stmt->get_result();
 
 <link rel="stylesheet" href="itemsTable.css">
 
-<table border="1">
+<table border="1" class="table-mobile">
     <thead>
         <tr>
             <th>#</th> <!-- Added Number column -->

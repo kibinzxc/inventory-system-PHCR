@@ -959,20 +959,67 @@ h5 {
 /* Media query for mobile devices */
 @media (max-width: 768px) {
     #main-content {
-        margin-left: 20px;
-        padding: 16px;
+        margin: 0;
     }
+
+    .header h1 {
+        font-size: 1.7rem;
+        text-align: left;
+    }
+
+    .container {
+        margin: 0 20px 50px 20px !important;
+    }
+
+    .card {
+        width: 100%;
+        flex-grow: 1;
+        margin-bottom: 5px;
+        padding: 10px 20px;
+    }
+
+
+    .neutral img {
+        width: 20px;
+    }
+
+    .card-body h5 {
+        font-size: 1rem;
+    }
+
+    .sales-amount {
+        font-size: 1.7rem;
+    }
+
+    .headliner {
+        text-align: center;
+        font-size: 1rem;
+    }
+
 
     .daily_sales,
     .daily_sales2 {
         width: 100%;
         flex-grow: 1;
         margin-bottom: 10px;
+        padding: 0 10px;
     }
 
     .inventory-cards {
+        gap: 0;
         margin-bottom: 10px;
     }
+
+    .table-mobile {
+        font-size: 12px;
+    }
+
+    table th:nth-child(1),
+    table td:nth-child(1) {
+        display: none;
+    }
+
+
 
 
 }

@@ -70,7 +70,7 @@ if ($currentTime >= '01:00' && $currentTime <= '23:59') {
 
                     $mail->Body = $message;
 
-                    $mail->send();
+                    // $mail->send(); // Uncomment this line to send the email
                     // echo 'Reminder email sent to ' . $superAdminEmail . '<br>';
 
                     // Insert the notification record into the forgot_user table

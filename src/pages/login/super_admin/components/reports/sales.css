@@ -963,8 +963,42 @@ h5 {
 /* Media query for mobile devices */
 @media (max-width: 768px) {
     #main-content {
-        margin-left: 20px;
-        padding: 16px;
+        margin: 0;
+    }
+
+    .header h1 {
+        font-size: 1.7rem;
+        text-align: left;
+    }
+
+    .container {
+        margin: 0 20px 50px 20px !important;
+    }
+
+    .card {
+        width: 100%;
+        flex-grow: 1;
+        margin-bottom: 5px;
+        padding: 10px 20px;
+        min-width: 300px;
+        padding-top: 20px !important;
+    }
+
+    .card-body h5 {
+        font-size: 1.1rem;
+    }
+
+    .percentage-body p {
+        font-size: 10px;
+    }
+
+    .card-footer p {
+        color: gray;
+        text-align: center;
+    }
+
+    .sales-amount {
+        font-size: 1.5rem;
     }
 
     .daily_sales,
@@ -975,7 +1009,8 @@ h5 {
     }
 
     .inventory-cards {
-        margin-bottom: 10px;
+        margin-bottom: 10px !important;
+        gap: 3px !important;
     }
 
 

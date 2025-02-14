@@ -37,7 +37,8 @@ $conn->close();
             <h1>Product Reports & Analytics</h1>
             <div class="btn-wrapper">
                 <!-- <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Online Orders</a>-->
-                <a href="export-product-summary.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Download</a>
+                <a href="export-product-summary.php" class="btn"><img src="../../assets/file-text.svg" alt="">
+                    Download</a>
             </div>
         </div>
         <div class="btncontents">
@@ -109,27 +110,27 @@ $conn->close();
         <div class="same_column-container">
             <div class="same-column">
                 <div class="table_container daily_sales">
-                    <h3>Weekly Fast-Moving Products</h3>
+                    <h3 class="headliner">Weekly Fast-Moving Products</h3>
                     <?php include 'top-selling.php' ?>
                 </div>
                 <div class="table_container daily_sales2">
-                    <h3>Weekly Slow-Moving Product</h3>
+                    <h3 class="headliner">Weekly Slow-Moving Product</h3>
                     <?php include 'least-selling.php' ?>
                 </div>
             </div>
             <div class="table_container paddington">
                 <div class="header">
-                    <h3>Product Analytics</h3>
+                    <h3 class="headliner">Product Analytics</h3>
                     <div class="btn-wrapper">
                         <?php
                         // Check if the 'product' parameter exists in the URL
                         if (isset($_GET['product'])) {
                         ?>
-                            <div class="btn-wrapper download">
-                                <a href="export-product-analysis.php?product=<?php echo $_GET['product']; ?>" class="btn">
-                                    <img src="../../assets/file-text.svg" alt=""> Download
-                                </a>
-                            </div>
+                        <div class="btn-wrapper download">
+                            <a href="export-product-analysis.php?product=<?php echo $_GET['product']; ?>" class="btn">
+                                <img src="../../assets/file-text.svg" alt=""> Download
+                            </a>
+                        </div>
                         <?php
                         }
                         ?>

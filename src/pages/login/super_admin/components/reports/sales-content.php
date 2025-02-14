@@ -93,7 +93,8 @@ if (isset($_SESSION['user_id'])) {
             <h1>Sales Reports & Analytics</h1>
             <div class="btn-wrapper">
                 <!-- <a href="week-overview.php" target="_blank" class="btn"><img src="../../assets/external-link.svg" alt=""> Online Orders</a>-->
-                <a href="export-sales-analytics.php" class="btn"><img src="../../assets/file-text.svg" alt=""> Download</a>
+                <a href="export-sales-analytics.php" class="btn"><img src="../../assets/file-text.svg" alt="">
+                    Download</a>
             </div>
         </div>
         <div class="btncontents">
@@ -227,20 +228,20 @@ if (isset($_SESSION['user_id'])) {
                     <div class="percentage-box">
                         <div class="percentage-body">
                             <?php if ($aovPercentageChange > 0) { ?>
-                                <div class="up">
-                                    <img src="../../assets/up.png" style="width:25px;margin-right:5px;">
-                                    <p class="percentage-up">+<?php echo number_format($aovPercentageChange, 2); ?>%</p>
-                                </div>
+                            <div class="up">
+                                <img src="../../assets/up.png" style="width:25px;margin-right:5px;">
+                                <p class="percentage-up">+<?php echo number_format($aovPercentageChange, 2); ?>%</p>
+                            </div>
                             <?php } elseif ($aovPercentageChange < 0) { ?>
-                                <div class="down">
-                                    <img src="../../assets/down.png" style="width:25px;margin-right:5px;">
-                                    <p class="percentage-down"><?php echo number_format($aovPercentageChange, 2); ?>%</p>
-                                </div>
+                            <div class="down">
+                                <img src="../../assets/down.png" style="width:25px;margin-right:5px;">
+                                <p class="percentage-down"><?php echo number_format($aovPercentageChange, 2); ?>%</p>
+                            </div>
                             <?php } else { ?>
-                                <div class="neutral">
-                                    <img src="../../assets/neutral.png" style="width:25px;margin-right:5px;">
-                                    <p class="percentage-neutral">0.00%</p>
-                                </div>
+                            <div class="neutral">
+                                <img src="../../assets/neutral.png" style="width:25px;margin-right:5px;">
+                                <p class="percentage-neutral">0.00%</p>
+                            </div>
                             <?php } ?>
                         </div>
                     </div>
@@ -317,20 +318,20 @@ if (isset($_SESSION['user_id'])) {
                     <div class="percentage-box">
                         <div class="percentage-body">
                             <?php if ($revenuePercentage > 0) { ?>
-                                <div class="up">
-                                    <img src="../../assets/up.png" alt="" style="width:25px;margin-right:5px;">
-                                    <p class="percentage-up">+<?php echo number_format($revenuePercentage, 2); ?>%</p>
-                                </div>
+                            <div class="up">
+                                <img src="../../assets/up.png" alt="" style="width:25px;margin-right:5px;">
+                                <p class="percentage-up">+<?php echo number_format($revenuePercentage, 2); ?>%</p>
+                            </div>
                             <?php } elseif ($revenuePercentage < 0) { ?>
-                                <div class="down">
-                                    <img src="../../assets/down.png" alt="" style="width:25px; margin-right:5px;">
-                                    <p class="percentage-down"><?php echo number_format($revenuePercentage, 2); ?>%</p>
-                                </div>
+                            <div class="down">
+                                <img src="../../assets/down.png" alt="" style="width:25px; margin-right:5px;">
+                                <p class="percentage-down"><?php echo number_format($revenuePercentage, 2); ?>%</p>
+                            </div>
                             <?php } else { ?>
-                                <div class="neutral">
-                                    <img src="../../assets/neutral.png" alt="" style="width:25px; margin-right:5px;">
-                                    <p class="percentage-neutral"> 0.00%</p>
-                                </div>
+                            <div class="neutral">
+                                <img src="../../assets/neutral.png" alt="" style="width:25px; margin-right:5px;">
+                                <p class="percentage-neutral"> 0.00%</p>
+                            </div>
                             <?php } ?>
                         </div>
                     </div>
@@ -413,8 +414,9 @@ if (isset($_SESSION['user_id'])) {
 
             </div>
             <div class="same-column">
-                <div class="table_container"> <?php include 'predictive-sales.php'; ?></div>
-                <div class=" table_container daily_sales2" style="text-align:center;"><?php include 'analysis-sales.php' ?></div>
+                <div class="table_container hidden"> <?php include 'predictive-sales.php'; ?></div>
+                <div class=" table_container daily_sales2" style="text-align:center;">
+                    <?php include 'analysis-sales.php' ?></div>
 
             </div>
         </div>

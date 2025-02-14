@@ -41,32 +41,34 @@ $minSalesDay1 = $nextWeekDates1[array_search($minForecastedSales1, $nextWeekSale
 
 
 <style>
-    h1,
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
+h1,
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-    .analysis {
-        margin-top: 20px;
-    }
+.analysis {
+    margin-top: 20px;
+}
 
-    .analysis p {
-        font-size: 1.1em;
-        line-height: 1.6;
-    }
+.analysis p {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
 </style>
 </head>
 
 <body>
-    <div class="container">
 
-    </div>
 
     <div class="container analysis">
         <h2>Analysis</h2>
-        <p><strong>Total Forecasted Sales for Next Week:</strong> ₱<?php echo number_format($totalForecastedSales1, 2); ?></p>
-        <p><strong>Average Forecasted Sales per Day:</strong> ₱<?php echo number_format($averageForecastedSales1, 2); ?></p>
-        <p><strong>Highest Forecasted Sales Day:</strong> <?php echo $maxSalesDay1; ?> (₱<?php echo number_format($maxForecastedSales1, 2); ?>)</p>
-        <p><strong>Lowest Forecasted Sales Day:</strong> <?php echo $minSalesDay1; ?> (₱<?php echo number_format($minForecastedSales1, 2); ?>)</p>
+        <p><strong>Total Forecasted Sales for Next Week:</strong>
+            ₱<?php echo number_format($totalForecastedSales1, 2); ?></p>
+        <p><strong>Average Forecasted Sales per Day:</strong> ₱<?php echo number_format($averageForecastedSales1, 2); ?>
+        </p>
+        <p><strong>Highest Forecasted Sales Day:</strong> <?php echo $maxSalesDay1; ?>
+            (₱<?php echo number_format($maxForecastedSales1, 2); ?>)</p>
+        <p><strong>Lowest Forecasted Sales Day:</strong> <?php echo $minSalesDay1; ?>
+            (₱<?php echo number_format($minForecastedSales1, 2); ?>)</p>
     </div>

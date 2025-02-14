@@ -49,3 +49,67 @@ option {
 option:empty {
     color: #888;
 }
+
+@media (max-width: 768px) {
+    .select-container {
+        flex-direction: column;
+        /* Stack label and select vertically */
+        align-items: flex-start;
+        /* Align items to the start */
+    }
+
+    select {
+        width: 100%;
+        /* Full width */
+    }
+
+    .products-chart {
+        display: none !important;
+        /* Hide the chart */
+    }
+
+    .analysis {
+        padding: 0 !important;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .analysis>* {
+        flex: 1;
+        /* Make all child elements the same size */
+        max-width: 200px;
+        min-width: 200px;
+        /* Set a fixed size if needed */
+    }
+
+    .analysis_card {
+        overflow: hidden !important;
+
+        /* Make all cards the same size */
+    }
+
+    .analysis_ingredient {
+        font-size: 0.8rem !important;
+    }
+
+    .analysis_meta p {
+        font-size: 1rem !important;
+    }
+
+    .analysis_image {
+        margin-bottom: 5px !important;
+    }
+
+    .analysis_details {
+        display: flex !important;
+        margin-left: 0 !important;
+        overflow: hidden !important;
+        min-width: 250px;
+        /* Make details the same size as card */
+    }
+
+    .analysis_details p {
+        font-size: 1rem !important;
+    }
+}

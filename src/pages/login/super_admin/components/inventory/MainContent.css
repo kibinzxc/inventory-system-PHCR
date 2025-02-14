@@ -431,6 +431,10 @@ a.btn2.disabled:hover {
         margin: 0;
     }
 
+    .headliner {
+        text-align: center;
+    }
+
     .container {
         margin: 0 20px 50px 20px !important;
     }

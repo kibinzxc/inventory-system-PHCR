@@ -63,11 +63,12 @@ $recordExists = $row['recordCount'] > 0;
 
         <div class="table-wrapper">
             <div class="table_container second-table">
-                <h3> Recent Orders</h3>
+                <h3 class="headliner"> Recent Orders</h3>
                 <?php include 'recent-orders-card.php'; ?>
             </div>
             <div class="table_container last-table">
-                <h3> Recent Inventory Updates <span style="font-weight:500; font-size:1rem; color:gray;">(Usage)</span>
+                <h3 class="headliner"> Recent Inventory Updates <span
+                        style="font-weight:500; font-size:1rem; color:gray;">(Usage)</span>
                 </h3>
                 <?php include 'recent-inv-card.php'; ?>
             </div>

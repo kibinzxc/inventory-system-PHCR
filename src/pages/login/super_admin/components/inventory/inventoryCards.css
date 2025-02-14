@@ -51,4 +51,13 @@
         grid-template-columns: 1fr;
         /* Stack items in a single column on smaller screens */
     }
+
+    .item-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .item {
+        padding: 10px;
+    }
 }

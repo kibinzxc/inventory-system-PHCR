@@ -80,3 +80,56 @@
     color: #777;
     margin-top: 4px;
 }
+
+
+@media (max-width: 768px) {
+    .recent-orders-card {
+        height: auto;
+    }
+
+    .recent-orders-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .recent-image img {
+        width: 100%;
+        height: auto;
+    }
+
+    .recent-details {
+        margin: 0;
+        margin-top: 8 px;
+    }
+
+    .recent-name {
+        flex-direction: column;
+        align-items: flex-start;
+
+    }
+
+    .recent-name .name {
+        font-size: 17px;
+    }
+
+    .recent-name .size {
+        font-size: 14px;
+    }
+
+    .transaction-type {
+        font-size: 12px;
+    }
+
+    .recent-info {
+        align-items: flex-start;
+        margin-top: 8px;
+    }
+
+    .recent-count {
+        font-size: 16px;
+    }
+
+    .recent-date {
+        font-size: 12px;
+    }
+}

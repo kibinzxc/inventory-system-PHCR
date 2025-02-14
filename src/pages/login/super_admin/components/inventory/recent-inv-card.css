@@ -100,3 +100,30 @@
     font-size: 14px;
     color: #777;
 }
+
+
+@media (max-width: 768px) {
+    .inv-orders-card {
+        height: auto;
+    }
+
+    .inv-name {
+        flex-direction: column;
+    }
+
+    .inv-orders-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .inv-image img {
+        width: 100%;
+        height: auto;
+    }
+
+    .inv-details {
+        margin: 0;
+        margin-top: 8px;
+        text-align: center;
+    }
+}

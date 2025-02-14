@@ -1034,5 +1034,18 @@ h3 {
         /* Chrome, Safari, Opera */
     }
 
+    .warning-modal-content {
+        max-width: 350px !important;
+        padding: 10px !important;
+
+    }
+
+    #low-stock-section {
+        font-size: 14px !important;
+    }
+
+    #low-stock-list {
+        font-size: 14px !important;
+    }
 
 }

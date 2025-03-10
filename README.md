@@ -1,5 +1,5 @@
 # Inventory-PHCR
-Inventory System with Data Analytics and Decision Support System for Pizza Hut Chino Roces
+Inventory System with Data Analytics and Decision Support System for Pizza Company
 
 ## Main Features
 - Data Analytics

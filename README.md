@@ -1,5 +1,5 @@
 # Inventory-PHCR
-Inventory System with Data Analytics and Decision Support System for Pizza Company
+Inventory System with Data Analytics and Decision Support System
 
 ## Main Features
 - Data Analytics

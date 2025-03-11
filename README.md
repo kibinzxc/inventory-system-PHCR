@@ -1,4 +1,4 @@
-# Inventory-PHCR
+# Inventory System w/ DA & DSS
 Inventory System with Data Analytics and Decision Support System
 
 ## Main Features

@@ -40,7 +40,7 @@ Inventory System with Data Analytics and Decision Support System
 - Kevin Daniel C. Almirante
   - Project Manager
   - UI/UX Designer
-  - Full Stack Dev
+  - Full Stack Developer
 
 - Mark Anthony B. Basmayor
     - QA Tester

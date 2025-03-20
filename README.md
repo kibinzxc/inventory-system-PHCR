@@ -41,6 +41,7 @@ Inventory System with Data Analytics and Decision Support System
   - Project Manager
   - UI/UX Designer
   - Full Stack Developer
+  - QA Tester
 
 - Mark Anthony B. Basmayor
     - QA Tester

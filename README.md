@@ -6,7 +6,7 @@ Inventory System with Data Analytics and Decision Support System
 - Decision Support System
 - Inventory Management
 - POS
-- Online Ordering
+- Online Ordering (integrated)
   
 >[!NOTE]
 > This project is primarily developed using PHP Vanilla

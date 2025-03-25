@@ -52,4 +52,5 @@ Inventory System with Data Analytics and Decision Support System
   - QA Tester
   - Documentation
 
+daily commit
  

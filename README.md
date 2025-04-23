@@ -1,56 +1,60 @@
-# Inventory System w/ DA & DSS
-Inventory System with Data Analytics and Decision Support System
+# Inventory Management System with Data Analytics & DSS  
+*(Academic Capstone Project)*  
 
-## Main Features
-- Data Analytics
-- Decision Support System
-- Inventory Management
-- POS
-- Online Ordering (integrated)
-  
->[!NOTE]
-> This project is primarily developed using PHP Vanilla
+[![PHP](https://img.shields.io/badge/PHP-8.0+-777BB4?logo=php&logoColor=white)](https://php.net)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://mysql.com)
 
-## Tech Stacks
+## 📚 Project Overview
+A comprehensive inventory system developed as our **final capstone project**, featuring:
+- Real-time data analytics
+- Decision support capabilities
+- Integrated POS and online ordering
 
-- ### Frontend
-   - HTML5
-   - CSS3
-   - JavaScript
+## ✨ Core Features
+| Module | Key Functionality |
+|--------|------------------|
+| **Data Analytics** | Sales trends, inventory turnover |
+| **Decision Support** | Automated restocking suggestions |
+| **Inventory Control** | Barcode tracking, stock alerts |
+| **Point-of-Sale** | Receipt generation, cashier UI |
+| **Online Portal** | Customer order interface |
 
- - ### Backend
-   - PHP (Vanilla)
-  
-- ### Database
-  - MySQL
- 
-- ### API
-  - LocationIQ
+## 🛠️ Technical Implementation
+### Frontend
+- HTML5, CSS3, JavaScript (ES6+)
+- Responsive design (mobile-friendly)
 
-- ### Version Control
-  - Git
-  - Github
+### Backend
+- Vanilla PHP (Procedural + OOP)
+- Custom MVC-like architecture
 
-- ### Project Management
-  - Github Projects
- 
- 
+### Database
+- MySQL (Normalized schema)
+- Stored procedures for analytics
 
-## Roles
-- Kevin Daniel C. Almirante
-  - Project Manager
-  - UI/UX Designer
-  - Full Stack Developer
-  - QA Tester
+### APIs
+- LocationIQ for geolocation
 
-- Mark Anthony B. Basmayor
-    - QA Tester
-    - Documentation
-      
-- Maricar M. Glorioso
-  - UI/UX Designer
-  - QA Tester
-  - Documentation
+## 👥 Capstone Team
+**Kevin Daniel C. Almirante**  
+- Project Manager
+- Lead Full-Stack Developer
+- System Architect
 
-daily commit im tired sorry [4]
- 
+**Mark Anthony B. Basmayor**  
+- Quality Assurance
+- Documentation Specialist
+
+**Maricar M. Glorioso**  
+- UI/UX Design
+- User Testing Coordinator
+
+## 📝 Academic Context
+- **Institution**: Cavite State University - Imus 
+- **Program**: BSIT  
+- **Advisor**: Mr. Rhoel Sarino
+- **Duration**: 2024 - 2025
+
+---
+
+*Submitted in partial fulfillment of the requirements for the degree of Bachelor of Science in Information Technology*

@@ -57,4 +57,4 @@ A comprehensive inventory system developed as our **final capstone project**, fe
 
 ---
 
-*Submitted in partial fulfillment of the requirements for the degree of Bachelor of Science in Information Technology*
+*Submitted in partial fulfillment of the requirements for the degree of Bachelor of Science in Information Technology.*

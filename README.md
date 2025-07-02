@@ -42,6 +42,7 @@ A comprehensive inventory system developed as our **final capstone project**, fe
 - System Architect
 
 **Mark Anthony B. Basmayor**  
+- Front-end Developer
 - Quality Assurance
 - Documentation Specialist
 

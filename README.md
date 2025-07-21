@@ -1,5 +1,5 @@
 # Inventory Management System with Data Analytics & DSS for PHCR
-*(Academic Capstone Project)*  
+*(Academic Capstone 2 Project)*  
 
 [![PHP](https://img.shields.io/badge/PHP-8.0+-777BB4?logo=php&logoColor=white)](https://php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://mysql.com)

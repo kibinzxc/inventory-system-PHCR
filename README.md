@@ -1,11 +1,11 @@
 # Inventory Management System with Data Analytics & DSS for PHCR
-*(Academic Capstone 2 Project)*  
+
 
 [![PHP](https://img.shields.io/badge/PHP-8.0+-777BB4?logo=php&logoColor=white)](https://php.net)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql&logoColor=white)](https://mysql.com)
 
 ## 📚 Project Overview
-A comprehensive inventory system developed as our **final capstone project**, featuring:
+A comprehensive inventory system developed, featuring:
 - Real-time data analytics
 - Decision support capabilities
 - Integrated POS and online ordering
@@ -40,6 +40,7 @@ A comprehensive inventory system developed as our **final capstone project**, fe
 - Project Manager
 - Lead Full-Stack Developer
 - System Architect
+- QA Lead
 
 **Mark Anthony B. Basmayor**  
 - Front-end Developer
@@ -50,12 +51,8 @@ A comprehensive inventory system developed as our **final capstone project**, fe
 - UI/UX Design
 - User Testing Coordinator
 
-## 📝 Academic Context
-- **Institution**: Cavite State University - Imus 
-- **Program**: BSIT  
-- **Advisor**: Mr. Rhoel Sarino
-- **Duration**: 2024 - 2025
+
 
 ---
 
-*Submitted in partial fulfillment of the requirements for the degree of Bachelor of Science in Information Technology*
+

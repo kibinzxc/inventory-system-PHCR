@@ -35,20 +35,21 @@ A comprehensive inventory system developed, featuring:
 ### APIs
 - LocationIQ for geolocation
 
-## 👥 Capstone Team
+## 👥 Team
 **Kevin Daniel C. Almirante**  
 - Project Manager
 - Lead Full-Stack Developer
 - System Architect
 - QA Lead
+- UI/UX Designer
 
 **Mark Anthony B. Basmayor**  
 - Front-end Developer
-- Quality Assurance
+- QA Tester
 - Documentation Specialist
 
 **Maricar M. Glorioso**  
-- UI/UX Design
+- UI/UX Design Consultant
 - User Testing Coordinator
 
 
